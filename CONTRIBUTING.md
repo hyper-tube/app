@@ -281,7 +281,7 @@ python3 .github/scripts/analyze.py --depends-on .clang-tidy build-tidy build-tid
 python3 .github/scripts/analyze.py build-tidy build-tidy/results/clazy -- \
     clazy-standalone -p build-tidy \
         --checks="level1,no-non-pod-global-static,no-range-loop-detach,no-qproperty-without-notify,no-container-anti-pattern" \
-        --header-filter='.*/(app|shared)/.*' \
+        --header-filter="^$PWD/(app|shared)/.*" \
         --extra-arg="-resource-dir=$(clang -print-resource-dir)"
 ```
 

@@ -18,7 +18,8 @@ FetchContent_Declare(sentry
     URL https://github.com/getsentry/sentry-native/releases/download/0.16.6/sentry-native.zip
     URL_HASH SHA256=d35145daaafddc50c0c87ec564acf0ba9968e67b23981e7f57c702b2dd6f2ff1
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-    EXCLUDE_FROM_ALL)
+    EXCLUDE_FROM_ALL
+    SYSTEM)
 
 block(SCOPE_FOR VARIABLES)
     set(CMAKE_AUTOMOC OFF)

@@ -80,7 +80,7 @@ jobs:
           python3 .github/scripts/analyze.py build analysis/clazy -- \
             clazy-standalone -p build \
               --checks="$CLAZY_CHECKS" \
-              --header-filter='.*/(app|shared)/.*' \
+              --header-filter="^$PWD/(app|shared)/.*" \
               --extra-arg="-resource-dir=$(clang-$LLVM_VERSION -print-resource-dir)"
 
       - name: Save the analysis results
