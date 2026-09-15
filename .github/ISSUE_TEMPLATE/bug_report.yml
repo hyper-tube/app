@@ -1,0 +1,130 @@
+name: Bug report
+description: Report something that doesn't work as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Before opening a report, make sure you're on the latest version and search the existing issues to see if it has already been reported.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Shown in **Settings > About**.
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - Windows
+        - macOS
+    validations:
+      required: true
+
+  - type: input
+    id: os-details
+    attributes:
+      label: OS version and desktop
+      description: On Linux, include your distribution, desktop environment or compositor, and whether you use Wayland or X11.
+      placeholder: Arch Linux, KDE Plasma 6.5, Wayland
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install
+    attributes:
+      label: Installation method
+      options:
+        - Windows installer
+        - AppImage
+        - .deb package
+        - .rpm package
+        - macOS disk image
+        - Built from source
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the app is affected?
+      options:
+        - Playback
+        - Sign-in and account
+        - Library and playlists
+        - Search and browsing
+        - Downloads and offline mode
+        - Podcasts
+        - Appearance and theming
+        - Desktop integration (media keys, tray, media controls)
+        - Plugins
+        - Installer and updates
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: signed-in
+    attributes:
+      label: Were you signed in?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the problem. If the app crashed, say so.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Open **Settings > Diagnostics** and click **Open** next to **Logs**, then paste the relevant part of `ht-music.log`. Logs can contain track titles, URLs and file paths with your user name, so look through them before posting.
+      render: text
+
+  - type: dropdown
+    id: crash-reports
+    attributes:
+      label: Is "Share crash reports and diagnostics" turned on?
+      description: You can find it in **Settings > Diagnostics**. If it's on and the app crashed, mention roughly when it happened so we can find the report.
+      options:
+        - "Yes"
+        - "No"
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or recordings
+      description: Drag and drop images or videos here if they help show the problem.

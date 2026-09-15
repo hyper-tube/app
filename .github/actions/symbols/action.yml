@@ -1,0 +1,66 @@
+name: Upload debug symbols
+description: Keeps a platform's split debug information with the run and uploads it to GlitchTip
+
+inputs:
+  path:
+    description: Directory holding the debug information files and the binaries they belong to
+    required: true
+  platform:
+    description: Suffix that names this platform's symbol artifact
+    required: true
+  auth-token:
+    description: GlitchTip API token with permission to upload debug files
+    default: ""
+  url:
+    description: GlitchTip server the crash reports go to
+    default: https://htm-report.nekolab.app
+  organization:
+    description: GlitchTip organization slug
+    default: ""
+  project:
+    description: GlitchTip project slug
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Keep the symbols with the run
+      uses: actions/upload-artifact@v7
+      with:
+        name: symbols-${{ inputs.platform }}
+        path: ${{ inputs.path }}
+        retention-days: 30
+        if-no-files-found: error
+
+    - id: credentials
+      name: Check the GlitchTip credentials
+      shell: bash
+      env:
+        AUTH_TOKEN: ${{ inputs.auth-token }}
+        ORGANIZATION: ${{ inputs.organization }}
+        PROJECT: ${{ inputs.project }}
+      run: |
+        missing=""
+        [ -n "$AUTH_TOKEN" ] || missing="$missing GLITCHTIP_AUTH_TOKEN"
+        [ -n "$ORGANIZATION" ] || missing="$missing GLITCHTIP_ORG"
+        [ -n "$PROJECT" ] || missing="$missing GLITCHTIP_PROJECT"
+        if [ -z "$missing" ]; then
+          echo "present=true" >> "$GITHUB_OUTPUT"
+        elif [ "$GITHUB_REF_TYPE" = tag ]; then
+          echo "::error::Releasing needs these repository secrets, which reached this job empty:$missing"
+          exit 1
+        else
+          echo "::warning::These repository secrets reached this job empty:$missing. Symbols were kept as an artifact only"
+          echo "present=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Upload the symbols to GlitchTip
+      if: steps.credentials.outputs.present == 'true'
+      shell: bash
+      env:
+        GLITCHTIP_URL: ${{ inputs.url }}
+        GLITCHTIP_AUTH_TOKEN: ${{ inputs.auth-token }}
+        GLITCHTIP_ORG: ${{ inputs.organization }}
+        GLITCHTIP_PROJECT: ${{ inputs.project }}
+        SYMBOLS: ${{ inputs.path }}
+      run: python "$GITHUB_WORKSPACE/.github/scripts/upload-symbols.py" "$SYMBOLS"

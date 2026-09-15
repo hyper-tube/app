@@ -1,0 +1,21 @@
+#pragma once
+
+namespace core::build {
+
+inline constexpr auto kIdentifier = "@PROJECT_NAME@";
+inline constexpr auto kDisplayName = "@HT_MUSIC_DISPLAY_NAME@";
+inline constexpr auto kVersion = "@PROJECT_VERSION@";
+inline constexpr auto kOrganizationDomain = "@HT_MUSIC_ORGANIZATION_DOMAIN@";
+inline constexpr auto kWebsiteUrl = "@PROJECT_HOMEPAGE_URL@";
+inline constexpr auto kRepositoryUrl = "@HT_MUSIC_REPOSITORY_URL@";
+inline constexpr auto kAppUserModelId = "@HT_MUSIC_APP_USER_MODEL_ID@";
+inline constexpr auto kPublisher = "@HT_MUSIC_PUBLISHER@";
+inline constexpr auto kCopyright = "@HT_MUSIC_COPYRIGHT@";
+inline constexpr auto kProductFolder = "@HT_MUSIC_PRODUCT_FOLDER@";
+inline constexpr auto kUninstallKey = "@HT_MUSIC_UNINSTALL_KEY@";
+inline constexpr auto kUrlScheme = "@HT_MUSIC_URL_SCHEME@";
+inline constexpr auto kCommit = "@HT_MUSIC_BUILD_COMMIT@";
+inline constexpr auto kDiagnosticsDsn = "@HT_MUSIC_DIAGNOSTICS_DSN@";
+inline constexpr auto kDiagnosticsEnvironment = "@HT_MUSIC_DIAGNOSTICS_ENVIRONMENT@";
+
+}

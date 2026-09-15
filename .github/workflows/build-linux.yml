@@ -1,0 +1,81 @@
+name: Build Linux
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: AppImage, deb and rpm
+    runs-on: ubuntu-24.04
+    env:
+      PACKAGE: HyperTubeMusic-${{ inputs.version }}-Linux
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-key: release
+
+      - id: linuxdeploy
+        uses: miurahr/install-linuxdeploy-action@v1.8.0
+        with:
+          plugins: qt appimage
+
+      - uses: jaxxstorm/action-install-gh-release@v3.0.0
+        with:
+          repo: goreleaser/nfpm
+
+      - name: Build
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
+            -DHT_MUSIC_SEPARATE_DEBUG_INFO=ON -DHT_MUSIC_DIAGNOSTICS_ENVIRONMENT=production
+          cmake --build build
+          DESTDIR="$PWD/AppDir" cmake --install build
+
+      - name: Split off the debug information
+        run: |
+          mkdir symbols
+          for binary in AppDir/usr/bin/ht-music AppDir/usr/libexec/ht-music/crashpad_handler; do
+            name=$(basename "$binary")
+            objcopy --only-keep-debug --compress-debug-sections=zlib "$binary" "symbols/$name.debug"
+            objcopy --strip-debug --add-gnu-debuglink="symbols/$name.debug" "$binary"
+            cp "$binary" "symbols/$name"
+          done
+
+      - uses: ./.github/actions/symbols
+        with:
+          path: symbols
+          platform: linux
+          auth-token: ${{ secrets.GLITCHTIP_AUTH_TOKEN }}
+          organization: ${{ secrets.GLITCHTIP_ORG }}
+          project: ${{ secrets.GLITCHTIP_PROJECT }}
+
+      - name: Build the AppImage
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: 1
+          QML_SOURCES_PATHS: ${{ github.workspace }}/app/qml:${{ github.workspace }}/shared/qml
+          EXTRA_PLATFORM_PLUGINS: libqwayland.so
+          EXTRA_QT_MODULES: waylandcompositor
+          LINUXDEPLOY_EXCLUDED_LIBRARIES: libqtiff.so;libqtposition_nmea.so
+          LINUXDEPLOY_OUTPUT_VERSION: ${{ inputs.version }}
+          OUTPUT: ${{ env.PACKAGE }}-x86_64.AppImage
+        run: ${{ steps.linuxdeploy.outputs.linuxdeploy }} --appdir AppDir --plugin qt --output appimage
+
+      - name: Build the deb and the rpm
+        run: python3 packaging/linux/package.py --appdir AppDir --version "${{ inputs.version }}" --output "$PACKAGE"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: package-linux
+          path: |
+            ${{ env.PACKAGE }}-x86_64.AppImage
+            ${{ env.PACKAGE }}-amd64.deb
+            ${{ env.PACKAGE }}-x86_64.rpm
+          if-no-files-found: error

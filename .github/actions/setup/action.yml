@@ -1,0 +1,106 @@
+name: Set up the toolchain
+description: Installs Qt, libmpv, the font tooling and a compiler cache on any of the three platforms
+
+inputs:
+  qt-version:
+    description: Qt version to install
+    default: "6.11.2"
+  aqt-source:
+    description: Where pip installs aqtinstall from
+    default: git+https://github.com/miurahr/aqtinstall.git@a127d08d3b910473decef927ea2e541bfec33aad
+  mpv-build:
+    description: shinchiro libmpv build to link against on Windows
+    default: "20260903"
+  mpv-archive:
+    description: File name of that build inside its release
+    default: mpv-dev-x86_64-20260903-git-69e63f425a.7z
+  mpv-sha256:
+    description: Checksum of that archive
+    default: fac135c68a35b7639e39d72c0c365104edbaebdea39a0dfdd8c36e8c8e80faef
+  cache-key:
+    description: Suffix that separates one compiler cache from another
+    default: default
+
+runs:
+  using: composite
+  steps:
+    - name: Install Linux packages
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends ninja-build libmpv-dev libcurl4-openssl-dev \
+          libnss3 libnspr4 libxcomposite1 libxdamage1 libxtst6 libxkbfile1
+
+    - name: Install macOS packages
+      if: runner.os == 'macOS'
+      shell: bash
+      env:
+        HOMEBREW_NO_AUTO_UPDATE: "1"
+        HOMEBREW_NO_INSTALL_CLEANUP: "1"
+        HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: "1"
+      run: brew install ninja mpv
+
+    - name: Set up MSVC
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Restore libmpv
+      if: runner.os == 'Windows'
+      id: mpv
+      uses: actions/cache@v6
+      with:
+        path: deps/mpv
+        key: mpv-x64-msvc-${{ inputs.mpv-build }}
+
+    - name: Build the libmpv import library
+      if: runner.os == 'Windows' && steps.mpv.outputs.cache-hit != 'true'
+      shell: pwsh
+      env:
+        MPV_URL: https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/${{ inputs.mpv-build }}/${{ inputs.mpv-archive }}
+        MPV_SHA256: ${{ inputs.mpv-sha256 }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        Invoke-WebRequest $env:MPV_URL -OutFile mpv.7z
+        if ((Get-FileHash mpv.7z -Algorithm SHA256).Hash -ne $env:MPV_SHA256) { throw 'libmpv checksum mismatch' }
+        7z x mpv.7z -odeps/mpv
+        if ($LASTEXITCODE -ne 0) { throw 'libmpv extraction failed' }
+        $exports = & dumpbin /exports deps/mpv/libmpv-2.dll
+        $names = $exports | ForEach-Object { if ($_ -match '^\s+\d+\s+[0-9A-F]+\s+[0-9A-F]+\s+(mpv_\w+)') { $Matches[1] } }
+        if (!$names) { throw 'no libmpv exports found' }
+        New-Item -ItemType Directory -Force deps/mpv/lib | Out-Null
+        @('LIBRARY libmpv-2.dll', 'EXPORTS') + $names | Set-Content deps/mpv/lib/mpv.def -Encoding ascii
+        lib /def:deps/mpv/lib/mpv.def /machine:x64 /out:deps/mpv/lib/mpv.lib
+        if ($LASTEXITCODE -ne 0) { throw 'libmpv import library failed' }
+
+    - name: Point CMake at libmpv
+      if: runner.os == 'Windows'
+      shell: bash
+      run: echo "MPV_ROOT=$GITHUB_WORKSPACE/deps/mpv" >> "$GITHUB_ENV"
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ inputs.qt-version }}
+        arch: ${{ runner.os == 'Windows' && 'win64_msvc2022_64' || '' }}
+        modules: qtwebengine qtimageformats qtpositioning qtserialport qtwebchannel qtshadertools
+        aqtsource: ${{ inputs.aqt-source }}
+        cache: true
+
+    - name: Install the font tooling
+      shell: bash
+      run: python -m pip install fonttools
+
+    - name: Set up the compiler cache
+      uses: hendrikmuhs/ccache-action@v1.2.24
+      with:
+        key: ${{ runner.os }}-${{ inputs.cache-key }}
+        variant: ${{ runner.os == 'Windows' && 'sccache' || 'ccache' }}
+
+    - name: Route every compile through the cache
+      shell: bash
+      env:
+        LAUNCHER: ${{ runner.os == 'Windows' && 'sccache' || 'ccache' }}
+      run: |
+        echo "CMAKE_C_COMPILER_LAUNCHER=$LAUNCHER" >> "$GITHUB_ENV"
+        echo "CMAKE_CXX_COMPILER_LAUNCHER=$LAUNCHER" >> "$GITHUB_ENV"

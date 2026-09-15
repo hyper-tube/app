@@ -1,0 +1,82 @@
+---
+Language: Cpp
+BasedOnStyle: WebKit
+Standard: c++20
+
+ColumnLimit: 100
+IndentWidth: 4
+ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 4
+AccessModifierOffset: -4
+UseTab: Never
+NamespaceIndentation: None
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterStruct: true
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+
+AlignAfterOpenBracket: Align
+AlignArrayOfStructures: None
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+BreakBeforeBinaryOperators: NonAssignment
+BreakConstructorInitializers: BeforeComma
+PackConstructorInitializers: BinPack
+Cpp11BracedListStyle: true
+LambdaBodyIndentation: OuterScope
+PointerAlignment: Right
+ReferenceAlignment: Right
+SpaceAfterTemplateKeyword: false
+KeepEmptyLinesAtTheStartOfBlocks: false
+SortIncludes: false
+IndentPPDirectives: None
+---
+Language: ObjC
+BasedOnStyle: WebKit
+ColumnLimit: 100
+IndentWidth: 4
+ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 4
+AccessModifierOffset: -4
+UseTab: Never
+NamespaceIndentation: None
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterObjCDeclaration: false
+  AfterStruct: true
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+AlignAfterOpenBracket: Align
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+BreakBeforeBinaryOperators: NonAssignment
+BreakConstructorInitializers: BeforeComma
+Cpp11BracedListStyle: true
+LambdaBodyIndentation: OuterScope
+ObjCBlockIndentWidth: 4
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: true
+PointerAlignment: Right
+ReferenceAlignment: Right
+KeepEmptyLinesAtTheStartOfBlocks: false
+SortIncludes: false

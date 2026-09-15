@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=HyperTube Music
+GenericName=Music Player
+Comment=Native YouTube Music client
+Exec=ht-music
+Icon=ht-music
+Terminal=false
+Categories=AudioVideo;Audio;Player;
+StartupWMClass=ht-music

@@ -1,0 +1,17 @@
+set(HT_MUSIC_BUILD_COMMIT "")
+
+if(DEFINED ENV{GITHUB_SHA})
+    set(HT_MUSIC_BUILD_COMMIT "$ENV{GITHUB_SHA}")
+else()
+    find_package(Git QUIET)
+    if(Git_FOUND)
+        execute_process(
+            COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+            OUTPUT_VARIABLE HT_MUSIC_BUILD_COMMIT
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET)
+    endif()
+endif()
+
+string(SUBSTRING "${HT_MUSIC_BUILD_COMMIT}" 0 12 HT_MUSIC_BUILD_COMMIT)

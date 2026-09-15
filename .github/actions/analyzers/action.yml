@@ -1,0 +1,53 @@
+name: Set up the analyzers
+description: Installs a pinned LLVM with clang-tidy, and builds the matching clazy once and caches it
+
+inputs:
+  llvm-version:
+    description: LLVM release to install from apt.llvm.org
+    default: "23"
+  clazy-version:
+    description: clazy tag to build against it
+    default: v1.17.1
+
+runs:
+  using: composite
+  steps:
+    - name: Install LLVM
+      shell: bash
+      env:
+        LLVM: ${{ inputs.llvm-version }}
+      run: |
+        . /etc/os-release
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/keyrings/apt.llvm.org.asc > /dev/null
+        echo "deb [signed-by=/etc/apt/keyrings/apt.llvm.org.asc] https://apt.llvm.org/$VERSION_CODENAME/ llvm-toolchain-$VERSION_CODENAME-$LLVM main" \
+          | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends "clang-$LLVM" "clang-tidy-$LLVM"
+        echo "/usr/lib/llvm-$LLVM/bin" >> "$GITHUB_PATH"
+
+    - name: Restore clazy
+      id: clazy
+      uses: actions/cache@v6
+      with:
+        path: ~/.local/clazy
+        key: clazy-${{ inputs.clazy-version }}-llvm${{ inputs.llvm-version }}-${{ runner.os }}
+
+    - name: Build clazy
+      if: steps.clazy.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        LLVM: ${{ inputs.llvm-version }}
+      run: |
+        sudo apt-get install -y --no-install-recommends ninja-build "llvm-$LLVM-dev" "libclang-$LLVM-dev" "libclang-cpp$LLVM-dev"
+        git clone --depth 1 --branch "${{ inputs.clazy-version }}" https://invent.kde.org/sdk/clazy.git "$RUNNER_TEMP/clazy"
+        cmake -S "$RUNNER_TEMP/clazy" -B "$RUNNER_TEMP/clazy/build" -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DLLVM_ROOT="/usr/lib/llvm-$LLVM" \
+          -DCMAKE_INSTALL_PREFIX="$HOME/.local/clazy" \
+          -DCLAZY_BUILD_CLANG_TIDY=OFF
+        cmake --build "$RUNNER_TEMP/clazy/build" --target install
+
+    - name: Publish clazy
+      shell: bash
+      run: echo "$HOME/.local/clazy/bin" >> "$GITHUB_PATH"

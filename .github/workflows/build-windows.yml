@@ -1,0 +1,47 @@
+name: Build Windows
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Installer
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-key: release
+
+      - name: Configure
+        run: >
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          -DHT_MUSIC_SEPARATE_DEBUG_INFO=ON -DHT_MUSIC_DIAGNOSTICS_ENVIRONMENT=production
+
+      - name: Build the installer
+        run: cmake --build build --target ht-music-installer
+
+      - name: Collect the debug information
+        run: cmake --build build --target ht-music-symbols
+
+      - uses: ./.github/actions/symbols
+        with:
+          path: build/symbols
+          platform: windows
+          auth-token: ${{ secrets.GLITCHTIP_AUTH_TOKEN }}
+          organization: ${{ secrets.GLITCHTIP_ORG }}
+          project: ${{ secrets.GLITCHTIP_PROJECT }}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: package-windows
+          path: build/HyperTubeMusic-Setup-${{ inputs.version }}-x64.exe
+          if-no-files-found: error

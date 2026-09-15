@@ -1,0 +1,16 @@
+option(HT_MUSIC_SEPARATE_DEBUG_INFO "Compile optimized builds with debug information, to be split off and uploaded as symbols" OFF)
+
+if(NOT HT_MUSIC_SEPARATE_DEBUG_INFO)
+    return()
+endif()
+
+if(MSVC)
+    set(CMAKE_POLICY_DEFAULT_CMP0141 NEW)
+    set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded)
+    add_link_options(/DEBUG:FULL /OPT:REF /OPT:ICF)
+else()
+    add_compile_options(-g)
+    if(NOT APPLE)
+        add_link_options(-Wl,--build-id=sha1)
+    endif()
+endif()

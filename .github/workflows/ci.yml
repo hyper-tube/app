@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CLANG_FORMAT_VERSION: 23.1.1
+  LLVM_VERSION: "23"
+  CLAZY_CHECKS: level1,no-non-pod-global-static,no-range-loop-detach,no-qproperty-without-notify,no-container-anti-pattern
+
+jobs:
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+
+      - name: Install clang-format
+        run: pip install "clang-format==$CLANG_FORMAT_VERSION"
+
+      - name: Check formatting
+        run: git ls-files '*.cpp' '*.h' '*.mm' | xargs clang-format --dry-run --Werror
+
+  analyze:
+    name: Compile and analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-key: analyze
+
+      - uses: ./.github/actions/analyzers
+        with:
+          llvm-version: ${{ env.LLVM_VERSION }}
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_C_FLAGS_DEBUG= \
+            -DCMAKE_CXX_FLAGS_DEBUG= \
+            -DCMAKE_C_COMPILER="clang-$LLVM_VERSION" \
+            -DCMAKE_CXX_COMPILER="clang++-$LLVM_VERSION"
+
+      - id: build
+        name: Build
+        run: cmake --build build
+
+      - name: Restore the analysis results
+        uses: actions/cache/restore@v6
+        with:
+          path: analysis
+          key: analysis-llvm${{ env.LLVM_VERSION }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: analysis-llvm${{ env.LLVM_VERSION }}-
+
+      - name: clang-tidy
+        run: |
+          python3 .github/scripts/analyze.py --depends-on .clang-tidy build analysis/clang-tidy -- \
+            clang-tidy -p build --quiet --warnings-as-errors='*'
+
+      - name: clazy
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          python3 .github/scripts/analyze.py build analysis/clazy -- \
+            clazy-standalone -p build \
+              --checks="$CLAZY_CHECKS" \
+              --header-filter='.*/(app|shared)/.*' \
+              --extra-arg="-resource-dir=$(clang-$LLVM_VERSION -print-resource-dir)"
+
+      - name: Save the analysis results
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        uses: actions/cache/save@v6
+        with:
+          path: analysis
+          key: analysis-llvm${{ env.LLVM_VERSION }}-${{ github.run_id }}-${{ github.run_attempt }}

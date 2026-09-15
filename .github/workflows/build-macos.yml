@@ -1,0 +1,67 @@
+name: Build macOS
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Disk image
+    runs-on: macos-14
+    env:
+      OUTPUT: HyperTubeMusic-${{ inputs.version }}-macOS-arm64.dmg
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup
+        with:
+          cache-key: release
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=14.4 \
+            -DHT_MUSIC_SEPARATE_DEBUG_INFO=ON \
+            -DHT_MUSIC_DIAGNOSTICS_ENVIRONMENT=production
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Split off the debug information
+        run: |
+          app=$(find build -maxdepth 3 -name 'ht-music.app' -print -quit)
+          mkdir symbols
+          for name in ht-music crashpad_handler; do
+            binary="$app/Contents/MacOS/$name"
+            dsymutil "$binary" -o "symbols/$name.dSYM"
+            strip -S "$binary"
+            cp "$binary" "symbols/$name"
+          done
+
+      - uses: ./.github/actions/symbols
+        with:
+          path: symbols
+          platform: macos
+          auth-token: ${{ secrets.GLITCHTIP_AUTH_TOKEN }}
+          organization: ${{ secrets.GLITCHTIP_ORG }}
+          project: ${{ secrets.GLITCHTIP_PROJECT }}
+
+      - name: Bundle
+        run: |
+          app=$(find build -maxdepth 3 -name 'ht-music.app' -print -quit)
+          "$QT_ROOT_DIR/bin/macdeployqt" "$app" -qmldir=app/qml -qmldir=shared/qml
+          codesign --force --deep --sign - "$app"
+          hdiutil create -volname "HyperTube Music" -srcfolder "$app" -ov -format UDZO "$OUTPUT"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: package-macos
+          path: ${{ env.OUTPUT }}
+          if-no-files-found: error
