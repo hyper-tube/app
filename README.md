@@ -31,7 +31,7 @@ A truly native YouTube Music client for Linux, Windows and macOS.
 
 ## Development
 
-See [BUILDING.md](BUILDING.md) for instructions on building the app from source, and [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+See [BUILDING.md](BUILDING.md) for instructions on development setup and building the app from source.
 
 ## Contributing
 
