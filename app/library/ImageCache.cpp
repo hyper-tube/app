@@ -2,13 +2,18 @@
 
 #include "core/Logging.h"
 #include "core/Paths.h"
+#include "net/Connectivity.h"
 #include "net/HttpClient.h"
 
 #include <QBuffer>
 #include <QCryptographicHash>
+#include <QDataStream>
+#include <QDateTime>
 #include <QDir>
 #include <QImageReader>
+#include <QLocale>
 #include <QSaveFile>
+#include <QTimeZone>
 
 #include <algorithm>
 #include <cstddef>
@@ -18,6 +23,8 @@ namespace {
 constexpr int kConcurrentRequests = 12;
 constexpr int kMemoryLimitKiB = 48 * 1024;
 constexpr qint64 kDiskLimit = 256 * 1024 * 1024;
+constexpr quint32 kEntryFormat = 0x68746d31;
+constexpr qint64 kDeltaSecondsLimit = 2147483648;
 
 QImage decode(const QByteArray &bytes, const QSize &target)
 {
@@ -35,6 +42,78 @@ QImage decode(const QByteArray &bytes, const QSize &target)
     return reader.read();
 }
 
+qint64 now()
+{
+    return QDateTime::currentMSecsSinceEpoch();
+}
+
+std::optional<qint64> parseHttpDate(const QByteArray &value)
+{
+    const QString text = QString::fromLatin1(value.trimmed());
+    QDateTime date =
+        QLocale::c().toDateTime(text, QStringLiteral("ddd, dd MMM yyyy HH:mm:ss 'GMT'"));
+
+    if (date.isValid())
+        date.setTimeZone(QTimeZone::UTC);
+    else
+        date = QDateTime::fromString(text, Qt::RFC2822Date);
+
+    if (!date.isValid())
+        return std::nullopt;
+
+    return date.toMSecsSinceEpoch();
+}
+
+std::optional<qint64> millisecondsOf(const QByteArray &deltaSeconds)
+{
+    bool ok = false;
+    const qint64 seconds = deltaSeconds.trimmed().toLongLong(&ok);
+    if (!ok || seconds < 0)
+        return std::nullopt;
+
+    return std::min(seconds, kDeltaSecondsLimit) * 1000;
+}
+
+std::optional<qint64> expiryOf(const net::Response &response, qint64 requestedAt, qint64 receivedAt)
+{
+    bool noCache = false;
+    std::optional<qint64> maxAge;
+
+    for (const QByteArray &part : response.header("cache-control").split(',')) {
+        const QByteArray directive = part.trimmed().toLower();
+        if (directive == "no-store")
+            return std::nullopt;
+        if (directive == "no-cache" || directive.startsWith("no-cache="))
+            noCache = true;
+        else if (directive.startsWith("max-age=") && !maxAge)
+            maxAge = millisecondsOf(directive.sliced(8).replace('"', "")).value_or(0);
+    }
+
+    const qint64 date = parseHttpDate(response.header("date")).value_or(receivedAt);
+    qint64 lifetime = parseHttpDate(response.header("expires")).value_or(date) - date;
+
+    if (noCache)
+        lifetime = 0;
+    else if (maxAge)
+        lifetime = *maxAge;
+
+    const qint64 apparentAge = std::max<qint64>(0, receivedAt - date);
+    const qint64 correctedAge =
+        millisecondsOf(response.header("age")).value_or(0) + receivedAt - requestedAt;
+
+    return receivedAt + lifetime - std::max(apparentAge, correctedAge);
+}
+
+net::Headers validatorsFor(const QByteArray &etag, const QByteArray &lastModified)
+{
+    net::Headers headers;
+    if (!etag.isEmpty())
+        headers.append(net::Header {QByteArrayLiteral("If-None-Match"), etag});
+    if (!lastModified.isEmpty())
+        headers.append(net::Header {QByteArrayLiteral("If-Modified-Since"), lastModified});
+    return headers;
+}
+
 }
 
 namespace library {
@@ -45,6 +124,41 @@ ImageCache::ImageCache(QObject *parent)
     , m_directory(core::paths::artworkCacheDir())
 {
     QMetaObject::invokeMethod(this, &ImageCache::pruneDisk, Qt::QueuedConnection);
+}
+
+ImageCache::Entry ImageCache::Entry::read(const QString &path, const QUrl &url)
+{
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
+        return {url};
+
+    QDataStream stream(&file);
+    stream.setVersion(QDataStream::Qt_6_0);
+    quint32 format = 0;
+    stream >> format;
+
+    if (format != kEntryFormat) {
+        file.seek(0);
+        return {url, file.readAll()};
+    }
+
+    Entry entry;
+    stream >> entry.url >> entry.body >> entry.etag >> entry.lastModified >> entry.expiresAt;
+
+    if (stream.status() != QDataStream::Ok || entry.url.scheme() != url.scheme()
+        || entry.url.host() != url.host())
+        return {url};
+
+    return entry;
+}
+
+QByteArray ImageCache::Entry::serialized() const
+{
+    QByteArray bytes;
+    QDataStream stream(&bytes, QIODevice::WriteOnly);
+    stream.setVersion(QDataStream::Qt_6_0);
+    stream << kEntryFormat << url << body << etag << lastModified << expiresAt;
+    return bytes;
 }
 
 QUrl ImageCache::sizedUrl(const QString &source, const QSize &size) const
@@ -101,8 +215,12 @@ void ImageCache::load(const QString &source, const QSize &size, Handler handler,
         + QByteArray::number(target.height());
     const QString key =
         QString::fromLatin1(QCryptographicHash::hash(identity, QCryptographicHash::Sha256).toHex());
-    if (const QImage *cached = m_memory.object(key)) {
-        handler(*cached);
+
+    const bool online = net::Connectivity::instance().online();
+    
+    if (const Decoded *cached = m_memory.object(key);
+        cached && (!online || cached->expiresAt > now())) {
+        handler(cached->image);
         return;
     }
     if (m_pending.contains(key)) {
@@ -111,17 +229,21 @@ void ImageCache::load(const QString &source, const QSize &size, Handler handler,
     }
     m_pending.insert(key, {{std::move(handler), std::move(needed)}});
     const QString path = m_directory + QLatin1Char('/') + key;
-    QFile file(path);
-    if (file.open(QIODevice::ReadOnly)) {
-        const QImage image = decode(file.readAll(), target);
+    Entry entry = Entry::read(path, url);
+
+    if (!entry.body.isEmpty() && (!online || entry.expiresAt > now())) {
+        const QImage image = decode(entry.body, target);
+
         if (!image.isNull()) {
-            finish(key, image);
+            finish(key, image, entry.expiresAt);
             return;
         }
-        file.close();
-        file.remove();
+
+        QFile::remove(path);
+        entry = Entry {url};
     }
-    m_requests.append({key, path, url, target});
+
+    m_requests.append({key, path, target, std::move(entry)});
     startNext();
 }
 
@@ -134,41 +256,61 @@ void ImageCache::startNext()
             continue;
         }
         ++m_activeRequests;
-        net::HttpClient::instance().get(request.url, {}, net::Credentialed::No,
-                                        [this, request](const net::Response &response) {
+        const qint64 requestedAt = now();
+        net::HttpClient::instance().get(
+            request.entry.url, validatorsFor(request.entry.etag, request.entry.lastModified),
+            net::Credentialed::No, [this, request, requestedAt](const net::Response &response) {
             --m_activeRequests;
-            if (!isNeeded(request.key)) {
+            if (isNeeded(request.key))
+                complete(request, response, requestedAt);
+            else
                 finish(request.key, {});
-                startNext();
-                return;
-            }
-            const QImage image = response.ok() ? decode(response.body, request.size) : QImage();
-            if (!image.isNull()) {
-                QSaveFile file(request.path);
-                if (file.open(QIODevice::WriteOnly)) {
-                    file.write(response.body);
-                    file.commit();
-                }
-                if (++m_writesSincePrune >= 128) {
-                    m_writesSincePrune = 0;
-                    pruneDisk();
-                }
-            } else {
-                qCDebug(logArtwork) << "thumbnail unavailable" << response.status;
-            }
-            if (image.isNull()
-                && request.url.fileName().startsWith(QLatin1String("maxresdefault"))) {
-                Request fallback = request;
-                QString path = fallback.url.path();
-                path.replace(QStringLiteral("maxresdefault"), QStringLiteral("mqdefault"));
-                fallback.url.setPath(path);
-                m_requests.append(fallback);
-            } else {
-                finish(request.key, image);
-            }
             startNext();
         });
     }
+}
+
+void ImageCache::complete(const Request &request, const net::Response &response, qint64 requestedAt)
+{
+    const Entry &stale = request.entry;
+    const bool notModified = response.status == 304 && !stale.body.isEmpty();
+    Entry entry =
+        notModified ? stale : Entry {stale.url, response.ok() ? response.body : QByteArray()};
+    const QImage image = decode(entry.body, request.size);
+
+    if (image.isNull()) {
+        qCDebug(logArtwork) << "thumbnail unavailable" << response.status;
+
+        if (stale.url.fileName().startsWith(QLatin1String("maxresdefault"))) {
+            Request fallback = request;
+            QString path = fallback.entry.url.path();
+            path.replace(QStringLiteral("maxresdefault"), QStringLiteral("mqdefault"));
+            fallback.entry.url.setPath(path);
+            m_requests.append(std::move(fallback));
+            return;
+        }
+
+        if (notModified)
+            QFile::remove(request.path);
+        finish(request.key, decode(stale.body, request.size), stale.expiresAt);
+        return;
+    }
+
+    const std::optional<qint64> expiresAt = expiryOf(response, requestedAt, now());
+
+    if (expiresAt) {
+        const QByteArray etag = response.header("etag");
+        const QByteArray lastModified = response.header("last-modified");
+        entry.etag = etag.isEmpty() ? entry.etag : etag;
+        entry.lastModified = lastModified.isEmpty() ? entry.lastModified : lastModified;
+        entry.expiresAt = *expiresAt;
+        store(request.path, entry);
+    } else {
+        QFile::remove(request.path);
+        m_memory.remove(request.key);
+    }
+
+    finish(request.key, image, expiresAt);
 }
 
 bool ImageCache::isNeeded(const QString &key) const
@@ -180,13 +322,30 @@ bool ImageCache::isNeeded(const QString &key) const
     });
 }
 
-void ImageCache::finish(const QString &key, const QImage &image)
+void ImageCache::finish(const QString &key, const QImage &image, std::optional<qint64> expiresAt)
 {
-    if (!image.isNull())
-        m_memory.insert(key, new QImage(image), qMax(1, int(image.sizeInBytes() / 1024)));
-    const QList<Listener> listeners = m_pending.take(key);
+    if (!image.isNull() && expiresAt)
+        m_memory.insert(key, new Decoded {image, *expiresAt},
+                        qMax(1, int(image.sizeInBytes() / 1024)));
+
+                        const QList<Listener> listeners = m_pending.take(key);
     for (const Listener &listener : listeners)
         listener.handler(listener.needed && !listener.needed() ? QImage() : image);
+}
+
+void ImageCache::store(const QString &path, const Entry &entry)
+{
+    QSaveFile file(path);
+
+    if (file.open(QIODevice::WriteOnly)) {
+        file.write(entry.serialized());
+        file.commit();
+    }
+
+    if (++m_writesSincePrune >= 128) {
+        m_writesSincePrune = 0;
+        pruneDisk();
+    }
 }
 
 void ImageCache::pruneDisk()

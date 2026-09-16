@@ -8,6 +8,11 @@
 #include <QUrl>
 
 #include <functional>
+#include <optional>
+
+namespace net {
+struct Response;
+}
 
 namespace library {
 
@@ -30,21 +35,42 @@ private:
         Needed needed;
     };
 
+    struct Entry
+    {
+        QUrl url;
+        QByteArray body;
+        QByteArray etag;
+        QByteArray lastModified;
+        qint64 expiresAt = 0;
+
+        static Entry read(const QString &path, const QUrl &url);
+        QByteArray serialized() const;
+    };
+
+    struct Decoded
+    {
+        QImage image;
+        qint64 expiresAt = 0;
+    };
+
     struct Request
     {
         QString key;
         QString path;
-        QUrl url;
         QSize size;
+        Entry entry;
     };
 
     void startNext();
+    void complete(const Request &request, const net::Response &response, qint64 requestedAt);
     bool isNeeded(const QString &key) const;
-    void finish(const QString &key, const QImage &image);
+    void finish(const QString &key, const QImage &image,
+                std::optional<qint64> expiresAt = std::nullopt);
+    void store(const QString &path, const Entry &entry);
     void pruneDisk();
     QUrl sizedUrl(const QString &source, const QSize &size) const;
 
-    QCache<QString, QImage> m_memory;
+    QCache<QString, Decoded> m_memory;
     QHash<QString, QList<Listener>> m_pending;
     QList<Request> m_requests;
     QString m_directory;
