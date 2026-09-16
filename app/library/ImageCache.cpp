@@ -217,7 +217,7 @@ void ImageCache::load(const QString &source, const QSize &size, Handler handler,
         QString::fromLatin1(QCryptographicHash::hash(identity, QCryptographicHash::Sha256).toHex());
 
     const bool online = net::Connectivity::instance().online();
-    
+
     if (const Decoded *cached = m_memory.object(key);
         cached && (!online || cached->expiresAt > now())) {
         handler(cached->image);
@@ -328,7 +328,7 @@ void ImageCache::finish(const QString &key, const QImage &image, std::optional<q
         m_memory.insert(key, new Decoded {image, *expiresAt},
                         qMax(1, int(image.sizeInBytes() / 1024)));
 
-                        const QList<Listener> listeners = m_pending.take(key);
+    const QList<Listener> listeners = m_pending.take(key);
     for (const Listener &listener : listeners)
         listener.handler(listener.needed && !listener.needed() ? QImage() : image);
 }
