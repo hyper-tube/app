@@ -31,7 +31,7 @@ Item {
     required property string sectionDescription
     required property string sectionMessage
     required property BrowseModel page
-    required property int columns
+    required property real cellSize
     required property ListView viewport
 
     readonly property bool ghostMore: !!root.page && root.page.kind === "library"
@@ -231,7 +231,7 @@ Item {
 
         Row {
             width: root.usableWidth
-            height: Math.min(200, root.usableWidth / root.columns - 24) + 88
+            height: root.cellSize + 88
             spacing: 4
 
             Repeater {
@@ -243,7 +243,7 @@ Item {
                     required property var modelData
                     required property int index
 
-                    artSize: Math.min(200, root.usableWidth / root.columns - 24)
+                    artSize: root.cellSize
                     title: modelData.title
                     subtitle: modelData.subtitle
                     artId: modelData.artId

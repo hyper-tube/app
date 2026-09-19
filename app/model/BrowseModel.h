@@ -22,7 +22,7 @@ class BrowseModel : public QAbstractListModel
 
     Q_PROPERTY(bool local READ local CONSTANT)
     Q_PROPERTY(bool detail READ detail CONSTANT)
-    Q_PROPERTY(bool gridSkeleton READ gridSkeleton CONSTANT)
+    Q_PROPERTY(QString skeleton READ skeleton NOTIFY stateChanged)
     Q_PROPERTY(bool charts READ charts CONSTANT)
     Q_PROPERTY(int sortIndex READ sortIndex NOTIFY stateChanged)
     Q_PROPERTY(QString title READ title NOTIFY stateChanged)
@@ -71,7 +71,7 @@ public:
     virtual bool local() const { return false; }
     bool detail() const;
     bool sequential() const;
-    bool gridSkeleton() const;
+    QString skeleton() const;
     bool charts() const { return m_source.browseId == QLatin1String("FEmusic_charts"); }
     int sortIndex() const;
     int scopeIndex() const;

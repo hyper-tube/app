@@ -41,6 +41,7 @@ private:
 
         quint64 identity = 0;
         Item snapshot;
+        QList<quint64> cells;
 
         bool operator==(const Row &other) const
         {
@@ -72,6 +73,8 @@ private:
     static bool listed(const Row &row);
     int firstCell(const Row &row) const;
     int cellLimit(const Row &row, const ItemModel *items) const;
+    QList<quint64> cellIdentities(const Row &row, const ItemModel *items) const;
+    QList<int> changedRoles(const Row &current, const Row &next, bool sectionChanged) const;
     QList<Row> layout() const;
     QList<SectionState> sectionStates() const;
     void sync();

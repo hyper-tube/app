@@ -139,15 +139,23 @@ bool BrowseModel::sequential() const
         || local();
 }
 
-bool BrowseModel::gridSkeleton() const
+QString BrowseModel::skeleton() const
 {
     static const QStringList listed {QStringLiteral("FEmusic_liked_videos"),
-                                     QStringLiteral("FEmusic_library_privately_owned_tracks")};
+                                     QStringLiteral("FEmusic_library_privately_owned_tracks"),
+                                     QStringLiteral("FEmusic_library_corpus_track_artists"),
+                                     QStringLiteral("FEmusic_library_user_profile_channels_list")};
+
     if (local())
-        return false;
+        return QStringLiteral("list");
+
     if (kind() == QLatin1String("library"))
-        return !listed.contains(m_source.browseId);
-    return kind() == QLatin1String("feed") || kind() == QLatin1String("category");
+        return listed.contains(m_source.browseId) ? QStringLiteral("list") : QStringLiteral("grid");
+
+    if (kind() == QLatin1String("feed") || kind() == QLatin1String("category"))
+        return QStringLiteral("shelves");
+
+    return QStringLiteral("list");
 }
 
 bool BrowseModel::followable() const

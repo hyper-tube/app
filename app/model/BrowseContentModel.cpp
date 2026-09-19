@@ -142,6 +142,36 @@ int BrowseContentModel::cellLimit(const Row &row, const ItemModel *items) const
     return row.item + (row.type == kGrid ? m_columns : 1);
 }
 
+QList<quint64> BrowseContentModel::cellIdentities(const Row &row, const ItemModel *items) const
+{
+    QList<quint64> identities;
+
+    if (row.type != kGrid && !spans(row))
+        return identities;
+
+    for (int i = firstCell(row); i < qMin(cellLimit(row, items), items->rowCount()); ++i)
+        identities.append(items->identity(i));
+
+    return identities;
+}
+
+QList<int> BrowseContentModel::changedRoles(const Row &current, const Row &next,
+                                            bool sectionChanged) const
+{
+    QList<int> roles;
+
+    if (current.item != next.item)
+        roles.append(ItemIndex);
+
+    if (current.cells != next.cells)
+        roles.append({Entry, Cells});
+
+    if (sectionChanged)
+        roles.append({Title, Subtitle, More, HasMore, Busy});
+
+    return roles;
+}
+
 QString BrowseContentModel::navigationStyle(const ItemModel *items) const
 {
     bool striped = false;
@@ -251,6 +281,7 @@ QList<BrowseContentModel::Row> BrowseContentModel::layout() const
         const bool listedTracks = m_page->kind() == kCategory && holdsTracks(items);
         const bool grid = horizontal && catalogue && !listedTracks;
         const bool ranked = sectionData(section, "ranked").toBool();
+        const qsizetype first = rows.size();
         if (sectionData(section, "card").toBool()) {
             rows.append({section, -1, kCard});
         } else if (!sectionData(section, "sectionDescription").toString().isEmpty()) {
@@ -281,6 +312,10 @@ QList<BrowseContentModel::Row> BrowseContentModel::layout() const
                              grid ? 0 : items->identity(item), entry});
             }
         }
+
+        for (qsizetype row = first; row < rows.size(); ++row)
+            rows[row].cells = cellIdentities(rows.at(row), items);
+
         rows.append({section, -1, QStringLiteral("continuation")});
     }
     return rows;
@@ -316,29 +351,29 @@ void BrowseContentModel::sync()
         m_rows.removeAt(row);
         endRemoveRows();
     }
+    const QList<SectionState> states = sectionStates();
+    const QList<SectionState> previous = std::exchange(m_sectionStates, states);
     for (int row = 0; row < rows.size(); ++row) {
-        const int existing = m_rows.indexOf(rows.at(row), row);
+        const Row &next = rows.at(row);
+        const int existing = m_rows.indexOf(next, row);
+
         if (existing < 0) {
             beginInsertRows({}, row, row);
-            m_rows.insert(row, rows.at(row));
+            m_rows.insert(row, next);
             endInsertRows();
-        } else if (existing != row) {
+            continue;
+        }
+
+        if (existing != row) {
             beginMoveRows({}, existing, existing, {}, row);
             m_rows.move(existing, row);
             endMoveRows();
         }
-        m_rows[row] = rows.at(row);
-    }
 
-    const QList<SectionState> states = sectionStates();
-    const QList<SectionState> previous = std::exchange(m_sectionStates, states);
-    for (int row = 0; row < m_rows.size(); ++row) {
-        const Row &entry = m_rows.at(row);
-        QList<int> roles {Entry, Entries, ItemIndex};
-        if (previous.value(entry.section) != states.value(entry.section))
-            roles.append({Title, Subtitle, More, HasMore, Busy});
-        if (entry.type == kGrid || spans(entry))
-            roles.append(Cells);
+        const Row current = std::exchange(m_rows[row], next);
+        const QList<int> roles =
+            changedRoles(current, next, previous.value(next.section) != states.value(next.section));
+
         if (!roles.isEmpty())
             Q_EMIT dataChanged(index(row), index(row), roles);
     }

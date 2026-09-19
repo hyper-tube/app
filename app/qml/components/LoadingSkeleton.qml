@@ -4,19 +4,23 @@ import HtMusic
 Column {
     id: root
 
-    property bool cards: true
-    property bool episodes: false
+    property string shape: "list"
+    property int columns: 1
+    property real cellSize: 168
     property real departure: 0
     property real sweep: -0.3
 
-    spacing: 18
+    readonly property bool shelves: root.shape === "shelves"
+    readonly property real inset: Theme.size.cardInset
+
+    spacing: root.shape === "grid" ? 2 : 18
     opacity: 1 - root.departure
     scale: 1 - 0.06 * root.departure
     transformOrigin: Item.Top
     transform: Translate { y: -18 * root.departure }
 
     Repeater {
-        model: root.episodes ? 5 : 0
+        model: root.shape === "episodes" ? 5 : 0
 
         delegate: Row {
             width: root.width
@@ -63,7 +67,54 @@ Column {
     }
 
     Repeater {
-        model: root.episodes ? 0 : root.cards ? 2 : 7
+        model: root.shape === "grid" ? 3 : 0
+
+        delegate: Row {
+            spacing: 4
+
+            Repeater {
+                model: root.columns
+
+                delegate: Item {
+                    width: root.cellSize + root.inset * 2
+                    height: root.cellSize + 88
+
+                    SkeletonBlock {
+                        phase: root.sweep
+                        x: root.inset
+                        y: root.inset
+                        width: root.cellSize
+                        height: root.cellSize
+                        radius: Theme.rounding.small
+                        colBase: Theme.colLayer3
+                    }
+
+                    SkeletonBlock {
+                        phase: root.sweep
+                        x: root.inset
+                        y: root.inset + root.cellSize + 14
+                        width: root.cellSize * 0.7
+                        height: 12
+                        radius: Theme.rounding.verysmall
+                        colBase: Theme.colLayer4
+                    }
+
+                    SkeletonBlock {
+                        phase: root.sweep
+                        x: root.inset
+                        y: root.inset + root.cellSize + 34
+                        width: root.cellSize * 0.45
+                        height: 10
+                        radius: Theme.rounding.verysmall
+                        colBase: Theme.colLayer3
+                    }
+                }
+            }
+        }
+    }
+
+    Repeater {
+        model: root.shelves ? 2 : root.shape === "list" ? 7 : 0
 
         delegate: Column {
             width: root.width
@@ -71,14 +122,14 @@ Column {
 
             SkeletonBlock {
                 phase: root.sweep
-                width: root.cards ? 180 : parent.width * 0.65
-                height: root.cards ? 20 : 44
+                width: root.shelves ? 180 : parent.width * 0.65
+                height: root.shelves ? 20 : 44
                 radius: Theme.rounding.verysmall
                 colBase: Theme.colLayer4
             }
 
             Row {
-                visible: root.cards
+                visible: root.shelves
                 spacing: 20
 
                 Repeater {

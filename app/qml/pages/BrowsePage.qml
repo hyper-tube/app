@@ -21,6 +21,8 @@ Item {
     readonly property real pageWidth: Math.min(root.width, Theme.size.contentMaxWidth)
     readonly property real pageInset: (root.width - root.pageWidth) / 2
     readonly property real contentWidth: Math.min(list.width, Theme.size.contentMaxWidth)
+    readonly property real cellSize: Math.min(200,
+        (root.contentWidth - Theme.size.bleed * 2) / contentModel.columns - 24)
     readonly property real podcastColumn: Math.max(280, Math.min(380, root.pageWidth * 0.3))
     readonly property bool podcastSplit: root.podcastPage && root.pageWidth >= 1000
     readonly property bool initialLoading: !!root.page && root.page.refreshing
@@ -270,7 +272,7 @@ Item {
             reveal: Math.max(0, Math.min(1, (root.loadingReveal
                 - Math.min(0.25, Math.max(0, y - list.contentY) / Math.max(1, list.height) * 0.25)) / 0.75))
             page: root.page
-            columns: contentModel.columns
+            cellSize: root.cellSize
             viewport: list
             reorder: playlistDrag
             selectMode: root.selectMode
@@ -396,8 +398,9 @@ Item {
             x: (list.width - root.contentWidth) / 2 + Theme.size.bleed
             y: list.headerItem ? list.headerItem.y + list.headerItem.height - list.contentY : 0
             width: root.contentWidth - Theme.size.bleed * 2
-            cards: !!root.page && root.page.gridSkeleton
-            episodes: root.podcastPage
+            shape: root.podcastPage ? "episodes" : !!root.page ? root.page.skeleton : "list"
+            columns: contentModel.columns
+            cellSize: root.cellSize
             departure: root.loadingReveal
         }
     }
