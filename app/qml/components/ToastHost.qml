@@ -99,6 +99,7 @@ Column {
             required property bool closing
 
             property bool entered: false
+            property bool seen: false
             property real remaining
             property real reveal: 0
 
@@ -247,11 +248,17 @@ Column {
                 }
             }
 
+            Timer {
+                interval: 1500
+                running: !notice.seen && notice.Window.active
+                onTriggered: notice.seen = true
+            }
+
             NumberAnimation on remaining {
                 from: 1
                 to: 0
                 duration: notice.error ? 9000 : 5000
-                paused: hover.hovered || !notice.Window.active
+                paused: hover.hovered || !(notice.seen || notice.Window.active)
                 onFinished: root.dismiss(notice.noticeId)
             }
 
