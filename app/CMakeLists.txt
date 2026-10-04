@@ -65,6 +65,7 @@ qt_add_executable(ht-music
     media/EpisodeDetails.h
     media/EpisodeDetails.cpp
     media/Track.h
+    media/Credit.h
     media/SearchSuggestions.h
     media/SearchSuggestions.cpp
     media/SearchHistory.h
@@ -362,6 +363,7 @@ qt_add_qml_module(ht-music
         qml/components/NavRail.qml
         qml/components/NavItem.qml
         qml/components/Card.qml
+        qml/components/CreditLine.qml
         qml/components/Shelf.qml
         qml/components/SongRow.qml
         qml/components/PlayingIndicator.qml

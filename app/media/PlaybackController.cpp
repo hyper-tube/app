@@ -203,6 +203,7 @@ PlaybackController::PlaybackController(QObject *parent)
         if (entry.track.videoId != track().videoId)
             return;
         m_currentEntry = entry;
+        adoptCredits(entry.track);
         const bool resolved =
             m_currentStream.videoId == entry.track.videoId && m_currentStream.episode.has_value();
         if (!entry.track.episode || m_queue.at(m_queueIndex).episode || resolved)
@@ -1093,6 +1094,24 @@ void PlaybackController::enrichCurrent(const player::Stream &stream)
     }
     if (current.durationMs > 0 || current.live)
         setDuration(current.durationMs);
+}
+
+void PlaybackController::adoptCredits(const Track &source)
+{
+    Track &current = m_queue[m_queueIndex];
+    const bool credits = current.credits.isEmpty() && !source.credits.isEmpty();
+    const bool album = current.albumId.isEmpty() && !source.albumId.isEmpty();
+    if (!credits && !album)
+        return;
+    if (credits)
+        current.credits = source.credits;
+    if (album) {
+        current.albumId = source.albumId;
+        if (current.album.isEmpty())
+            current.album = source.album;
+    }
+    Q_EMIT queueChanged();
+    Q_EMIT trackChanged();
 }
 
 void PlaybackController::applyStream(const player::Stream &stream)

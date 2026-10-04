@@ -8,6 +8,7 @@
 #include <QSet>
 
 #include <algorithm>
+#include <utility>
 
 namespace {
 
@@ -288,6 +289,17 @@ qint64 durationOf(const QString &text)
     return seconds * 1000;
 }
 
+void credit(media::Track &track, const QString &name, const QString &browseId, const QString &kind)
+{
+    if (name.isEmpty() || browseId.isEmpty())
+        return;
+    for (const media::Credit &existing : std::as_const(track.credits)) {
+        if (existing.browseId == browseId)
+            return;
+    }
+    track.credits.append({name, browseId, kind});
+}
+
 void readMetadata(const QJsonValue &text, model::Item &item)
 {
     using namespace innertube::parsers;
@@ -304,8 +316,13 @@ void readMetadata(const QJsonValue &text, model::Item &item)
                 kind == QLatin1String("artist") || kind == QLatin1String("podcast");
             if (credited && !artists.contains(label))
                 artists.append(label);
-            if (kind == QLatin1String("album"))
+            if (credited)
+                credit(item.track, label, browse.value(QStringLiteral("browseId")).toString(),
+                       kind);
+            if (kind == QLatin1String("album")) {
                 item.track.album = label;
+                item.track.albumId = browse.value(QStringLiteral("browseId")).toString();
+            }
             if (kind == QLatin1String("podcast"))
                 item.actions.podcastId = browse.value(QStringLiteral("browseId")).toString();
             if (kind == QLatin1String("profile"))

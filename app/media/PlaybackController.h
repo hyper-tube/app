@@ -158,6 +158,7 @@ private:
 
     void startCurrent();
     void enrichCurrent(const player::Stream &stream);
+    void adoptCredits(const Track &source);
     bool advance(int delta);
     void advanceQueue();
     void stopAtEnd();

@@ -133,18 +133,19 @@ void LibraryActions::rememberRating(const QString &videoId, int rating)
 
 void LibraryActions::refreshTrack(const QString &videoId)
 {
-    if (videoId.isEmpty() || !auth::Account::instance().signedIn()
-        || !net::Connectivity::instance().online())
+    if (videoId.isEmpty() || !net::Connectivity::instance().online())
         return;
+    const bool signedIn = auth::Account::instance().signedIn();
     const quint64 generation = m_accountGeneration;
     const quint64 version = m_ratingVersions.value(videoId);
     m_endpoints.next({}, videoId, {},
-                     [this, videoId, generation, version](const innertube::Reply &reply) {
+                     [this, videoId, signedIn, generation, version](const innertube::Reply &reply) {
         if (!reply.ok() || generation != m_accountGeneration)
             return;
         if (const std::optional<model::Item> entry = entryFor(videoId, reply.json))
             Q_EMIT trackEntryRead(*entry);
-        if (m_ratingWrites.contains(videoId) || m_ratingVersions.value(videoId) != version)
+        if (!signedIn || m_ratingWrites.contains(videoId)
+            || m_ratingVersions.value(videoId) != version)
             return;
         const QString status =
             innertube::parsers::findFirst(reply.json.value(QStringLiteral("playerOverlays")),

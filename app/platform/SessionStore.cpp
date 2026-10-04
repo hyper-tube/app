@@ -3,6 +3,7 @@
 #include "core/Json.h"
 #include "core/Logging.h"
 #include "core/Paths.h"
+#include "library/TrackStorage.h"
 #include "media/PlaybackController.h"
 
 #include <QFile>
@@ -29,6 +30,11 @@ QJsonObject encode(const media::Track &track)
         entry.insert(QStringLiteral("artist"), track.artist);
     if (!track.album.isEmpty())
         entry.insert(QStringLiteral("album"), track.album);
+    if (!track.albumId.isEmpty())
+        entry.insert(QStringLiteral("albumId"), track.albumId);
+    if (!track.credits.isEmpty())
+        entry.insert(QStringLiteral("credits"),
+                     library::trackStorage::encodeCredits(track.credits));
     if (!track.artId.isEmpty())
         entry.insert(QStringLiteral("artId"), track.artId);
     if (track.durationMs > 0)
@@ -80,6 +86,8 @@ media::Track decode(const QJsonObject &entry)
     track.title = entry.value(QStringLiteral("title")).toString();
     track.artist = entry.value(QStringLiteral("artist")).toString();
     track.album = entry.value(QStringLiteral("album")).toString();
+    track.albumId = entry.value(QStringLiteral("albumId")).toString();
+    track.credits = library::trackStorage::decodeCredits(entry.value(QStringLiteral("credits")));
     track.artId = entry.value(QStringLiteral("artId")).toString();
     track.durationMs = core::json::toInt(entry.value(QStringLiteral("durationMs")));
     track.video = entry.value(QStringLiteral("video")).toBool();

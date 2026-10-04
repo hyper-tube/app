@@ -18,6 +18,7 @@ Rectangle {
     property real podcastReveal: root.episode ? 1 : 0
 
     signal expandRequested
+    signal pageRequested(string browseId, string kind)
 
     function openTrackMenu(x) {
         trackMenu.show({ "entry": PlaybackController.currentEntry(), "source": root, "x": x, "y": 0,
@@ -309,13 +310,15 @@ Rectangle {
                         active: PlaybackController.playing
                     }
 
-                    StyledText {
+                    CreditLine {
                         width: parent.width
                         visible: switcher.track.valid
-                        text: switcher.track.artist
-                        font.pixelSize: Theme.font.smaller
-                        color: Theme.colInactive
-                        elide: Text.ElideRight
+                        credits: switcher.track.credits
+                        album: switcher.track.album
+                        albumId: switcher.track.albumId
+                        fallback: switcher.track.artist
+                        interactive: Connectivity.online
+                        onPageRequested: (browseId, kind) => root.pageRequested(browseId, kind)
                     }
                 }
             }

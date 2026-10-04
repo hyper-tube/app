@@ -27,6 +27,8 @@ Item {
             title: entry.title,
             artist: entry.artist,
             album: entry.album,
+            albumId: entry.albumId,
+            credits: entry.credits,
             artId: entry.artId,
             video: entry.video,
             live: entry.live,

@@ -18,6 +18,7 @@ Rectangle {
     readonly property bool detailsShown: root.episode && root.pane === 1
 
     signal collapseRequested
+    signal pageRequested(string browseId, string kind)
 
     y: root.height
     visible: y < height
@@ -146,13 +147,16 @@ Rectangle {
                         active: PlaybackController.playing
                     }
 
-                    StyledText {
+                    CreditLine {
                         width: parent.width
-                        text: switcher.track.artist
-                            + (switcher.track.album ? "  -  " + switcher.track.album : "")
-                        font.pixelSize: Theme.font.large
-                        color: Theme.colOnSurfaceVariant
-                        elide: Text.ElideRight
+                        credits: switcher.track.credits
+                        album: switcher.track.album
+                        albumId: switcher.track.albumId
+                        fallback: switcher.track.artist
+                        pixelSize: Theme.font.large
+                        colText: Theme.colOnSurfaceVariant
+                        interactive: Connectivity.online
+                        onPageRequested: (browseId, kind) => root.pageRequested(browseId, kind)
                     }
                 }
             }

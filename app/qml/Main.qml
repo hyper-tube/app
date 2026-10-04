@@ -301,6 +301,7 @@ Window {
                 anchors.bottom: parent.bottom
                 enabled: !fullPlayer.visible && !pages.modalActive && !window.sheetVisible
                 onExpandRequested: fullPlayer.open = true
+                onPageRequested: (browseId, kind) => Browser.openPage(browseId, kind)
             }
 
             FullPlayer {
@@ -310,6 +311,10 @@ Window {
                 anchors.right: parent.right
                 height: parent.height
                 onCollapseRequested: open = false
+                onPageRequested: (browseId, kind) => {
+                    open = false;
+                    Browser.openPage(browseId, kind);
+                }
             }
         }
     }

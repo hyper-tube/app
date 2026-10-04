@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Credit.h"
+
+#include <QList>
 #include <QMetaType>
 #include <QString>
 #include <QtQml/qqmlregistration.h>
@@ -15,6 +18,8 @@ class Track
     Q_PROPERTY(QString title MEMBER title)
     Q_PROPERTY(QString artist MEMBER artist)
     Q_PROPERTY(QString album MEMBER album)
+    Q_PROPERTY(QString albumId MEMBER albumId)
+    Q_PROPERTY(QList<media::Credit> credits MEMBER credits)
     Q_PROPERTY(QString artId MEMBER artId)
     Q_PROPERTY(qint64 durationMs MEMBER durationMs)
     Q_PROPERTY(bool liked MEMBER liked)
@@ -30,6 +35,8 @@ public:
     QString title;
     QString artist;
     QString album;
+    QString albumId;
+    QList<Credit> credits;
     QString artId;
     qint64 durationMs = 0;
     bool liked = false;
