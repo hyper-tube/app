@@ -26,7 +26,10 @@ const QString kViewSongKey = QStringLiteral("viewSong");
 const QString kInstallAppKey = QStringLiteral("installApp");
 const QString kActivityKey = QStringLiteral("activity");
 
-constexpr qint64 kMinimumInterval = 5000;
+constexpr int kSettleDelay = 250;
+constexpr int kBudget = 5;
+constexpr qint64 kBudgetWindow = 20000;
+constexpr qint64 kDriftTolerance = 2000;
 constexpr int kFirstRetry = 2000;
 constexpr int kMaximumRetry = 60000;
 constexpr int kReassertInterval = 15000;
@@ -61,6 +64,35 @@ QString clamped(const QString &text)
     return text;
 }
 
+QJsonObject timeline(const QJsonObject &activity)
+{
+    return activity.value(QStringLiteral("timestamps")).toObject();
+}
+
+QJsonObject withoutTimeline(QJsonObject activity)
+{
+    activity.remove(QStringLiteral("timestamps"));
+    return activity;
+}
+
+bool drifted(const QJsonObject &current, const QJsonObject &published, const QString &key)
+{
+    const QJsonValue now = current.value(key);
+    const QJsonValue then = published.value(key);
+    if (now.isUndefined() || then.isUndefined())
+        return now.isUndefined() != then.isUndefined();
+    return qAbs(now.toInteger() - then.toInteger()) > kDriftTolerance;
+}
+
+bool differs(const QJsonObject &current, const QJsonObject &published)
+{
+    if (withoutTimeline(current) != withoutTimeline(published))
+        return true;
+    const QJsonObject now = timeline(current);
+    const QJsonObject then = timeline(published);
+    return drifted(now, then, QStringLiteral("start")) || drifted(now, then, QStringLiteral("end"));
+}
+
 }
 
 namespace plugin::discord {
@@ -68,33 +100,32 @@ namespace plugin::discord {
 DiscordPresence::DiscordPresence(QObject *parent)
     : Plugin(parent)
     , m_ipc(new DiscordIpc(this))
-    , m_throttle(new QTimer(this))
+    , m_settle(new QTimer(this))
     , m_retry(new QTimer(this))
     , m_reassert(new QTimer(this))
 {
-    m_throttle->setSingleShot(true);
+    m_settle->setSingleShot(true);
     m_retry->setSingleShot(true);
+    m_reassert->setSingleShot(true);
     m_reassert->setInterval(kReassertInterval);
+    m_clock.start();
 
-    connect(m_throttle, &QTimer::timeout, this, &DiscordPresence::publishNow);
+    connect(m_settle, &QTimer::timeout, this, [this] { deliver(false); });
     connect(m_retry, &QTimer::timeout, this, &DiscordPresence::refresh);
-    connect(m_reassert, &QTimer::timeout, this, [this] {
-        if (m_sent.isValid() && m_sent.elapsed() < kMinimumInterval)
-            return;
-        publish(true);
-    });
+    connect(m_reassert, &QTimer::timeout, this,
+            [this] { deliver(m_published && !m_published->isEmpty()); });
 
     connect(m_ipc, &DiscordIpc::ready, this, [this] {
         qCInfo(logPlugins) << "discord presence connected";
         m_backoff = 0;
-        m_published = {};
+        m_published.reset();
         control::ControlCenter::instance().retract(kFailureId);
-        m_reassert->start();
-        publishNow();
+        deliver(false);
         restate();
     });
     connect(m_ipc, &DiscordIpc::closed, this, [this] {
-        m_published = {};
+        m_published.reset();
+        m_settle->stop();
         m_reassert->stop();
         restate();
         if (enabled() && sharing() && !m_refused)
@@ -103,12 +134,17 @@ DiscordPresence::DiscordPresence(QObject *parent)
     connect(m_ipc, &DiscordIpc::rejected, this, &DiscordPresence::noteFailure);
 
     media::PlaybackController const &playback = media::PlaybackController::instance();
-    connect(&playback, &media::PlaybackController::trackChanged, this, &DiscordPresence::schedule);
+    connect(&playback, &media::PlaybackController::trackChanged, this,
+            &DiscordPresence::followPlayback);
     connect(&playback, &media::PlaybackController::playingChanged, this,
-            &DiscordPresence::schedule);
+            &DiscordPresence::followPlayback);
     connect(&playback, &media::PlaybackController::durationChanged, this,
             &DiscordPresence::schedule);
     connect(&playback, &media::PlaybackController::seeked, this, &DiscordPresence::schedule);
+    connect(&playback, &media::PlaybackController::positionChanged, this, [this] {
+        if (timelineDrifted())
+            schedule();
+    });
 
     connect(&control::ControlCenter::instance(), &control::ControlCenter::actionInvoked, this,
             [](const QString &id) {
@@ -243,10 +279,10 @@ void DiscordPresence::start()
 
 void DiscordPresence::stop()
 {
-    m_throttle->stop();
+    m_settle->stop();
     m_retry->stop();
     m_reassert->stop();
-    m_published = {};
+    m_published.reset();
     m_ipc->close();
     control::ControlCenter::instance().retract(kFailureId);
     setState(Ok, {});
@@ -261,7 +297,6 @@ void DiscordPresence::valueChanged(const QString &key)
         refresh();
         return;
     }
-    m_published = {};
     schedule();
     restate();
 }
@@ -280,7 +315,7 @@ void DiscordPresence::reconnect()
 void DiscordPresence::refresh()
 {
     if (!enabled() || !sharing() || m_refused) {
-        m_throttle->stop();
+        m_settle->stop();
         m_retry->stop();
         m_reassert->stop();
         m_ipc->close();
@@ -294,36 +329,46 @@ void DiscordPresence::refresh()
     restate();
 }
 
+void DiscordPresence::followPlayback()
+{
+    if (!enabled())
+        return;
+    restate();
+    schedule();
+}
+
 void DiscordPresence::schedule()
 {
-    if (!enabled() || !m_ipc->connected())
+    if (!enabled() || !m_ipc->connected() || m_settle->isActive())
         return;
-    const qint64 since = m_sent.isValid() ? m_sent.elapsed() : kMinimumInterval;
-    if (since >= kMinimumInterval)
-        publishNow();
-    else if (!m_throttle->isActive())
-        m_throttle->start(int(kMinimumInterval - since));
+    m_settle->start(kSettleDelay);
 }
 
-void DiscordPresence::publishNow()
-{
-    publish(false);
-}
-
-void DiscordPresence::publish(bool force)
+void DiscordPresence::deliver(bool force)
 {
     if (!m_ipc->connected())
         return;
-    m_throttle->stop();
     const QJsonObject current = activity();
-    const bool changed = current != m_published || !m_sent.isValid();
+    const bool changed = m_published ? differs(current, *m_published) : !current.isEmpty();
     if (!changed && !force)
         return;
-    if (changed)
+    const qint64 wait = untilSlot();
+    if (wait > 0) {
+        m_settle->start(int(wait));
+        return;
+    }
+    m_settle->stop();
+    send(current);
+}
+
+void DiscordPresence::send(const QJsonObject &current)
+{
+    if (!m_published || withoutTimeline(current) != withoutTimeline(*m_published))
         qCDebug(logPlugins) << "discord activity"
                             << (current.isEmpty() ? QString() : shown().title);
     m_published = current;
-    m_sent.restart();
+    m_sends.append(m_clock.elapsed());
+    m_reassert->start();
 
     QJsonObject arguments {{QStringLiteral("pid"), QCoreApplication::applicationPid()}};
     arguments.insert(QStringLiteral("activity"),
@@ -331,7 +376,28 @@ void DiscordPresence::publish(bool force)
     m_ipc->send({{QStringLiteral("cmd"), QStringLiteral("SET_ACTIVITY")},
                  {QStringLiteral("nonce"), QUuid::createUuid().toString(QUuid::WithoutBraces)},
                  {QStringLiteral("args"), arguments}});
-    restate();
+}
+
+qint64 DiscordPresence::untilSlot()
+{
+    const qint64 now = m_clock.elapsed();
+    while (!m_sends.isEmpty() && now - m_sends.constFirst() >= kBudgetWindow)
+        m_sends.removeFirst();
+    if (m_sends.size() < kBudget)
+        return 0;
+    return m_sends.constFirst() + kBudgetWindow - now;
+}
+
+bool DiscordPresence::timelineDrifted() const
+{
+    if (!m_published || m_settle->isActive())
+        return false;
+    const QJsonValue start = timeline(*m_published).value(QStringLiteral("start"));
+    if (start.isUndefined())
+        return false;
+    const qint64 expected =
+        QDateTime::currentMSecsSinceEpoch() - media::PlaybackController::instance().position();
+    return qAbs(expected - start.toInteger()) > kDriftTolerance;
 }
 
 void DiscordPresence::retryLater()

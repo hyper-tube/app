@@ -5,8 +5,11 @@
 
 #include <QElapsedTimer>
 #include <QJsonObject>
+#include <QList>
 #include <QQmlEngine>
 #include <QString>
+
+#include <optional>
 
 class QTimer;
 
@@ -52,19 +55,23 @@ protected:
 
 private:
     void refresh();
+    void followPlayback();
     void schedule();
-    void publishNow();
-    void publish(bool force);
+    void deliver(bool force);
+    void send(const QJsonObject &current);
+    qint64 untilSlot();
+    bool timelineDrifted() const;
     void retryLater();
     void noteFailure(const QString &message);
     QJsonObject activity() const;
 
     DiscordIpc *m_ipc;
-    QTimer *m_throttle;
+    QTimer *m_settle;
     QTimer *m_retry;
     QTimer *m_reassert;
-    QElapsedTimer m_sent;
-    QJsonObject m_published;
+    QElapsedTimer m_clock;
+    QList<qint64> m_sends;
+    std::optional<QJsonObject> m_published;
     QString m_failure;
     int m_backoff = 0;
     bool m_refused = false;
