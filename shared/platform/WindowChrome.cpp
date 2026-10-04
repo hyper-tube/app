@@ -178,7 +178,7 @@ void WindowChrome::startResize(int edges)
 void WindowChrome::minimize()
 {
     if (m_window)
-        m_window->showMinimized();
+        m_window->setWindowStates(m_window->windowStates() | Qt::WindowMinimized);
 }
 
 void WindowChrome::toggleMaximized()
