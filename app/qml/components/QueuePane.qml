@@ -202,10 +202,13 @@ Item {
             readonly property bool live: row.current ? PlaybackController.live : row.modelData.live
             readonly property bool reachable: Connectivity.online
                 || Downloads.ids.indexOf(row.modelData.videoId) >= 0
+            readonly property bool playingNow: row.current && PlaybackController.playing
 
             width: list.width
             implicitHeight: 56
             rounding: Theme.rounding.small
+            colBackground: row.current ? ColorUtils.withAlpha(Theme.colSecondaryContainer, 0.85)
+                : "transparent"
 
             Behavior on presence {
                 NumberAnimation {
@@ -226,6 +229,37 @@ Item {
                 opacity: row.presence
                 artId: modelData.artId
                 rounding: Theme.rounding.verysmall
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: thumb.rounding
+                    color: ColorUtils.withAlpha(Theme.colLayer1, 0.62)
+                    opacity: row.current || row.hovered ? 1 : 0
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: Theme.duration.fast
+                            easing.type: Easing.BezierSpline
+                            easing.bezierCurve: Theme.curve.expressiveEffects
+                        }
+                    }
+
+                    Sym {
+                        anchors.centerIn: parent
+                        opacity: row.playingNow ? 0 : 1
+                        text: "play_arrow"
+                        iconSize: Theme.font.larger
+                        fill: 1
+                        color: row.current ? Theme.colPrimary : Theme.colOnSurface
+                    }
+
+                    PlayingIndicator {
+                        anchors.centerIn: parent
+                        visible: row.playingNow
+                        playing: visible && enabled
+                        barHeight: 16
+                    }
+                }
             }
 
             Column {
@@ -240,11 +274,9 @@ Item {
                 StyledText {
                     width: parent.width
                     text: modelData.title
-                    title: row.queuePosition === PlaybackController.queueIndex
+                    title: row.current
                     font.pixelSize: Theme.font.smallie
-                    color: row.queuePosition === PlaybackController.queueIndex
-                        ? Theme.colPrimary
-                        : Theme.colOnSurface
+                    color: row.current ? Theme.colPrimary : Theme.colOnSurface
                     elide: Text.ElideRight
                 }
 
