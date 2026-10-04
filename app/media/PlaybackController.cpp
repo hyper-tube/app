@@ -326,8 +326,14 @@ PlaybackController::PlaybackController(QObject *parent)
                                 : tr("Playback failed. Press play to retry."));
     });
     connect(&m_engine, &player::AudioEngine::transitionPromotionRequested, this, [this] {
-        if (m_runnerStaged && stagedIndex() == m_queueIndex + 1)
+        const int staged = stagedIndex();
+        if (m_runnerStaged && staged == m_queueIndex + 1) {
             promoteStaged(true);
+            return;
+        }
+        qCWarning(logTransition) << "runner promotion ignored" << "runner_staged" << m_runnerStaged
+                                 << "staged_index" << staged << "queue_index" << m_queueIndex
+                                 << "staged" << m_engine.stagedVideoId();
     });
     connect(&m_engine, &player::AudioEngine::transitionFallbackRequested, this, [this] {
         if (!m_stagedStream.valid())

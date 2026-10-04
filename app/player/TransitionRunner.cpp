@@ -168,6 +168,8 @@ void TransitionRunner::update()
 
     if (!m_promotionRequested && outgoingPts >= m_plan.handoffMs) {
         m_promotionRequested = true;
+        qCInfo(logTransition) << "runner handoff" << "outgoing_pts_ms" << outgoingPts
+                              << "handoff_ms" << m_plan.handoffMs;
         Q_EMIT promotionRequested();
     }
     if (m_promoted && !m_outgoingStopped && outgoingPts >= m_plan.outgoingStopMs)

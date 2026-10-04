@@ -46,8 +46,11 @@ AudioEngine::AudioEngine(QObject *parent)
                 Q_EMIT ending();
         });
         connect(&deck, &MpvController::trackEnded, this, [this, &deck] {
-            if (&deck == &active())
-                Q_EMIT trackEnded();
+            if (&deck != &active())
+                return;
+            if (m_runner.active() && !m_runner.promoted())
+                qCWarning(logTransition) << "runner missed handoff" << m_stagedVideoId;
+            Q_EMIT trackEnded();
         });
         connect(&deck, &MpvController::failed, this, [this, &deck](const QString &message) {
             if (m_runner.active() && &deck == &idle()) {
@@ -315,12 +318,16 @@ void AudioEngine::promoteStaged(bool crossfade)
     const bool fade = !runner && crossfade && m_handoffMs.has_value();
     MpvController &outgoing = active();
     MpvController &incoming = idle();
+    const bool reportedPlaying = outgoing.playing();
     if (!fade && !runner && incoming.fade().active()) {
         incoming.setFade({});
         incoming.seek(incoming.position());
     }
 
     m_active = 1 - m_active;
+    qCDebug(logPlayback) << "promoted" << m_stagedVideoId << "crossfade" << crossfade << "runner"
+                         << runner << "outgoing_playing" << reportedPlaying << "incoming_playing"
+                         << incoming.playing();
     m_stagedVideoId.clear();
     m_handoffMs.reset();
     adopt(incoming);
@@ -336,6 +343,8 @@ void AudioEngine::promoteStaged(bool crossfade)
     incoming.play();
     if (runner)
         m_runner.confirmPromotion();
+    if (incoming.playing() && !reportedPlaying)
+        Q_EMIT playingChanged(true);
 
     routePicture();
     Q_EMIT pictureChanged();
