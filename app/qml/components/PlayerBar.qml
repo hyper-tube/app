@@ -77,7 +77,7 @@ Rectangle {
             spacing: 0
 
             TapHandler {
-                acceptedButtons: Qt.RightButton
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
                 gesturePolicy: TapHandler.ReleaseWithinBounds
             }
 
@@ -176,7 +176,7 @@ Rectangle {
             spacing: 6
 
             TapHandler {
-                acceptedButtons: Qt.RightButton
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
                 gesturePolicy: TapHandler.ReleaseWithinBounds
             }
 
@@ -337,6 +337,13 @@ Rectangle {
         y: -height - 10
         anchorX: (tuning.width - 40) / tuning.width
         anchorY: 1
+    }
+
+    TapHandler {
+        enabled: root.loaded
+        acceptedButtons: Qt.LeftButton
+        gesturePolicy: TapHandler.ReleaseWithinBounds
+        onTapped: root.expandRequested()
     }
 
     TapHandler {
