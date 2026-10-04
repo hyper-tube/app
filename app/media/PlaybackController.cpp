@@ -28,6 +28,7 @@ constexpr qint64 kResumeTailMs = 15000;
 constexpr qint64 kStageLeadMs = 15000;
 constexpr qint64 kShortestSmartTransitionMs = 1000;
 constexpr int kAutoplayLead = 3;
+constexpr int kVolumeStep = 5;
 
 const QString kRadioPrefix = QStringLiteral("RDAMVM");
 const QRegularExpression kCodecs(QStringLiteral("codecs=\"?([^\",]+)"));
@@ -885,6 +886,14 @@ void PlaybackController::cycleRepeat()
 void PlaybackController::toggleMuted()
 {
     setMuted(!m_muted);
+}
+
+void PlaybackController::stepVolume(int steps)
+{
+    const int level = qBound(0, (m_muted ? 0 : m_volume) + steps * kVolumeStep, 100);
+    setMuted(level == 0);
+    if (level > 0)
+        setVolume(level);
 }
 
 void PlaybackController::toggleLike() const

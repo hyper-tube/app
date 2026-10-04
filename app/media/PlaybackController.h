@@ -119,6 +119,7 @@ public:
     Q_INVOKABLE void skip(qint64 milliseconds);
     Q_INVOKABLE void cycleRepeat();
     Q_INVOKABLE void toggleMuted();
+    Q_INVOKABLE void stepVolume(int steps);
     Q_INVOKABLE void toggleLike() const;
     Q_INVOKABLE static QString formatTime(qint64 milliseconds);
 

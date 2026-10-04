@@ -124,6 +124,12 @@ Window {
                 else
                     PlaybackController.previous();
                 break;
+            case Qt.Key_Up:
+                PlaybackController.stepVolume(1);
+                break;
+            case Qt.Key_Down:
+                PlaybackController.stepVolume(-1);
+                break;
             case Qt.Key_Escape:
                 if (login.open)
                     login.open = false;
