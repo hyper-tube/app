@@ -218,6 +218,8 @@ qt_add_executable(ht-music
     platform/Desktop.cpp
     platform/Clipboard.h
     platform/Clipboard.cpp
+    platform/ShortcutKeys.h
+    platform/ShortcutKeys.cpp
     platform/SystemSettings.h
     platform/SystemSettings.cpp
 )

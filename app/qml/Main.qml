@@ -107,7 +107,8 @@ Window {
                 event.accepted = true;
                 return;
             }
-            switch (event.key) {
+            const key = ShortcutKeys.resolve(event.key, event.nativeScanCode);
+            switch (key) {
             case Qt.Key_Space:
                 PlaybackController.toggle();
                 break;
@@ -141,8 +142,8 @@ Window {
                 rail.expanded = !rail.expanded;
                 break;
             default:
-                if (event.key >= Qt.Key_1 && event.key <= Qt.Key_4)
-                    Browser.showSection(event.key - Qt.Key_1);
+                if (key >= Qt.Key_1 && key <= Qt.Key_4)
+                    Browser.showSection(key - Qt.Key_1);
                 return;
             }
             event.accepted = true;
