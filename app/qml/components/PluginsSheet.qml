@@ -169,6 +169,11 @@ ModalSheet {
                 }
             }
 
+            ScrollWheel {
+                parent: list
+                target: list
+            }
+
             EmptyState {
                 anchors.fill: list
                 visible: PluginRegistry.count === 0

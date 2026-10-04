@@ -105,6 +105,11 @@ Popover {
         }
     }
 
+    ScrollWheel {
+        parent: scroller
+        target: scroller
+    }
+
     Item {
         width: root.columnWidth
         implicitHeight: 148 * root.emptyReveal

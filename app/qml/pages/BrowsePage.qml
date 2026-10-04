@@ -179,6 +179,11 @@ Item {
         }
     }
 
+    ScrollWheel {
+        parent: podcastColumn
+        target: podcastColumn
+    }
+
     ListView {
         id: list
 

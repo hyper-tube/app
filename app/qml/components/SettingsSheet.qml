@@ -776,6 +776,11 @@ ModalSheet {
         }
     }
 
+    ScrollWheel {
+        parent: view
+        target: view
+    }
+
     NumberAnimation {
         id: sectionFade
 

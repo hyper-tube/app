@@ -268,6 +268,11 @@ ModalSheet {
             }
         }
 
+        ScrollWheel {
+            parent: scroller
+            target: scroller
+        }
+
         Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right

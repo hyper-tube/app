@@ -189,6 +189,11 @@ Item {
             }
         }
 
+        ScrollWheel {
+            parent: home
+            target: home
+        }
+
         Flickable {
             id: preferences
 
@@ -238,6 +243,11 @@ Item {
                     source: root.custom ? root.plugin.info.settingsSource : ""
                 }
             }
+        }
+
+        ScrollWheel {
+            parent: preferences
+            target: preferences
         }
     }
 }

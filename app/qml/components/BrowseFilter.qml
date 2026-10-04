@@ -80,6 +80,11 @@ PillButton {
             }
         }
 
+        ScrollWheel {
+            parent: options
+            target: options
+        }
+
         onOpened: options.positionViewAtIndex(options.currentIndex, ListView.Contain)
     }
 }
