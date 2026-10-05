@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.28)
 cmake_policy(SET CMP0091 NEW)
 
 project(ht-music
-    VERSION 0.1.0
+    VERSION 0.2.0
     DESCRIPTION "Native YouTube Music client"
     HOMEPAGE_URL "https://htm.nekolab.app"
     LANGUAGES C CXX)
