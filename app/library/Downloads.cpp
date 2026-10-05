@@ -57,13 +57,14 @@ Downloads::Downloads(QObject *parent)
         qBound(0.1, settings.value(QStringLiteral("downloads/gigabytes"), 2).toDouble(), 100.0);
     connect(&m_resolver, &player::StreamResolver::resolved, this, &Downloads::fetch);
     connect(&m_resolver, &player::StreamResolver::failed, this,
-            [this](const QString &videoId, const QString &message, bool unreachable) {
+            [this](const QString &videoId, const QString &message, bool unreachable,
+                   const QString &refusal) {
         if (videoId != m_activeVideoId)
             return;
         if (unreachable)
             defer(videoId);
         else
-            fail(videoId, message);
+            fail(videoId, refusal.isEmpty() ? message : refusal);
     });
     connect(&net::Connectivity::instance(), &net::Connectivity::onlineChanged, this, [this] {
         if (!net::Connectivity::instance().online())

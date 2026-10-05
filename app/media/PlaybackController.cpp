@@ -1208,7 +1208,7 @@ void PlaybackController::prepareTracking(const player::Stream &stream)
 }
 
 void PlaybackController::reportFailure(const QString &videoId, const QString &message,
-                                       bool unreachable)
+                                       bool unreachable, const QString &refusal)
 {
     if (videoId != track().videoId)
         return;
@@ -1225,26 +1225,34 @@ void PlaybackController::reportFailure(const QString &videoId, const QString &me
     qCWarning(logPlayback) << "cannot play" << videoId << message;
     reportUnplayable(track().upload
                          ? tr("YouTube would not stream this upload.")
-                         : tr("This track could not be played. Try again or choose another."));
+                         : tr("This track could not be played. Try again or choose another."),
+                     refusal);
 }
 
-void PlaybackController::reportUnplayable(const QString &message)
+void PlaybackController::reportUnplayable(const QString &message, const QString &refusal)
 {
     ++m_failuresInRow;
     const Track failed = track();
     const int limit = std::min(int(m_queue.size()), kFailuresBeforeStopping);
     if (!player::PlaybackSettings::instance().skipFailedTracks() || m_failuresInRow >= limit
         || !advance(1)) {
-        setError(message);
+        setError(refusal.isEmpty() ? message : refusal);
         return;
     }
     diagnostics::breadcrumb("playback.failure_skipped",
                             {{"kind", kindOf(failed)}, {"failures_in_row", m_failuresInRow}},
                             diagnostics::Level::Warning);
-    setError(failed.title.isEmpty()
-                 ? tr("Skipped a track that could not be played.")
-                 : tr("Skipped %1 because it could not be played.").arg(failed.title));
+    setError(skippedNotice(failed, refusal));
     startCurrent();
+}
+
+QString PlaybackController::skippedNotice(const Track &skipped, const QString &refusal)
+{
+    if (skipped.title.isEmpty())
+        return refusal.isEmpty() ? tr("Skipped a track that could not be played.")
+                                 : tr("Skipped a track: %1").arg(refusal);
+    return refusal.isEmpty() ? tr("Skipped %1 because it could not be played.").arg(skipped.title)
+                             : tr("Skipped %1: %2").arg(skipped.title, refusal);
 }
 
 void PlaybackController::reportOffline()

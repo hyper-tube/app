@@ -36,6 +36,7 @@ public:
     const ClientRegistry &clients() const { return m_clients; }
     bool authenticated() const;
     const QString &identity() const { return m_identity; }
+    const QString &visitorCountry() const { return m_visitorCountry; }
 
     void setIdentity(const QString &dataSyncId);
     void call(const QString &endpoint, const Client &client, QJsonObject body,
@@ -62,6 +63,7 @@ private:
     ClientRegistry m_clients;
     ContextBuilder m_context;
     QString m_visitorData;
+    QString m_visitorCountry;
     QString m_identity;
     QString m_dataSyncId;
     QString m_pageId;

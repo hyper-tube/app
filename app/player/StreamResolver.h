@@ -52,7 +52,8 @@ public:
 
 Q_SIGNALS:
     void resolved(const player::Stream &stream);
-    void failed(const QString &videoId, const QString &message, bool unreachable);
+    void failed(const QString &videoId, const QString &message, bool unreachable,
+                const QString &refusal);
 
 private:
     struct Attempt;
@@ -60,6 +61,7 @@ private:
     using AttemptPtr = std::shared_ptr<Attempt>;
 
     void fetchMetadata(const AttemptPtr &attempt);
+    bool rejectBlocked(const AttemptPtr &attempt, const QJsonObject &response);
     void signWebStream(const AttemptPtr &attempt);
     void tryNextClient(const AttemptPtr &attempt);
     const QStringList &chainFor(const AttemptPtr &attempt) const;

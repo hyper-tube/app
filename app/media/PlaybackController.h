@@ -165,8 +165,10 @@ private:
     void applyStream(const player::Stream &stream);
     void prepareTracking(const player::Stream &stream);
     void finishTracking();
-    void reportFailure(const QString &videoId, const QString &message, bool unreachable);
-    void reportUnplayable(const QString &message);
+    void reportFailure(const QString &videoId, const QString &message, bool unreachable,
+                       const QString &refusal);
+    void reportUnplayable(const QString &message, const QString &refusal = {});
+    static QString skippedNotice(const Track &skipped, const QString &refusal);
     void reportOffline();
     void followConnectivity();
     bool reachable(const Track &entry) const;

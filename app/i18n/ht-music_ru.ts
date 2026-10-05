@@ -2465,7 +2465,7 @@
 <context>
     <name>library::Downloads</name>
     <message>
-        <location filename="../library/Downloads.cpp" line="+449"/>
+        <location filename="../library/Downloads.cpp" line="+450"/>
         <source>No tracks available to download.</source>
         <translation>Нет треков для скачивания.</translation>
     </message>
@@ -2932,9 +2932,14 @@
         <translation>Этот трек не удалось воспроизвести. Попробуйте снова или выберите другой.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+24"/>
         <source>Skipped a track that could not be played.</source>
         <translation>Трек не удалось воспроизвести, он пропущен.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Skipped a track: %1</source>
+        <translation>Трек пропущен: %1</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2942,7 +2947,12 @@
         <translation>«%1» не удалось воспроизвести, трек пропущен.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+1"/>
+        <source>Skipped %1: %2</source>
+        <translation>Трек «%1» пропущен: %2</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>You&apos;re offline and this song isn&apos;t downloaded.</source>
         <translation>Вы не в сети, а этот трек не скачан.</translation>
     </message>

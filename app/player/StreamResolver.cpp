@@ -4,6 +4,7 @@
 #include "LiveManifest.h"
 #include "core/Json.h"
 #include "core/Logging.h"
+#include "innertube/parsers/RendererReader.h"
 #include "net/CookieJar.h"
 #include "net/HttpClient.h"
 
@@ -51,6 +52,28 @@ QString playabilityFailure(const QJsonObject &response)
 
     const QString reason = status.value(QStringLiteral("reason")).toString();
     return reason.isEmpty() ? state : state + QStringLiteral(": ") + reason;
+}
+
+QString refusalOf(const QJsonObject &response)
+{
+    const QJsonObject status = response.value(QStringLiteral("playabilityStatus")).toObject();
+    const QString detail = innertube::parsers::readText(
+        core::json::at(status,
+                       {QStringLiteral("errorScreen"), QStringLiteral("playerErrorMessageRenderer"),
+                        QStringLiteral("subreason")}));
+    return detail.isEmpty() ? status.value(QStringLiteral("reason")).toString() : detail;
+}
+
+bool blockedIn(const QString &country, const QJsonObject &response)
+{
+    if (country.isEmpty())
+        return false;
+    const QJsonArray countries =
+        core::json::at(response,
+                       {QStringLiteral("microformat"), QStringLiteral("microformatDataRenderer"),
+                        QStringLiteral("availableCountries")})
+            .toArray();
+    return !countries.isEmpty() && !countries.contains(country);
 }
 
 QString requestCookie()
@@ -105,6 +128,7 @@ struct StreamResolver::Attempt
     int index = 0;
     QString title;
     QString artist;
+    QString refusal;
     PlaybackTrackingSeed tracking;
     qint64 durationMs = 0;
     qint64 startMs = 0;
@@ -187,7 +211,7 @@ void StreamResolver::fetchMetadata(const AttemptPtr &attempt)
             return;
 
         if (reply.unreachable) {
-            Q_EMIT failed(attempt->videoId, reply.error, true);
+            Q_EMIT failed(attempt->videoId, reply.error, true, {});
             return;
         }
         if (!reply.ok()) {
@@ -197,6 +221,8 @@ void StreamResolver::fetchMetadata(const AttemptPtr &attempt)
         }
 
         readMetadata(attempt, *client, reply.json);
+        if (rejectBlocked(attempt, reply.json))
+            return;
         if (attempt->upload || attempt->signatureTimestamp.has_value()) {
             attempt->spare = buildStream(attempt, *client, reply.json);
             if (attempt->spare) {
@@ -206,6 +232,22 @@ void StreamResolver::fetchMetadata(const AttemptPtr &attempt)
         }
         tryNextClient(attempt);
     });
+}
+
+bool StreamResolver::rejectBlocked(const AttemptPtr &attempt, const QJsonObject &response)
+{
+    if (playabilityFailure(response).isEmpty())
+        return false;
+
+    attempt->refusal = refusalOf(response);
+    const QString &country = m_session.visitorCountry();
+    if (!blockedIn(country, response))
+        return false;
+
+    qCWarning(logStream) << attempt->videoId << "is not available in" << country;
+    Q_EMIT failed(attempt->videoId, QStringLiteral("not available in ") + country, false,
+                  attempt->refusal);
+    return true;
 }
 
 void StreamResolver::signWebStream(const AttemptPtr &attempt)
@@ -248,7 +290,8 @@ void StreamResolver::tryNextClient(const AttemptPtr &attempt)
             return;
         }
         qCWarning(logStream) << "no client could stream" << attempt->videoId;
-        Q_EMIT failed(attempt->videoId, QStringLiteral("no playable stream found"), false);
+        Q_EMIT failed(attempt->videoId, QStringLiteral("no playable stream found"), false,
+                      attempt->refusal);
         return;
     }
 
@@ -265,7 +308,7 @@ void StreamResolver::tryNextClient(const AttemptPtr &attempt)
             return;
 
         if (reply.unreachable) {
-            Q_EMIT failed(attempt->videoId, reply.error, true);
+            Q_EMIT failed(attempt->videoId, reply.error, true, {});
             return;
         }
         if (!reply.ok()) {
@@ -362,7 +405,7 @@ void StreamResolver::takeLiveStream(const AttemptPtr &attempt, const innertube::
         if (attempt->generation != m_generation)
             return;
         if (reply.unreachable) {
-            Q_EMIT failed(attempt->videoId, reply.error, true);
+            Q_EMIT failed(attempt->videoId, reply.error, true, {});
             return;
         }
         const LiveManifest renditions = reply.ok()

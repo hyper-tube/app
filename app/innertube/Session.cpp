@@ -12,6 +12,8 @@
 #include <QUrl>
 #include <QUrlQuery>
 
+#include <algorithm>
+
 namespace {
 
 constexpr int kTrackingShutdownTimeoutMs = 1500;
@@ -21,20 +23,32 @@ const QString kOrigin = QStringLiteral("https://music.youtube.com");
 const QString kReferer = QStringLiteral("https://music.youtube.com/");
 const QString kVisitorDataUrl = QStringLiteral("https://music.youtube.com/sw.js_data");
 
-QString parseVisitorData(const QByteArray &body)
+QJsonArray bootstrapValues(const QByteArray &body)
 {
     const int start = body.indexOf('[');
     if (start < 0)
         return {};
 
     const QJsonDocument document = QJsonDocument::fromJson(body.mid(start));
-    const QJsonArray candidates = document.array().at(0).toArray().at(2).toArray();
-    for (const QJsonValue &value : candidates) {
+    return document.array().at(0).toArray().at(2).toArray();
+}
+
+QString visitorDataIn(const QJsonArray &values)
+{
+    for (const QJsonValue &value : values) {
         const QString text = value.toString();
         if (text.startsWith(QLatin1String("Cgt")) || text.startsWith(QLatin1String("Cgs")))
             return text;
     }
     return {};
+}
+
+QString visitorCountryIn(const QJsonArray &values)
+{
+    const QString code = values.at(0).toArray().at(0).toArray().at(1).toString();
+    const bool countryCode = code.size() == 2
+        && std::ranges::all_of(code, [](QChar letter) { return letter >= u'A' && letter <= u'Z'; });
+    return countryCode ? code : QString();
 }
 
 QString errorFrom(const QJsonObject &json)
@@ -155,11 +169,13 @@ void Session::adoptVisitorData(const net::Response &response)
         return;
     }
 
-    m_visitorData = parseVisitorData(response.body);
+    const QJsonArray values = bootstrapValues(response.body);
+    m_visitorData = visitorDataIn(values);
+    m_visitorCountry = visitorCountryIn(values);
     if (m_visitorData.isEmpty())
         qCWarning(logInnerTube) << "visitorData missing from sw.js_data";
     else
-        qCInfo(logInnerTube) << "session bootstrapped";
+        qCInfo(logInnerTube) << "session bootstrapped in" << m_visitorCountry;
 }
 
 void Session::releasePending()
