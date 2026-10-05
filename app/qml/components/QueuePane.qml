@@ -11,6 +11,8 @@ Item {
     readonly property bool station: PlaybackController.live
     readonly property bool framed: root.navigable || root.station
     readonly property real originPresence: Math.max(0, Math.min(1, root.originReveal))
+    readonly property color currentFill: Theme.darkMode ? ColorUtils.withAlpha(Theme.colPrimary, 0.46)
+        : ColorUtils.withAlpha(Theme.colSecondaryContainer, 0.85)
 
     signal sourceRequested(var source)
 
@@ -207,8 +209,7 @@ Item {
             width: list.width
             implicitHeight: 56
             rounding: Theme.rounding.small
-            colBackground: row.current ? ColorUtils.withAlpha(Theme.colSecondaryContainer, 0.85)
-                : "transparent"
+            colBackground: row.current ? root.currentFill : "transparent"
 
             Behavior on presence {
                 NumberAnimation {
@@ -276,7 +277,7 @@ Item {
                     text: modelData.title
                     title: row.current
                     font.pixelSize: Theme.font.smallie
-                    color: row.current ? Theme.colPrimary : Theme.colOnSurface
+                    color: row.current ? Theme.colOnPrimaryContainer : Theme.colOnSurface
                     elide: Text.ElideRight
                 }
 
@@ -284,7 +285,7 @@ Item {
                     width: parent.width
                     text: modelData.artist
                     font.pixelSize: Theme.font.smaller
-                    color: Theme.colInactive
+                    color: row.current ? Theme.colOnSurfaceVariant : Theme.colInactive
                     elide: Text.ElideRight
                 }
             }
@@ -312,7 +313,7 @@ Item {
                 width: row.live ? rowLive.implicitWidth : implicitWidth
                 text: PlaybackController.formatTime(modelData.durationMs)
                 font.pixelSize: Theme.font.smaller
-                color: Theme.colInactive
+                color: row.current ? Theme.colOnSurfaceVariant : Theme.colInactive
             }
 
             Sym {
