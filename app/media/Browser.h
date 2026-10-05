@@ -7,6 +7,7 @@
 #include <QQmlEngine>
 #include <QHash>
 #include <QSet>
+#include <QUrl>
 
 #include <functional>
 
@@ -52,6 +53,7 @@ public:
     Q_INVOKABLE void playEntry(const model::Item &item);
     Q_INVOKABLE void playShuffled(const model::Item &item);
     Q_INVOKABLE void openPage(const QString &browseId, const QString &kind);
+    Q_INVOKABLE bool openLink(const QString &text);
     Q_INVOKABLE void resolveTracks(const model::Item &item, const QString &intent);
     Q_INVOKABLE void back();
     Q_INVOKABLE void retry() const;
@@ -65,6 +67,7 @@ Q_SIGNALS:
     void libraryTabsChanged();
     void playRequested(const QList<media::Track> &tracks, int index, const model::Item &source);
     void resolutionFailed(const QString &message);
+    void linkOpened();
     void tracksResolved(const QList<media::Track> &tracks, const QString &intent);
 
 private:
@@ -83,7 +86,10 @@ private:
     void recover();
     void playTrack(model::ItemModel *items, int index);
     void fetchTracks(const QString &playlistId, const QString &videoId,
-                     const std::function<void(const QList<media::Track> &)> &handler);
+                     const std::function<void(const QList<media::Track> &)> &handler,
+                     const std::function<void()> &failed = {});
+    void playLink(const QString &videoId, const QString &playlistId);
+    void followLink(const QUrl &page);
     static QString queueTarget(const model::Item &item);
     static model::Item sourceOf(const model::BrowseModel &surface);
     model::BrowseModel *library(int tab);

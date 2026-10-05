@@ -74,6 +74,11 @@ void Endpoints::next(const QString &playlistId, const QString &videoId, const QS
     metadata(QStringLiteral("next"), body, handler);
 }
 
+void Endpoints::resolveUrl(const QString &url, const Session::Handler &handler)
+{
+    metadata(QStringLiteral("navigation/resolve_url"), {{QStringLiteral("url"), url}}, handler);
+}
+
 void Endpoints::continuation(const QString &endpoint, const QString &token,
                              const Session::Handler &handler)
 {

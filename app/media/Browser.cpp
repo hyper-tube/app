@@ -1,9 +1,12 @@
 #include "Browser.h"
 
+#include "LinkTarget.h"
 #include "SearchHistory.h"
 #include "auth/Account.h"
 #include "core/Localization.h"
 #include "innertube/parsers/RendererParser.h"
+#include "innertube/parsers/RendererReader.h"
+#include "library/Downloads.h"
 #include "library/LibraryActions.h"
 #include "model/DownloadsModel.h"
 #include "model/OfflineSearchModel.h"
@@ -56,6 +59,7 @@ const LibrarySurface kHistory {QT_TRANSLATE_NOOP("media::Browser", "History"), k
 const QHash<QString, const char *> kPlaceholders {
     {QStringLiteral("artist"), QT_TRANSLATE_NOOP("media::Browser", "Artist")},
     {QStringLiteral("album"), QT_TRANSLATE_NOOP("media::Browser", "Album")},
+    {QStringLiteral("playlist"), QT_TRANSLATE_NOOP("media::Browser", "Playlist")},
     {QStringLiteral("podcast"), QT_TRANSLATE_NOOP("media::Browser", "Podcast")},
     {QStringLiteral("episode"), QT_TRANSLATE_NOOP("media::Browser", "Episode")},
     {QStringLiteral("profile"), QT_TRANSLATE_NOOP("media::Browser", "Profile")},
@@ -549,22 +553,28 @@ void Browser::playTrack(model::ItemModel *items, int index)
 }
 
 void Browser::fetchTracks(const QString &playlistId, const QString &videoId,
-                          const std::function<void(const QList<Track> &)> &handler)
+                          const std::function<void(const QList<Track> &)> &handler,
+                          const std::function<void()> &failed)
 {
     const QPointer<Browser> guard(this);
-    m_endpoints.next(playlistId, videoId, {}, [guard, handler](const innertube::Reply &reply) {
-        if (!guard || !reply.ok())
+    m_endpoints.next(playlistId, videoId, {},
+                     [guard, handler, failed](const innertube::Reply &reply) {
+        if (!guard)
             return;
-        const auto page = innertube::parsers::RendererParser::parse(reply.json);
         QList<Track> tracks;
-        for (const model::Shelf &shelf : page.shelves) {
-            for (const model::Item &item : shelf.items) {
-                if (item.playable())
-                    tracks.append(item.track);
+        if (reply.ok()) {
+            const auto page = innertube::parsers::RendererParser::parse(reply.json);
+            for (const model::Shelf &shelf : page.shelves) {
+                for (const model::Item &item : shelf.items) {
+                    if (item.playable())
+                        tracks.append(item.track);
+                }
             }
         }
         if (!tracks.isEmpty())
             handler(tracks);
+        else if (failed)
+            failed();
     });
 }
 
@@ -690,6 +700,60 @@ void Browser::openPage(const QString &browseId, const QString &kind)
     destination.browseId = browseId;
     destination.kind = kind;
     open(destination);
+}
+
+bool Browser::openLink(const QString &text)
+{
+    const LinkTarget target = LinkTarget::parse(text);
+    if (target.playable())
+        playLink(target.videoId, target.playlistId);
+    else if (target.valid())
+        followLink(target.page);
+    return target.valid();
+}
+
+void Browser::playLink(const QString &videoId, const QString &playlistId)
+{
+    if (!net::Connectivity::instance().online()) {
+        if (videoId.isEmpty()) {
+            Q_EMIT resolutionFailed(tr("Connect to the internet to open this link."));
+            return;
+        }
+        const QList<Track> stored = library::Downloads::instance().tracks();
+        const auto found = std::ranges::find(stored, videoId, &Track::videoId);
+        Track track;
+        track.videoId = videoId;
+        Q_EMIT playRequested({found == stored.end() ? track : *found}, 0, {});
+        return;
+    }
+    fetchTracks(playlistId, videoId, [this, videoId](const QList<Track> &tracks) {
+        const auto found = std::ranges::find(tracks, videoId, &Track::videoId);
+        Q_EMIT playRequested(tracks, found == tracks.end() ? 0 : int(found - tracks.begin()), {});
+    }, [this] { Q_EMIT resolutionFailed(tr("There is nothing to play at this link.")); });
+}
+
+void Browser::followLink(const QUrl &page)
+{
+    if (!net::Connectivity::instance().online()) {
+        Q_EMIT resolutionFailed(tr("Connect to the internet to open this link."));
+        return;
+    }
+    const QPointer<Browser> guard(this);
+    m_endpoints.resolveUrl(page.toString(QUrl::FullyEncoded),
+                           [guard](const innertube::Reply &reply) {
+        if (!guard)
+            return;
+        const model::Item target = innertube::parsers::readItem(
+            {{QStringLiteral("navigationEndpoint"), reply.json.value(QStringLiteral("endpoint"))}});
+        if (!target.browseId.isEmpty() && target.browseId != kHome.browseId) {
+            guard->openPage(target.browseId, target.kind);
+            Q_EMIT guard->linkOpened();
+        } else if (target.track.valid()) {
+            guard->playLink(target.track.videoId, target.playlistId);
+        } else {
+            Q_EMIT guard->resolutionFailed(tr("YouTube Music could not open this link."));
+        }
+    });
 }
 
 void Browser::playPage()

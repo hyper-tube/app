@@ -19,4 +19,10 @@ bool Clipboard::copy(const QString &text)
     return true;
 }
 
+QString Clipboard::text() const
+{
+    const QClipboard *clipboard = QGuiApplication::clipboard();
+    return clipboard ? clipboard->text() : QString();
+}
+
 }

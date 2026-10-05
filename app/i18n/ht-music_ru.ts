@@ -283,7 +283,7 @@
 <context>
     <name>BrowseHeader</name>
     <message>
-        <location filename="../qml/components/BrowseHeader.qml" line="+70"/>
+        <location filename="../qml/components/BrowseHeader.qml" line="+71"/>
         <source>Search in</source>
         <translation>Искать в</translation>
     </message>
@@ -410,7 +410,7 @@
 <context>
     <name>BrowsePage</name>
     <message>
-        <location filename="../qml/pages/BrowsePage.qml" line="+61"/>
+        <location filename="../qml/pages/BrowsePage.qml" line="+63"/>
         <source>Library</source>
         <translation>Медиатека</translation>
     </message>
@@ -421,12 +421,12 @@
     </message>
     <message>
         <location line="+9"/>
-        <location line="+437"/>
+        <location line="+443"/>
         <source>New playlist</source>
         <translation>Новый плейлист</translation>
     </message>
     <message>
-        <location line="-424"/>
+        <location line="-430"/>
         <source>Upload music</source>
         <translation>Загрузка музыки</translation>
     </message>
@@ -436,7 +436,7 @@
         <translation>Аудиофайлы (%1)</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+178"/>
         <source>You&apos;re offline</source>
         <translation>Вы не в сети</translation>
     </message>
@@ -467,12 +467,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+232"/>
+        <location line="+233"/>
         <source>Go to downloads</source>
         <translation>Перейти к скачанному</translation>
     </message>
     <message>
-        <location line="-218"/>
+        <location line="-219"/>
         <source>No matches</source>
         <translation>Ничего не найдено</translation>
     </message>
@@ -562,7 +562,7 @@
         <translation>Здесь пока нечего показать</translation>
     </message>
     <message>
-        <location line="+181"/>
+        <location line="+182"/>
         <source>Your library</source>
         <translation>Ваша медиатека</translation>
     </message>
@@ -699,7 +699,7 @@
         <translation>Убрать все уведомления</translation>
     </message>
     <message>
-        <location line="+69"/>
+        <location line="+74"/>
         <source>All clear</source>
         <translation>Всё чисто</translation>
     </message>
@@ -901,7 +901,7 @@
 <context>
     <name>FullPlayer</name>
     <message>
-        <location filename="../qml/components/FullPlayer.qml" line="+189"/>
+        <location filename="../qml/components/FullPlayer.qml" line="+193"/>
         <source>Remove download</source>
         <translation>Удалить скачанное</translation>
     </message>
@@ -1077,7 +1077,7 @@
 <context>
     <name>Main</name>
     <message numerus="yes">
-        <location filename="../qml/Main.qml" line="+49"/>
+        <location filename="../qml/Main.qml" line="+53"/>
         <source>Playing %n songs next</source>
         <translation>
             <numerusform>Играет следующим</numerusform>
@@ -1095,7 +1095,7 @@
         </translation>
     </message>
     <message>
-        <location line="+148"/>
+        <location line="+155"/>
         <source>Search songs, albums, artists</source>
         <translation>Поиск треков, альбомов, исполнителей</translation>
     </message>
@@ -1105,7 +1105,12 @@
         <translation>Поиск по скачанному</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+12"/>
+        <source>There is no YouTube link or video ID in the clipboard.</source>
+        <translation>В буфере обмена нет ссылки YouTube или ID видео.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
@@ -1115,7 +1120,7 @@
         <translation>Обновить страницу</translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+101"/>
         <source>Picked up where you left off on another device</source>
         <translation>Продолжаем с того места, где вы остановились на другом устройстве</translation>
     </message>
@@ -1218,7 +1223,7 @@
 <context>
     <name>PlayerBar</name>
     <message>
-        <location filename="../qml/components/PlayerBar.qml" line="+97"/>
+        <location filename="../qml/components/PlayerBar.qml" line="+98"/>
         <source>Shuffle</source>
         <translation>Перемешать</translation>
     </message>
@@ -1428,7 +1433,7 @@
         <translation>Поиск плагинов</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+83"/>
         <source>No plugins match</source>
         <translation>Ничего не найдено</translation>
     </message>
@@ -1514,7 +1519,7 @@
         <translation>Играет из плейлиста</translation>
     </message>
     <message>
-        <location line="+263"/>
+        <location line="+295"/>
         <source>Not downloaded</source>
         <translation>Не скачано</translation>
     </message>
@@ -1633,7 +1638,7 @@
         <translation>Для этой версии не опубликованы примечания к выпуску.</translation>
     </message>
     <message>
-        <location line="+109"/>
+        <location line="+114"/>
         <source>Later</source>
         <translation>Позже</translation>
     </message>
@@ -1656,7 +1661,7 @@
 <context>
     <name>SearchBar</name>
     <message>
-        <location filename="../qml/components/SearchBar.qml" line="+13"/>
+        <location filename="../qml/components/SearchBar.qml" line="+14"/>
         <source>Search songs, albums, artists</source>
         <translation>Поиск треков, альбомов, исполнителей</translation>
     </message>
@@ -1666,7 +1671,12 @@
         <translation>Очистить поиск</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+14"/>
+        <source>Open a link from the clipboard</source>
+        <translation>Открыть ссылку из буфера обмена</translation>
+    </message>
+    <message>
+        <location line="+70"/>
         <source>Remove from search history</source>
         <translation>Убрать из истории поиска</translation>
     </message>
@@ -1926,6 +1936,16 @@
     </message>
     <message>
         <location line="+11"/>
+        <source>Skip tracks that fail to play</source>
+        <translation>Пропускать треки, которые не удалось воспроизвести</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Move on to the next track instead of stopping when one fails</source>
+        <translation>Переходить к следующему треку вместо остановки при ошибке</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Play videos by default</source>
         <translation>Воспроизводить клипы по умолчанию</translation>
     </message>
@@ -1945,7 +1965,7 @@
         <translation>Сглаживать разницу громкости между треками</translation>
     </message>
     <message numerus="yes">
-        <location line="-381"/>
+        <location line="-393"/>
         <source>Overlap tracks by %n seconds</source>
         <translation>
             <numerusform>Наложение треков на %n секунду</numerusform>
@@ -1954,7 +1974,7 @@
         </translation>
     </message>
     <message>
-        <location line="+392"/>
+        <location line="+404"/>
         <source>Transitions</source>
         <translation>Переходы</translation>
     </message>
@@ -2205,7 +2225,7 @@
         <translation>Загрузка: %1</translation>
     </message>
     <message>
-        <location line="+132"/>
+        <location line="+133"/>
         <source>Dismiss notification</source>
         <translation>Убрать уведомление</translation>
     </message>
@@ -2508,7 +2528,7 @@
 <context>
     <name>library::LibraryActions</name>
     <message>
-        <location filename="../library/LibraryActions.cpp" line="+195"/>
+        <location filename="../library/LibraryActions.cpp" line="+196"/>
         <source>Could not update your rating. Please try again.</source>
         <translation>Не удалось обновить оценку. Попробуйте ещё раз.</translation>
     </message>
@@ -2792,7 +2812,7 @@
 <context>
     <name>media::Browser</name>
     <message>
-        <location filename="../media/Browser.cpp" line="+39"/>
+        <location filename="../media/Browser.cpp" line="+42"/>
         <source>Home</source>
         <translation>Главная</translation>
     </message>
@@ -2848,6 +2868,11 @@
     </message>
     <message>
         <location line="+1"/>
+        <source>Playlist</source>
+        <translation>Плейлист</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Podcast</source>
         <translation>Подкаст</translation>
     </message>
@@ -2862,36 +2887,62 @@
         <translation>Профиль</translation>
     </message>
     <message>
-        <location line="+628"/>
+        <location line="+634"/>
         <source>Page</source>
         <translation>Страница</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <location line="+19"/>
+        <source>Connect to the internet to open this link.</source>
+        <translation>Подключитесь к интернету, чтобы открыть эту ссылку.</translation>
+    </message>
+    <message>
+        <location line="-6"/>
+        <source>There is nothing to play at this link.</source>
+        <translation>По этой ссылке нечего воспроизвести.</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>YouTube Music could not open this link.</source>
+        <translation>YouTube Music не удалось открыть эту ссылку.</translation>
     </message>
 </context>
 <context>
     <name>media::PlaybackController</name>
     <message>
-        <location filename="../media/PlaybackController.cpp" line="+325"/>
-        <location line="+861"/>
+        <location filename="../media/PlaybackController.cpp" line="+330"/>
+        <location line="+897"/>
         <source>YouTube would not stream this upload.</source>
         <translation>YouTube отказался проигрывать этот загруженный трек.</translation>
     </message>
     <message>
-        <location line="-860"/>
+        <location line="-896"/>
         <source>Playback failed. Press play to retry.</source>
         <translation>Воспроизведение не удалось. Нажмите «Слушать», чтобы повторить.</translation>
     </message>
     <message>
-        <location line="+716"/>
+        <location line="+733"/>
         <source>You&apos;re offline and nothing else in the queue is downloaded.</source>
         <translation>Вы не в сети, а остальные треки в очереди не скачаны.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+164"/>
         <source>This track could not be played. Try again or choose another.</source>
         <translation>Этот трек не удалось воспроизвести. Попробуйте снова или выберите другой.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+17"/>
+        <source>Skipped a track that could not be played.</source>
+        <translation>Трек не удалось воспроизвести, он пропущен.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Skipped %1 because it could not be played.</source>
+        <translation>«%1» не удалось воспроизвести, трек пропущен.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>You&apos;re offline and this song isn&apos;t downloaded.</source>
         <translation>Вы не в сети, а этот трек не скачан.</translation>
     </message>
@@ -2899,7 +2950,7 @@
 <context>
     <name>model::BrowseModel</name>
     <message>
-        <location filename="../model/BrowseModel.cpp" line="+717"/>
+        <location filename="../model/BrowseModel.cpp" line="+725"/>
         <source>Could not load content. Check your connection and retry.</source>
         <translation>Не удалось загрузить содержимое. Проверьте подключение и повторите.</translation>
     </message>
@@ -3017,7 +3068,7 @@
 <context>
     <name>plugin::discord::DiscordPresence</name>
     <message>
-        <location filename="../plugin/discord/DiscordPresence.cpp" line="+136"/>
+        <location filename="../plugin/discord/DiscordPresence.cpp" line="+172"/>
         <source>Discord Rich Presence</source>
         <translation>Discord Rich Presence</translation>
     </message>
@@ -3091,7 +3142,7 @@ Discord должен быть запущен на этом компьютере.
         <translation>Ведет на страницу загрузки, чтобы любой, кто видит ваш статус, мог поставить тот же клиент</translation>
     </message>
     <message>
-        <location line="+181"/>
+        <location line="+211"/>
         <source>Paused</source>
         <translation>На паузе</translation>
     </message>
@@ -3111,7 +3162,7 @@ Discord должен быть запущен на этом компьютере.
         <translation>Discord не запущен. Переподключение выполняется автоматически.</translation>
     </message>
     <message>
-        <location line="-211"/>
+        <location line="-241"/>
         <source>How Discord describes it</source>
         <translation>Как Discord это описывает</translation>
     </message>
@@ -3122,7 +3173,7 @@ Discord должен быть запущен на этом компьютере.
     </message>
     <message>
         <location line="+1"/>
-        <location line="+170"/>
+        <location line="+200"/>
         <source>Playing</source>
         <translation>Играет</translation>
     </message>
@@ -3249,12 +3300,12 @@ Discord должен быть запущен на этом компьютере.
         <translation>%1 из %2</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+50"/>
         <source>The update could not be saved, because the cache folder is not writable.</source>
         <translation>Не удалось сохранить обновление: папка кэша недоступна для записи.</translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+152"/>
         <source>Update available</source>
         <translation>Доступно обновление</translation>
     </message>
@@ -3279,7 +3330,7 @@ Discord должен быть запущен на этом компьютере.
         <translation>Скачивание %1 %2</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+21"/>
         <source>The download stopped because the network went away. Try again once you are back online.</source>
         <translation>Скачивание прервалось из-за потери сети. Попробуйте снова, когда подключение вернётся.</translation>
     </message>
@@ -3294,7 +3345,7 @@ Discord должен быть запущен на этом компьютере.
         <translation>Обновление скачалось не полностью, поэтому было удалено.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>The downloaded installer did not match its published checksum, so it was deleted without running.</source>
         <translation>Скачанный установщик не совпал с опубликованной контрольной суммой, поэтому он удалён и не запускался.</translation>
     </message>

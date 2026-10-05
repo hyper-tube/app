@@ -16,6 +16,7 @@ public:
     explicit Clipboard(QObject *parent = nullptr);
 
     Q_INVOKABLE bool copy(const QString &text);
+    Q_INVOKABLE QString text() const;
 };
 
 }

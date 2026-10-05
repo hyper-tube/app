@@ -54,6 +54,8 @@ qt_add_executable(ht-music
     media/ArtworkProvider.cpp
     media/Browser.h
     media/Browser.cpp
+    media/LinkTarget.h
+    media/LinkTarget.cpp
     media/PlaybackController.h
     media/PlaybackController.cpp
     media/QueueSync.h

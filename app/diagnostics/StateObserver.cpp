@@ -127,6 +127,8 @@ void StateObserver::bind(QQmlEngine &engine)
             [this] { followSetting("autoplay"); });
     connect(&settings, &player::PlaybackSettings::playVideosChanged, this,
             [this] { followSetting("play_videos"); });
+    connect(&settings, &player::PlaybackSettings::skipFailedTracksChanged, this,
+            [this] { followSetting("skip_failed_tracks"); });
 
     for (const plugin::Plugin *entry : plugin::PluginRegistry::instance().plugins()) {
         connect(entry, &plugin::Plugin::enabledChanged, this, [this, entry] {
@@ -187,7 +189,8 @@ void StateObserver::publishPlayback() const
                 {"equalizer", settings.equalizerEnabled()},
                 {"normalize_loudness", settings.normalizeLoudness()},
                 {"autoplay", settings.autoplay()},
-                {"play_videos", settings.playVideos()}});
+                {"play_videos", settings.playVideos()},
+                {"skip_failed_tracks", settings.skipFailedTracks()}});
 }
 
 void StateObserver::publishPlugins() const

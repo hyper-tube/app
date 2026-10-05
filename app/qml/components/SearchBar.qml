@@ -7,6 +7,7 @@ Rectangle {
 
     property alias text: input.text
     property bool suggestionsEnabled: false
+    property bool pasteEnabled: false
     property bool glass: false
     property int selectedEntry: -1
     property string icon: "search"
@@ -21,6 +22,7 @@ Rectangle {
 
     signal accepted(string query)
     signal editingFinished
+    signal pasteRequested
 
     function clearFocus() {
         input.focus = false;
@@ -146,8 +148,7 @@ Rectangle {
     IconButton {
         id: clear
 
-        anchors.right: parent.right
-        anchors.rightMargin: 4
+        anchors.right: paste.left
         anchors.verticalCenter: parent.verticalCenter
         visible: input.text.length > 0
         opacity: root.textPresence
@@ -157,6 +158,23 @@ Rectangle {
         iconSize: Theme.font.normal
         diameter: 36
         onClicked: input.clear()
+    }
+
+    IconButton {
+        id: paste
+
+        anchors.right: parent.right
+        anchors.rightMargin: 4
+        anchors.verticalCenter: parent.verticalCenter
+        visible: root.pasteEnabled
+        icon: "content_paste"
+        Accessible.name: qsTr("Open a link from the clipboard")
+        iconSize: Theme.font.normal
+        diameter: visible ? 36 : 0
+        onClicked: {
+            root.clearFocus();
+            root.pasteRequested();
+        }
     }
 
     SearchSuggestions {

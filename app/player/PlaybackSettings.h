@@ -26,6 +26,8 @@ class PlaybackSettings : public QObject
                    equalizerChanged)
     Q_PROPERTY(bool autoplay READ autoplay WRITE setAutoplay NOTIFY autoplayChanged)
     Q_PROPERTY(bool playVideos READ playVideos WRITE setPlayVideos NOTIFY playVideosChanged)
+    Q_PROPERTY(bool skipFailedTracks READ skipFailedTracks WRITE setSkipFailedTracks NOTIFY
+                   skipFailedTracksChanged)
     Q_PROPERTY(
         double podcastSpeed READ podcastSpeed WRITE setPodcastSpeed NOTIFY podcastSpeedChanged)
     Q_PROPERTY(QList<double> podcastSpeeds READ podcastSpeeds CONSTANT)
@@ -56,6 +58,7 @@ public:
     bool normalizeLoudness() const { return m_normalizeLoudness; }
     bool autoplay() const { return m_autoplay; }
     bool playVideos() const { return m_playVideos; }
+    bool skipFailedTracks() const { return m_skipFailedTracks; }
     double podcastSpeed() const { return m_podcastSpeed; }
     QList<double> podcastSpeeds() const;
     const QList<int> &gains() const { return m_gains; }
@@ -71,6 +74,7 @@ public:
     void setNormalizeLoudness(bool normalize);
     void setAutoplay(bool autoplay);
     void setPlayVideos(bool play);
+    void setSkipFailedTracks(bool skip);
     void setPodcastSpeed(double speed);
     void setPreset(int preset);
 
@@ -86,6 +90,7 @@ Q_SIGNALS:
     void equalizerChanged();
     void autoplayChanged();
     void playVideosChanged();
+    void skipFailedTracksChanged();
     void podcastSpeedChanged();
     void presetsChanged();
 
@@ -103,6 +108,7 @@ private:
     bool m_normalizeLoudness = true;
     bool m_autoplay = true;
     bool m_playVideos = false;
+    bool m_skipFailedTracks = true;
 };
 
 }

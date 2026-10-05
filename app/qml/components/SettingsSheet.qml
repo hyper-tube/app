@@ -403,6 +403,18 @@ ModalSheet {
 
                 SettingRow {
                     width: parent.width
+                    title: qsTr("Skip tracks that fail to play")
+                    caption: qsTr("Move on to the next track instead of stopping when one fails")
+                    controlWidth: 52
+
+                    ToggleSwitch {
+                        checked: PlaybackSettings.skipFailedTracks
+                        onToggled: value => PlaybackSettings.skipFailedTracks = value
+                    }
+                }
+
+                SettingRow {
+                    width: parent.width
                     title: qsTr("Play videos by default")
                     caption: qsTr("Open the music video instead of the artwork when a track has one")
                     controlWidth: 52

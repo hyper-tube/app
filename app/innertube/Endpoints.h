@@ -19,6 +19,7 @@ public:
     void search(const QString &query, const QString &params, const Session::Handler &handler);
     void next(const QString &playlistId, const QString &videoId, const QString &params,
               const Session::Handler &handler);
+    void resolveUrl(const QString &url, const Session::Handler &handler);
     void continuation(const QString &endpoint, const QString &token,
                       const Session::Handler &handler);
     void accountMenu(const Session::Handler &handler);

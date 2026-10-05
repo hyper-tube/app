@@ -40,6 +40,8 @@ Item {
         target: PlaybackController
 
         function onTrackAdvanced(direction) {
+            if (!root.holding)
+                root.frozen = root.live;
             root.heading = direction;
             root.holding = true;
             swap.restart();
@@ -74,8 +76,4 @@ Item {
             easing.bezierCurve: Theme.curve.emphasizedDecel
         }
     }
-
-    onLiveChanged: if (!root.holding) root.frozen = root.live
-
-    Component.onCompleted: root.frozen = root.live
 }

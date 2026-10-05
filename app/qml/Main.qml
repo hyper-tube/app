@@ -42,6 +42,10 @@ Window {
             Toasts.show(message, true);
         }
 
+        function onLinkOpened() {
+            fullPlayer.open = false;
+        }
+
         function onTracksResolved(tracks, intent) {
             switch (intent) {
             case "next":
@@ -208,12 +212,17 @@ Window {
                     placeholder: Connectivity.online ? qsTr("Search songs, albums, artists")
                         : qsTr("Search your downloads")
                     suggestionsEnabled: true
+                    pasteEnabled: true
                     glass: fullPlayer.visible
                     onEditingFinished: shell.forceActiveFocus()
                     onAccepted: query => {
                         fullPlayer.open = false;
                         Browser.search(query);
                         shell.forceActiveFocus();
+                    }
+                    onPasteRequested: {
+                        if (!Browser.openLink(Clipboard.text()))
+                            Toasts.show(qsTr("There is no YouTube link or video ID in the clipboard."), true);
                     }
                 }
 

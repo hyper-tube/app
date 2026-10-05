@@ -49,6 +49,7 @@ const QString kEqualizerKey = QStringLiteral("audio/equalizer");
 const QString kNormalizeKey = QStringLiteral("audio/normalize");
 const QString kAutoplayKey = QStringLiteral("audio/autoplay");
 const QString kPlayVideosKey = QStringLiteral("playback/videos");
+const QString kSkipFailedTracksKey = QStringLiteral("playback/skipFailedTracks");
 const QString kPodcastSpeedKey = QStringLiteral("playback/podcastSpeed");
 const QList<double> kPodcastSpeeds {0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0};
 const QString kGainsKey = QStringLiteral("audio/gains");
@@ -79,6 +80,7 @@ PlaybackSettings::PlaybackSettings(QObject *parent)
     m_normalizeLoudness = settings.value(kNormalizeKey, true).toBool();
     m_autoplay = settings.value(kAutoplayKey, true).toBool();
     m_playVideos = settings.value(kPlayVideosKey, false).toBool();
+    m_skipFailedTracks = settings.value(kSkipFailedTracksKey, true).toBool();
     m_podcastSpeed =
         qBound(kPodcastSpeeds.constFirst(), settings.value(kPodcastSpeedKey, 1.0).toDouble(),
                kPodcastSpeeds.constLast());
@@ -197,6 +199,15 @@ void PlaybackSettings::setPlayVideos(bool play)
     Q_EMIT playVideosChanged();
 }
 
+void PlaybackSettings::setSkipFailedTracks(bool skip)
+{
+    if (m_skipFailedTracks == skip)
+        return;
+    m_skipFailedTracks = skip;
+    save();
+    Q_EMIT skipFailedTracksChanged();
+}
+
 QList<double> PlaybackSettings::podcastSpeeds() const
 {
     return kPodcastSpeeds;
@@ -290,6 +301,7 @@ void PlaybackSettings::save() const
     settings.setValue(kNormalizeKey, m_normalizeLoudness);
     settings.setValue(kAutoplayKey, m_autoplay);
     settings.setValue(kPlayVideosKey, m_playVideos);
+    settings.setValue(kSkipFailedTracksKey, m_skipFailedTracks);
     settings.setValue(kPodcastSpeedKey, m_podcastSpeed);
     settings.setValue(kGainsKey, stored);
 }

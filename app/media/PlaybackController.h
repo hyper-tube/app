@@ -166,6 +166,7 @@ private:
     void prepareTracking(const player::Stream &stream);
     void finishTracking();
     void reportFailure(const QString &videoId, const QString &message, bool unreachable);
+    void reportUnplayable(const QString &message);
     void reportOffline();
     void followConnectivity();
     bool reachable(const Track &entry) const;
@@ -219,6 +220,7 @@ private:
     QString m_plannedPair;
     QString m_error;
     int m_queueIndex = -1;
+    int m_failuresInRow = 0;
     qint64 m_position = 0;
     qint64 m_duration = 0;
     qint64 m_resumePosition = 0;

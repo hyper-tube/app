@@ -4,7 +4,7 @@
 <context>
     <name>BrowseHeader</name>
     <message numerus="yes">
-        <location filename="../qml/components/BrowseHeader.qml" line="+116"/>
+        <location filename="../qml/components/BrowseHeader.qml" line="+117"/>
         <source>%n downloads - %1 GB</source>
         <translation>
             <numerusform>%n download - %1 GB</numerusform>
@@ -50,7 +50,7 @@
 <context>
     <name>Main</name>
     <message numerus="yes">
-        <location filename="../qml/Main.qml" line="+49"/>
+        <location filename="../qml/Main.qml" line="+53"/>
         <source>Playing %n songs next</source>
         <translation>
             <numerusform>Playing next</numerusform>
@@ -129,7 +129,7 @@
 <context>
     <name>library::LibraryActions</name>
     <message numerus="yes">
-        <location filename="../library/LibraryActions.cpp" line="+414"/>
+        <location filename="../library/LibraryActions.cpp" line="+415"/>
         <source>Added %n songs to %1</source>
         <translation>
             <numerusform>Added to %1</numerusform>

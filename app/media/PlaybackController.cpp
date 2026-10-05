@@ -28,6 +28,7 @@ constexpr qint64 kResumeTailMs = 15000;
 constexpr qint64 kStageLeadMs = 15000;
 constexpr qint64 kShortestSmartTransitionMs = 1000;
 constexpr int kAutoplayLead = 3;
+constexpr int kFailuresBeforeStopping = 5;
 constexpr int kVolumeStep = 5;
 
 const QString kRadioPrefix = QStringLiteral("RDAMVM");
@@ -303,8 +304,10 @@ PlaybackController::PlaybackController(QObject *parent)
     });
     connect(&m_engine, &player::AudioEngine::playingChanged, this, [this](bool playing) {
         m_tracker.setPlaying(playing && !m_loadedVideoId.isEmpty());
-        if (playing && !m_loadedVideoId.isEmpty())
+        if (playing && !m_loadedVideoId.isEmpty()) {
             setPending(false);
+            m_failuresInRow = 0;
+        }
         updatePlaying();
     });
     connect(&m_engine, &player::AudioEngine::trackEnded, this, &PlaybackController::handleTrackEnd);
@@ -324,8 +327,8 @@ PlaybackController::PlaybackController(QObject *parent)
             reportOffline();
             return;
         }
-        setError(track().upload ? tr("YouTube would not stream this upload.")
-                                : tr("Playback failed. Press play to retry."));
+        reportUnplayable(track().upload ? tr("YouTube would not stream this upload.")
+                                        : tr("Playback failed. Press play to retry."));
     });
     connect(&m_engine, &player::AudioEngine::transitionPromotionRequested, this, [this] {
         const int staged = stagedIndex();
@@ -799,6 +802,7 @@ void PlaybackController::play()
     if (!track().valid())
         return;
 
+    m_failuresInRow = 0;
     if (m_loadedVideoId == track().videoId) {
         m_engine.play();
         return;
@@ -828,6 +832,7 @@ void PlaybackController::next()
                             {{"queue_index", m_queueIndex},
                              {"queue_size", m_queue.size()},
                              {"staged", stagedIndex() == m_queueIndex + 1}});
+    m_failuresInRow = 0;
     library::PlayLog::instance().reach(m_duration, m_duration);
     library::PlayLog::instance().finish();
     advanceQueue();
@@ -849,6 +854,7 @@ void PlaybackController::previous()
 {
     diagnostics::breadcrumb("playback.previous_requested",
                             {{"queue_index", m_queueIndex}, {"queue_size", m_queue.size()}});
+    m_failuresInRow = 0;
     if (!m_loadedVideoId.isEmpty() && m_position > kRestartThresholdMs && !live()) {
         seek(0);
         return;
@@ -1217,8 +1223,28 @@ void PlaybackController::reportFailure(const QString &videoId, const QString &me
         return;
     }
     qCWarning(logPlayback) << "cannot play" << videoId << message;
-    setError(track().upload ? tr("YouTube would not stream this upload.")
-                            : tr("This track could not be played. Try again or choose another."));
+    reportUnplayable(track().upload
+                         ? tr("YouTube would not stream this upload.")
+                         : tr("This track could not be played. Try again or choose another."));
+}
+
+void PlaybackController::reportUnplayable(const QString &message)
+{
+    ++m_failuresInRow;
+    const Track failed = track();
+    const int limit = std::min(int(m_queue.size()), kFailuresBeforeStopping);
+    if (!player::PlaybackSettings::instance().skipFailedTracks() || m_failuresInRow >= limit
+        || !advance(1)) {
+        setError(message);
+        return;
+    }
+    diagnostics::breadcrumb("playback.failure_skipped",
+                            {{"kind", kindOf(failed)}, {"failures_in_row", m_failuresInRow}},
+                            diagnostics::Level::Warning);
+    setError(failed.title.isEmpty()
+                 ? tr("Skipped a track that could not be played.")
+                 : tr("Skipped %1 because it could not be played.").arg(failed.title));
+    startCurrent();
 }
 
 void PlaybackController::reportOffline()
