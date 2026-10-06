@@ -6,10 +6,19 @@
 
 namespace player {
 
+struct Cipher
+{
+    QString signature;
+    QString parameter;
+
+    bool present() const { return !signature.isEmpty(); }
+};
+
 struct AudioFormat
 {
     int itag = 0;
     QUrl url;
+    Cipher cipher;
     QString mimeType;
     QString quality;
     qint64 bitrate = 0;
@@ -24,6 +33,7 @@ struct VideoFormat
 {
     int itag = 0;
     QUrl url;
+    Cipher cipher;
     QString mimeType;
     qint64 bitrate = 0;
     int width = 0;
@@ -35,8 +45,13 @@ struct VideoFormat
 
 namespace formatPicker {
 
-AudioFormat best(const QJsonArray &adaptiveFormats);
-VideoFormat bestPicture(const QJsonArray &adaptiveFormats, int maximumHeight);
+enum class Ciphered {
+    Skip,
+    Accept,
+};
+
+AudioFormat best(const QJsonArray &adaptiveFormats, Ciphered ciphered);
+VideoFormat bestPicture(const QJsonArray &adaptiveFormats, int maximumHeight, Ciphered ciphered);
 
 }
 

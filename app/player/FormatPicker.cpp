@@ -4,6 +4,7 @@
 #include "core/Logging.h"
 
 #include <QJsonObject>
+#include <QUrlQuery>
 
 #include <tuple>
 
@@ -13,6 +14,7 @@ using player::AudioFormat;
 using player::VideoFormat;
 
 const QString kRectangularProjection = QStringLiteral("RECTANGULAR");
+const QString kSignatureParameter = QStringLiteral("signature");
 
 int qualityRank(const QString &quality)
 {
@@ -50,10 +52,33 @@ bool isAudio(const QJsonObject &format)
     return !format.contains(QStringLiteral("width"));
 }
 
+QString cipherOf(const QJsonObject &format)
+{
+    const QString cipher = format.value(QStringLiteral("signatureCipher")).toString();
+    return cipher.isEmpty() ? format.value(QStringLiteral("cipher")).toString() : cipher;
+}
+
 bool isCiphered(const QJsonObject &format)
 {
-    return format.contains(QStringLiteral("signatureCipher"))
-        || format.contains(QStringLiteral("cipher"));
+    return !cipherOf(format).isEmpty();
+}
+
+bool skips(const QJsonObject &format, player::formatPicker::Ciphered ciphered)
+{
+    return ciphered == player::formatPicker::Ciphered::Skip && isCiphered(format);
+}
+
+std::pair<QUrl, player::Cipher> locationOf(const QJsonObject &format)
+{
+    const QString cipher = cipherOf(format);
+    if (cipher.isEmpty())
+        return {QUrl(format.value(QStringLiteral("url")).toString()), {}};
+
+    const QUrlQuery fields(cipher);
+    const QString parameter = fields.queryItemValue(QStringLiteral("sp"), QUrl::FullyDecoded);
+    return {QUrl(fields.queryItemValue(QStringLiteral("url"), QUrl::FullyDecoded)),
+            {fields.queryItemValue(QStringLiteral("s"), QUrl::FullyDecoded),
+             parameter.isEmpty() ? kSignatureParameter : parameter}};
 }
 
 bool isAutoDubbed(const QJsonObject &format)
@@ -68,7 +93,7 @@ AudioFormat read(const QJsonObject &format)
 {
     AudioFormat audio;
     audio.itag = int(core::json::toInt(format.value(QStringLiteral("itag"))));
-    audio.url = QUrl(format.value(QStringLiteral("url")).toString());
+    std::tie(audio.url, audio.cipher) = locationOf(format);
     audio.mimeType = format.value(QStringLiteral("mimeType")).toString();
     audio.quality = format.value(QStringLiteral("audioQuality")).toString();
     audio.bitrate = core::json::toInt(format.value(QStringLiteral("bitrate")));
@@ -98,7 +123,7 @@ VideoFormat readPicture(const QJsonObject &format)
 {
     VideoFormat picture;
     picture.itag = int(core::json::toInt(format.value(QStringLiteral("itag"))));
-    picture.url = QUrl(format.value(QStringLiteral("url")).toString());
+    std::tie(picture.url, picture.cipher) = locationOf(format);
     picture.mimeType = format.value(QStringLiteral("mimeType")).toString();
     picture.bitrate = core::json::toInt(format.value(QStringLiteral("bitrate")));
     picture.width = int(core::json::toInt(format.value(QStringLiteral("width"))));
@@ -117,14 +142,14 @@ auto ranking(const VideoFormat &format)
 
 namespace player::formatPicker {
 
-AudioFormat best(const QJsonArray &adaptiveFormats)
+AudioFormat best(const QJsonArray &adaptiveFormats, Ciphered ciphered)
 {
     AudioFormat winner;
     AudioFormat dubbed;
 
     for (const QJsonValue &value : adaptiveFormats) {
         const QJsonObject format = value.toObject();
-        if (!isAudio(format) || isCiphered(format))
+        if (!isAudio(format) || skips(format, ciphered))
             continue;
 
         const AudioFormat candidate = read(format);
@@ -143,13 +168,13 @@ AudioFormat best(const QJsonArray &adaptiveFormats)
     return winner;
 }
 
-VideoFormat bestPicture(const QJsonArray &adaptiveFormats, int maximumHeight)
+VideoFormat bestPicture(const QJsonArray &adaptiveFormats, int maximumHeight, Ciphered ciphered)
 {
     VideoFormat winner;
 
     for (const QJsonValue &value : adaptiveFormats) {
         const QJsonObject format = value.toObject();
-        if (isAudio(format) || isCiphered(format) || !isFlat(format))
+        if (isAudio(format) || skips(format, ciphered) || !isFlat(format))
             continue;
 
         const VideoFormat candidate = readPicture(format);

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "PlayerScript.h"
+#include "FormatPicker.h"
 #include "PlaybackTrackingSeed.h"
 #include "innertube/Endpoints.h"
 
 #include <QDeadlineTimer>
 #include <QObject>
 #include <QString>
+#include <QStringList>
 #include <QUrl>
 
 #include <memory>
@@ -49,6 +50,7 @@ public:
 
     void setBackground(std::function<bool()> ready);
     void resolve(const QString &videoId, bool upload, bool fresh = false);
+    bool retryWithout(const Stream &stream, bool upload);
 
 Q_SIGNALS:
     void resolved(const player::Stream &stream);
@@ -60,14 +62,18 @@ private:
     struct Candidate;
     using AttemptPtr = std::shared_ptr<Attempt>;
 
+    void start(const QString &videoId, bool upload, bool fresh);
     void fetchMetadata(const AttemptPtr &attempt);
     bool rejectBlocked(const AttemptPtr &attempt, const QJsonObject &response);
     void signWebStream(const AttemptPtr &attempt);
     void tryNextClient(const AttemptPtr &attempt);
+    bool refuses(const QString &clientKey) const;
+    bool refusesWebStage() const;
     const QStringList &chainFor(const AttemptPtr &attempt) const;
     static QString playlistFor(const AttemptPtr &attempt);
     std::optional<Candidate> buildStream(const AttemptPtr &attempt, const innertube::Client &client,
-                                         const QJsonObject &response) const;
+                                         const QJsonObject &response,
+                                         formatPicker::Ciphered ciphered) const;
     bool takeStream(const AttemptPtr &attempt, const innertube::Client &client,
                     const QJsonObject &response);
     void takeLiveStream(const AttemptPtr &attempt, const innertube::Client &client,
@@ -82,6 +88,8 @@ private:
     quint64 m_generation = 0;
     Stream m_cached;
     QDeadlineTimer m_cacheExpiry;
+    QString m_refusedVideoId;
+    QStringList m_refusedClients;
 };
 
 }

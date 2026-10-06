@@ -20,6 +20,7 @@ public:
     bool restartRequired() const { return m_restartRequired; }
     bool cancelled() const { return m_cancelled; }
     bool unreachable() const { return m_unreachable; }
+    bool refused() const { return m_refused; }
 
 Q_SIGNALS:
     void progress(qint64 received, qint64 total);
@@ -39,6 +40,7 @@ private:
     bool m_restartRequired = false;
     bool m_cancelled = false;
     bool m_unreachable = false;
+    bool m_refused = false;
 };
 
 }

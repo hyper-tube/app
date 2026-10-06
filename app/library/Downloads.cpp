@@ -658,7 +658,8 @@ void Downloads::fetch(const player::Stream &stream)
             store(stream);
         else if (transfer && transfer->unreachable())
             defer(stream.videoId);
-        else
+        else if (!transfer || !transfer->refused()
+                 || !m_resolver.retryWithout(stream, m_wanted.value(stream.videoId).upload))
             fail(stream.videoId, error);
     });
 }

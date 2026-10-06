@@ -39,7 +39,7 @@ public:
     const QString &visitorCountry() const { return m_visitorCountry; }
 
     void setIdentity(const QString &dataSyncId);
-    void call(const QString &endpoint, const Client &client, QJsonObject body,
+    void call(const QString &endpoint, const Client &client, const QJsonObject &body,
               const Handler &handler, bool background = false);
     void ping(const Client &client, const QUrl &url);
     void finishTrackingRequests() const;
@@ -54,8 +54,11 @@ private:
     void bootstrap();
     void adoptVisitorData(const net::Response &response);
     void releasePending();
-    void send(const QString &endpoint, const Client &client, QJsonObject body,
-              const Handler &handler, bool background);
+    void queue(const QString &endpoint, const Client &client, const QJsonObject &body,
+               const Handler &handler, bool background, bool retried);
+    void send(const QString &endpoint, const Client &client, const QJsonObject &body,
+              const Handler &handler, bool background, bool retried);
+    bool renewVisitor(const QString &refused);
     bool signs(const Client &client) const;
     net::Headers headersFor(const Client &client) const;
 
@@ -69,6 +72,7 @@ private:
     QString m_pageId;
     QList<std::function<void()>> m_pending;
     int m_pendingPings = 0;
+    int m_visitorRenewals = 0;
     bool m_authenticated = false;
     bool m_bootstrapping = false;
     bool m_bootstrapped = false;

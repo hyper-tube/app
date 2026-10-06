@@ -3,8 +3,7 @@
     "lyricsClient": "IOS_MUSIC",
     "streamChain": [
         "VISIONOS",
-        "ANDROID_VR_1_65_10",
-        "ANDROID_VR_1_43_32"
+        "VISIONOS_1_02"
     ],
     "uploadChain": [
         "TVHTML5",
@@ -28,27 +27,15 @@
             "deviceMake": "Apple",
             "deviceModel": "RealityDevice14,1"
         },
-        "ANDROID_VR_1_65_10": {
-            "clientName": "ANDROID_VR",
-            "clientVersion": "1.65.10",
-            "clientId": "28",
-            "userAgent": "com.google.android.apps.youtube.vr.oculus/1.65.10 (Linux; U; Android 12L; eureka-user Build/SQ3A.220605.009.A1) gzip",
-            "osName": "Android",
-            "osVersion": "12L",
-            "deviceMake": "Oculus",
-            "deviceModel": "Quest 3",
-            "androidSdkVersion": "32"
-        },
-        "ANDROID_VR_1_43_32": {
-            "clientName": "ANDROID_VR",
-            "clientVersion": "1.43.32",
-            "clientId": "28",
-            "userAgent": "com.google.android.apps.youtube.vr.oculus/1.43.32 (Linux; U; Android 12; en_US; Quest 3; Build/SQ3A.220605.009.A1; Cronet/107.0.5284.2)",
-            "osName": "Android",
-            "osVersion": "12",
-            "deviceMake": "Oculus",
-            "deviceModel": "Quest 3",
-            "androidSdkVersion": "32"
+        "VISIONOS_1_02": {
+            "clientName": "VISIONOS",
+            "clientVersion": "1.02",
+            "clientId": "101",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15",
+            "osName": "visionOS",
+            "osVersion": "26.5.23O471",
+            "deviceMake": "Apple",
+            "deviceModel": "RealityDevice17,1"
         },
         "TVHTML5": {
             "clientName": "TVHTML5",

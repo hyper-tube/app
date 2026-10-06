@@ -17,6 +17,8 @@
 namespace {
 
 constexpr int kTrackingShutdownTimeoutMs = 1500;
+constexpr int kVisitorRenewals = 3;
+constexpr int kBadRequest = 400;
 
 const QString kBaseUrl = QStringLiteral("https://music.youtube.com/youtubei/v1/");
 const QString kOrigin = QStringLiteral("https://music.youtube.com");
@@ -59,6 +61,15 @@ QString errorFrom(const QJsonObject &json)
 
     const QString message = error.value(QStringLiteral("message")).toString();
     return message.isEmpty() ? QStringLiteral("innertube error") : message;
+}
+
+bool refusesVisitor(const net::Response &response)
+{
+    if (response.status != kBadRequest)
+        return false;
+    const QJsonObject error =
+        QJsonDocument::fromJson(response.body).object().value(QStringLiteral("error")).toObject();
+    return error.value(QStringLiteral("status")).toString() == QLatin1String("FAILED_PRECONDITION");
 }
 
 }
@@ -105,17 +116,23 @@ void Session::setIdentity(const QString &dataSyncId)
     Q_EMIT identityChanged();
 }
 
-void Session::call(const QString &endpoint, const Client &client, QJsonObject body,
+void Session::call(const QString &endpoint, const Client &client, const QJsonObject &body,
                    const Handler &handler, bool background)
 {
+    queue(endpoint, client, body, handler, background, false);
+}
+
+void Session::queue(const QString &endpoint, const Client &client, const QJsonObject &body,
+                    const Handler &handler, bool background, bool retried)
+{
     if (!m_bootstrapped) {
-        m_pending.append([this, endpoint, client, body, handler, background] {
-            send(endpoint, client, body, handler, background);
+        m_pending.append([this, endpoint, client, body, handler, background, retried] {
+            send(endpoint, client, body, handler, background, retried);
         });
         bootstrap();
         return;
     }
-    send(endpoint, client, std::move(body), handler, background);
+    send(endpoint, client, body, handler, background, retried);
 }
 
 void Session::ping(const Client &client, const QUrl &url)
@@ -186,22 +203,32 @@ void Session::releasePending()
         request();
 }
 
-void Session::send(const QString &endpoint, const Client &client, QJsonObject body,
-                   const Handler &handler, bool background)
+void Session::send(const QString &endpoint, const Client &client, const QJsonObject &body,
+                   const Handler &handler, bool background, bool retried)
 {
     const bool authenticate = signs(client);
-    body.insert(QStringLiteral("context"),
-                m_context.build(client, m_visitorData, authenticate ? m_identity : QString()));
+    const QString visitor = m_visitorData;
+    QJsonObject request = body;
+    request.insert(QStringLiteral("context"),
+                   m_context.build(client, visitor, authenticate ? m_identity : QString()));
 
     QUrl url(kBaseUrl + endpoint);
     QUrlQuery query(url);
     query.addQueryItem(QStringLiteral("prettyPrint"), QStringLiteral("false"));
     url.setQuery(query);
-    const QByteArray payload = QJsonDocument(body).toJson(QJsonDocument::Compact);
+    const QByteArray payload = QJsonDocument(request).toJson(QJsonDocument::Compact);
 
     m_http.post(url, headersFor(client), payload,
                 authenticate ? net::Credentialed::Yes : net::Credentialed::No,
-                [this, endpoint, authenticate, handler](const net::Response &response) {
+                [this, endpoint, client, body, handler, background, retried, authenticate,
+                 visitor](const net::Response &response) {
+        if (!authenticate && !retried && refusesVisitor(response) && renewVisitor(visitor)) {
+            qCWarning(logInnerTube)
+                << endpoint << client.key << "refused the visitor, retrying with a new one";
+            queue(endpoint, client, body, handler, background, true);
+            return;
+        }
+
         Reply reply;
         if (response.sessionRejected()) {
             if (authenticate) {
@@ -233,7 +260,20 @@ void Session::send(const QString &endpoint, const Client &client, QJsonObject bo
         reply.json = document.object();
         reply.error = errorFrom(reply.json);
         handler(reply);
-    }, background);
+    },
+                background);
+}
+
+bool Session::renewVisitor(const QString &refused)
+{
+    if (refused != m_visitorData)
+        return true;
+    if (m_visitorRenewals >= kVisitorRenewals)
+        return false;
+    ++m_visitorRenewals;
+    m_visitorData.clear();
+    m_bootstrapped = false;
+    return true;
 }
 
 bool Session::signs(const Client &client) const

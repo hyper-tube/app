@@ -2,6 +2,7 @@
 
 #include "FormatPicker.h"
 #include "LiveManifest.h"
+#include "PlayerScript.h"
 #include "core/Json.h"
 #include "core/Logging.h"
 #include "innertube/parsers/RendererReader.h"
@@ -115,6 +116,8 @@ namespace player {
 struct StreamResolver::Candidate
 {
     Stream stream;
+    Cipher audioCipher;
+    Cipher pictureCipher;
     qint64 expiresInSeconds = 0;
 };
 
@@ -152,6 +155,40 @@ void StreamResolver::setBackground(std::function<bool()> ready)
 }
 
 void StreamResolver::resolve(const QString &videoId, bool upload, bool fresh)
+{
+    m_refusedVideoId.clear();
+    m_refusedClients.clear();
+    start(videoId, upload, fresh);
+}
+
+bool StreamResolver::retryWithout(const Stream &stream, bool upload)
+{
+    if (stream.videoId.isEmpty() || stream.clientKey.isEmpty() || stream.url.isLocalFile())
+        return false;
+    if (m_refusedVideoId != stream.videoId) {
+        m_refusedVideoId = stream.videoId;
+        m_refusedClients.clear();
+    }
+    if (!m_refusedClients.contains(stream.clientKey))
+        m_refusedClients.append(stream.clientKey);
+    qCWarning(logStream) << stream.videoId << "was refused through" << stream.clientKey
+                         << "trying the remaining clients";
+    start(stream.videoId, upload, true);
+    return true;
+}
+
+bool StreamResolver::refuses(const QString &clientKey) const
+{
+    return m_refusedClients.contains(clientKey);
+}
+
+bool StreamResolver::refusesWebStage() const
+{
+    const innertube::Client *client = m_session.clients().metadataClient();
+    return client && refuses(client->key);
+}
+
+void StreamResolver::start(const QString &videoId, bool upload, bool fresh)
 {
     ++m_generation;
 
@@ -223,8 +260,9 @@ void StreamResolver::fetchMetadata(const AttemptPtr &attempt)
         readMetadata(attempt, *client, reply.json);
         if (rejectBlocked(attempt, reply.json))
             return;
-        if (attempt->upload || attempt->signatureTimestamp.has_value()) {
-            attempt->spare = buildStream(attempt, *client, reply.json);
+        if ((attempt->upload || attempt->signatureTimestamp.has_value()) && !refuses(client->key)) {
+            attempt->spare =
+                buildStream(attempt, *client, reply.json, formatPicker::Ciphered::Accept);
             if (attempt->spare) {
                 signWebStream(attempt);
                 return;
@@ -255,15 +293,20 @@ void StreamResolver::signWebStream(const AttemptPtr &attempt)
     if (!attempt->spare)
         return;
 
-    const QUrl url = PlayerScript::instance().descramble(attempt->spare->stream.url);
+    Candidate &candidate = *attempt->spare;
+    PlayerScript &script = PlayerScript::instance();
+    const QUrl url = script.sign(candidate.stream.url, candidate.audioCipher);
     if (url.isEmpty()) {
         qCWarning(logStream) << "could not sign the web stream for" << attempt->videoId;
         attempt->spare.reset();
         tryNextClient(attempt);
         return;
     }
-    attempt->spare->stream.url = url;
-    publish(attempt->spare->stream, attempt->spare->expiresInSeconds);
+    candidate.stream.url = url;
+    if (candidate.stream.showsPicture())
+        candidate.stream.pictureUrl =
+            script.sign(candidate.stream.pictureUrl, candidate.pictureCipher);
+    publish(candidate.stream, candidate.expiresInSeconds);
 }
 
 void StreamResolver::tryNextClient(const AttemptPtr &attempt)
@@ -277,7 +320,7 @@ void StreamResolver::tryNextClient(const AttemptPtr &attempt)
 
     const QStringList &chain = chainFor(attempt);
     if (attempt->index >= chain.size()) {
-        if (!attempt->upload && !attempt->signatureTimestamp) {
+        if (!attempt->upload && !attempt->signatureTimestamp && !refusesWebStage()) {
             PlayerScript::instance().ready([this, attempt](int timestamp) {
                 if (attempt->generation != m_generation)
                     return;
@@ -297,7 +340,7 @@ void StreamResolver::tryNextClient(const AttemptPtr &attempt)
 
     const QString key = chain.at(attempt->index++);
     const innertube::Client *client = m_session.clients().client(key);
-    if (!client) {
+    if (!client || refuses(key)) {
         tryNextClient(attempt);
         return;
     }
@@ -334,15 +377,17 @@ void StreamResolver::tryNextClient(const AttemptPtr &attempt)
 
 std::optional<StreamResolver::Candidate>
 StreamResolver::buildStream(const AttemptPtr &attempt, const innertube::Client &client,
-                            const QJsonObject &response) const
+                            const QJsonObject &response, formatPicker::Ciphered ciphered) const
 {
     const QJsonObject streamingData = response.value(QStringLiteral("streamingData")).toObject();
-    const AudioFormat format =
-        formatPicker::best(streamingData.value(QStringLiteral("adaptiveFormats")).toArray());
+    const QJsonArray adaptiveFormats =
+        streamingData.value(QStringLiteral("adaptiveFormats")).toArray();
+    const AudioFormat format = formatPicker::best(adaptiveFormats, ciphered);
     if (!format.valid())
         return std::nullopt;
 
     Candidate candidate;
+    candidate.audioCipher = format.cipher;
     Stream &stream = candidate.stream;
     stream.videoId = attempt->videoId;
     stream.url = format.url;
@@ -360,12 +405,13 @@ StreamResolver::buildStream(const AttemptPtr &attempt, const innertube::Client &
     stream.itag = format.itag;
     stream.musicVideo = attempt->musicVideo;
 
-    const VideoFormat picture = formatPicker::bestPicture(
-        streamingData.value(QStringLiteral("adaptiveFormats")).toArray(), kMaximumPictureHeight);
+    const VideoFormat picture =
+        formatPicker::bestPicture(adaptiveFormats, kMaximumPictureHeight, ciphered);
     if (picture.valid()) {
         stream.pictureUrl = picture.url;
         stream.pictureItag = picture.itag;
         stream.pictureHeight = picture.height;
+        candidate.pictureCipher = picture.cipher;
     }
 
     stream.gainDb =
@@ -378,7 +424,8 @@ StreamResolver::buildStream(const AttemptPtr &attempt, const innertube::Client &
 bool StreamResolver::takeStream(const AttemptPtr &attempt, const innertube::Client &client,
                                 const QJsonObject &response)
 {
-    const std::optional<Candidate> candidate = buildStream(attempt, client, response);
+    const std::optional<Candidate> candidate =
+        buildStream(attempt, client, response, formatPicker::Ciphered::Skip);
     if (!candidate)
         return false;
     publish(candidate->stream, candidate->expiresInSeconds);

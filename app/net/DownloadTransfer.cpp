@@ -37,6 +37,7 @@ void DownloadTransfer::start(QNetworkReply *reply)
             Connectivity::instance().observe(reply->error(), status);
             m_unreachable =
                 m_error.isEmpty() && status == 0 && Connectivity::unreachable(reply->error());
+            m_refused = status == 403;
         }
         if (reply->error() == QNetworkReply::NoError)
             read();

@@ -12,6 +12,9 @@
 #include <QRegularExpression>
 #include <QSaveFile>
 
+#include <algorithm>
+#include <functional>
+
 namespace {
 
 constexpr int kIdleReleaseMs = 5 * 60 * 1000;
@@ -20,6 +23,8 @@ constexpr const char *kNoisyCategory = "qt.qml.usedbeforedeclared";
 const QString kVersionUrl = QStringLiteral("https://www.youtube.com/iframe_api");
 const QString kSourceUrl =
     QStringLiteral("https://www.youtube.com/s/player/%1/player_ias.vflset/en_US/base.js");
+const QString kFunctionDefinition = QStringLiteral("=function(");
+const QString kSignerSlot = QStringLiteral("htmSigners[%1]=");
 
 const char *kBrowserShim = R"JS(
 var globalThis = this;
@@ -56,6 +61,7 @@ var performance = { now: function () { return Date.now(); }, timing: {} };
 var screen = { width: 1920, height: 1080 };
 function matchMedia() { return { matches: false, addListener: function () {}, removeListener: function () {} }; }
 function fetch() { return Promise.reject(new Error('unavailable')); }
+var htmSigners = [];
 )JS";
 
 const char *kTransform = R"JS(
@@ -120,6 +126,82 @@ const char *kTransform = R"JS(
 })()
 )JS";
 
+const char *kDecipher = R"JS(
+(function () {
+    var signer = null;
+
+    function textOf(result) {
+        if (typeof result === 'string')
+            return result;
+        if (!result || typeof result !== 'object')
+            return '';
+        var shape = Object.getPrototypeOf(result);
+        var members = shape ? Object.getOwnPropertyNames(shape) : [];
+        for (var i = 0; i < members.length; ++i) {
+            var method;
+            try { method = result[members[i]]; } catch (error) { continue; }
+            if (typeof method !== 'function' || method.length !== 0)
+                continue;
+            var text;
+            try { text = method.call(result); } catch (error) { continue; }
+            if (typeof text === 'string' && text.indexOf('/videoplayback') >= 0)
+                return text;
+        }
+        return '';
+    }
+
+    function valueIn(text, parameter) {
+        var name = parameter.replace(/[^A-Za-z0-9_]/g, '\\$&');
+        var match = new RegExp('[?&]' + name + '=([^&]*)').exec(text);
+        return match ? match[1] : '';
+    }
+
+    function rearranges(signature, scrambled) {
+        if (!signature || signature === scrambled || signature.length > scrambled.length
+            || signature.length < scrambled.length - 16)
+            return false;
+        var counts = {};
+        for (var i = 0; i < scrambled.length; ++i)
+            counts[scrambled[i]] = (counts[scrambled[i]] || 0) + 1;
+        for (var j = 0; j < signature.length; ++j) {
+            if (!counts[signature[j]])
+                return false;
+            --counts[signature[j]];
+        }
+        return true;
+    }
+
+    function signWith(candidate, url, parameter, scrambled) {
+        var encoded;
+        try { encoded = valueIn(textOf(candidate(url, parameter, scrambled)), parameter); }
+        catch (error) { return ''; }
+        var signature;
+        try { signature = decodeURIComponent(encoded); } catch (error) { return ''; }
+        return rearranges(signature, scrambled) ? encoded : '';
+    }
+
+    return function (url, parameter, scrambled) {
+        if (signer) {
+            var quick = signWith(signer, url, parameter, scrambled);
+            if (quick)
+                return url + '&' + parameter + '=' + quick;
+            signer = null;
+        }
+        for (var i = 0; i < htmSigners.length; ++i) {
+            var candidate = htmSigners[i];
+            if (typeof candidate !== 'function' || candidate.length < 3)
+                continue;
+            var found = signWith(candidate, url, parameter, scrambled);
+            if (found) {
+                signer = candidate;
+                return url + '&' + parameter + '=' + found;
+            }
+        }
+        return '';
+    };
+})()
+)JS";
+
 class SilencedDeclarations
 {
 public:
@@ -153,6 +235,27 @@ int signatureTimestampFrom(const QString &source)
     return match.hasMatch() ? match.captured(1).toInt() : 0;
 }
 
+QString withSignerSlots(const QString &source)
+{
+    static const QRegularExpression transformingConstruction(
+        QStringLiteral("new [A-Za-z0-9_$]+\\.[A-Za-z0-9_$]+\\([A-Za-z0-9_$]+,!0\\)"));
+    QList<qsizetype> definitions;
+    for (QRegularExpressionMatchIterator matches = transformingConstruction.globalMatch(source);
+         matches.hasNext();) {
+        const qsizetype definition =
+            source.lastIndexOf(kFunctionDefinition, matches.next().capturedStart());
+        if (definition >= 0 && !definitions.contains(definition))
+            definitions.append(definition);
+    }
+    std::ranges::sort(definitions, std::greater());
+
+    QString instrumented = source;
+    for (qsizetype slot = 0; slot < definitions.size(); ++slot)
+        instrumented.insert(definitions.at(slot) + 1, kSignerSlot.arg(slot));
+    qCDebug(logStream) << "player script offers" << definitions.size() << "signer candidates";
+    return instrumented;
+}
+
 }
 
 namespace player {
@@ -163,8 +266,7 @@ PlayerScript::PlayerScript(QObject *parent)
     m_idle.setSingleShot(true);
     m_idle.setInterval(kIdleReleaseMs);
     connect(&m_idle, &QTimer::timeout, this, [this] {
-        m_transform = QJSValue();
-        m_engine.reset();
+        release();
         qCDebug(logStream) << "player script released";
     });
 }
@@ -192,6 +294,14 @@ void PlayerScript::ready(Handler handler)
     start();
 }
 
+QUrl PlayerScript::sign(const QUrl &url, const Cipher &cipher)
+{
+    if (!cipher.present())
+        return descramble(url);
+    const QUrl deciphered = decipher(url, cipher);
+    return deciphered.isEmpty() ? QUrl() : descramble(deciphered);
+}
+
 QUrl PlayerScript::descramble(const QUrl &url)
 {
     if (!m_engine || !m_transform.isCallable())
@@ -202,6 +312,28 @@ QUrl PlayerScript::descramble(const QUrl &url)
         return {};
     const QString built = outcome.toString();
     return built.isEmpty() ? QUrl() : QUrl(built);
+}
+
+QUrl PlayerScript::decipher(const QUrl &url, const Cipher &cipher)
+{
+    if (!m_engine || !m_decipher.isCallable())
+        return {};
+    m_idle.start();
+    const QJSValue outcome = m_decipher.call({url.toString(), cipher.parameter, cipher.signature});
+    const QString built = outcome.isError() ? QString() : outcome.toString();
+    if (built.isEmpty()) {
+        qCWarning(logStream) << "no signer in player script" << m_version
+                             << "accepted the signature";
+        return {};
+    }
+    return QUrl(built);
+}
+
+void PlayerScript::release()
+{
+    m_transform = QJSValue();
+    m_decipher = QJSValue();
+    m_engine.reset();
 }
 
 void PlayerScript::start()
@@ -281,6 +413,23 @@ void PlayerScript::adoptSource(const QByteArray &source)
 bool PlayerScript::build(const QString &source)
 {
     const SilencedDeclarations quiet;
+    if (!load(withSignerSlots(source)) && !load(source))
+        return false;
+
+    m_transform = m_engine->evaluate(QString::fromUtf8(kTransform));
+    if (m_transform.isError() || !m_transform.isCallable()) {
+        qCWarning(logStream) << "player transform unavailable" << m_transform.toString();
+        release();
+        return false;
+    }
+    buildDecipher();
+    qCInfo(logStream) << "player script" << m_version << "ready, signature timestamp"
+                      << m_signatureTimestamp;
+    return true;
+}
+
+bool PlayerScript::load(const QString &script)
+{
     m_engine = std::make_unique<QJSEngine>();
     const QJSValue shim = m_engine->evaluate(QString::fromUtf8(kBrowserShim));
     if (shim.isError()) {
@@ -289,7 +438,7 @@ bool PlayerScript::build(const QString &source)
         return false;
     }
 
-    const QJSValue loaded = m_engine->evaluate(source, QStringLiteral("base.js"));
+    const QJSValue loaded = m_engine->evaluate(script, QStringLiteral("base.js"));
     if (loaded.isError()) {
         qCWarning(logStream) << "player script failed at line"
                              << loaded.property(QStringLiteral("lineNumber")).toInt()
@@ -297,17 +446,16 @@ bool PlayerScript::build(const QString &source)
         m_engine.reset();
         return false;
     }
-
-    m_transform = m_engine->evaluate(QString::fromUtf8(kTransform));
-    if (m_transform.isError() || !m_transform.isCallable()) {
-        qCWarning(logStream) << "player transform unavailable" << m_transform.toString();
-        m_transform = QJSValue();
-        m_engine.reset();
-        return false;
-    }
-    qCInfo(logStream) << "player script" << m_version << "ready, signature timestamp"
-                      << m_signatureTimestamp;
     return true;
+}
+
+void PlayerScript::buildDecipher()
+{
+    m_decipher = m_engine->evaluate(QString::fromUtf8(kDecipher));
+    if (m_decipher.isError() || !m_decipher.isCallable()) {
+        qCWarning(logStream) << "signature decipher unavailable" << m_decipher.toString();
+        m_decipher = QJSValue();
+    }
 }
 
 void PlayerScript::serve(int signatureTimestamp)

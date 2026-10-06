@@ -319,14 +319,18 @@ PlaybackController::PlaybackController(QObject *parent)
             {{"source", m_loadedLocal ? "download" : "stream"}, {"kind", kindOf(track())}},
             diagnostics::Level::Error);
         const bool streamed = !m_loadedLocal;
+        const bool neverStarted = m_pending && m_currentStream.videoId == track().videoId;
         m_loadedVideoId.clear();
-        setPending(false);
         if (streamed)
             net::Connectivity::instance().check();
         if (streamed && !net::Connectivity::instance().online()) {
+            setPending(false);
             reportOffline();
             return;
         }
+        if (streamed && neverStarted && m_resolver.retryWithout(m_currentStream, track().upload))
+            return;
+        setPending(false);
         reportUnplayable(track().upload ? tr("YouTube would not stream this upload.")
                                         : tr("Playback failed. Press play to retry."));
     });

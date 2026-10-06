@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FormatPicker.h"
+
 #include <QJSValue>
 #include <QList>
 #include <QObject>
@@ -27,7 +29,7 @@ public:
     static PlayerScript &instance();
 
     void ready(Handler handler);
-    QUrl descramble(const QUrl &url);
+    QUrl sign(const QUrl &url, const Cipher &cipher);
 
 private:
     QString cacheFile(const QString &version) const;
@@ -36,10 +38,16 @@ private:
     void fetchSource();
     void adoptSource(const QByteArray &source);
     bool build(const QString &source);
+    bool load(const QString &script);
+    void buildDecipher();
+    QUrl descramble(const QUrl &url);
+    QUrl decipher(const QUrl &url, const Cipher &cipher);
+    void release();
     void serve(int signatureTimestamp);
 
     std::unique_ptr<QJSEngine> m_engine;
     QJSValue m_transform;
+    QJSValue m_decipher;
     QString m_version;
     QList<Handler> m_pending;
     QTimer m_idle;

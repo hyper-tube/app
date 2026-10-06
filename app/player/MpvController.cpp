@@ -18,6 +18,7 @@ namespace {
 constexpr const char *kDemuxerMaxBytes = "32MiB";
 constexpr const char *kDemuxerMaxBackBytes = "8MiB";
 constexpr const char *kBoundedRequests = "request_size=10485760,multiple_requests=1";
+constexpr const char *kBoundedRequestSize = "10MiB";
 constexpr double kSilenceDb = -96.0;
 constexpr int kTrimIntervalMs = 900;
 constexpr int kTrimSamples = 4;
@@ -167,6 +168,8 @@ MpvController::MpvController(QObject *parent)
     mpv_set_option_string(m_handle, "demuxer-max-bytes", kDemuxerMaxBytes);
     mpv_set_option_string(m_handle, "demuxer-max-back-bytes", kDemuxerMaxBackBytes);
     mpv_set_option_string(m_handle, "stream-lavf-o", kBoundedRequests);
+    mpv_set_option_string(m_handle, "curl-max-request-size", kBoundedRequestSize);
+    mpv_set_option_string(m_handle, "ytdl", "no");
 
     const int status = mpv_initialize(m_handle);
     if (status < 0) {
