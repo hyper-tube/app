@@ -15,7 +15,7 @@ Item {
     readonly property real approach: 10
     readonly property bool engaged: root.compact && (button.hovered || trayHover.hovered || vertical.dragging)
 
-    implicitWidth: root.compact ? button.width : button.width + 6 + inline.width
+    implicitWidth: root.compact ? button.width : button.width + 6 + inline.implicitWidth
     implicitHeight: 40
 
     IconButton {
@@ -37,7 +37,8 @@ Item {
         anchors.leftMargin: 6
         anchors.verticalCenter: parent.verticalCenter
         visible: !root.compact
-        width: 84
+        width: Math.max(0, root.width - button.width - anchors.leftMargin)
+        implicitWidth: 84
         trackHeight: 4
         activeTrackHeight: 6
         continuous: true

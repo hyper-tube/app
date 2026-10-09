@@ -131,7 +131,7 @@ Rectangle {
                     artId: switcher.track.artId
                     video: switcher.track.video
                     live: switcher.track.live
-                    reach: Math.max(100, stage.parent.height - 310)
+                    reach: Math.max(100, stage.parent.height - 310 - volume.height - stage.spacing)
                     span: stage.width
                 }
 
@@ -355,6 +355,13 @@ Rectangle {
                         onClicked: PlaybackController.next()
                     }
                 }
+            }
+
+            VolumeControl {
+                id: volume
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.min(220, parent.width)
             }
         }
 
