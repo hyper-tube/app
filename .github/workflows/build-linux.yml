@@ -66,7 +66,17 @@ jobs:
           LINUXDEPLOY_EXCLUDED_LIBRARIES: libqtiff.so;libqtposition_nmea.so
           LINUXDEPLOY_OUTPUT_VERSION: ${{ inputs.version }}
           OUTPUT: ${{ env.PACKAGE }}-x86_64.AppImage
-        run: ${{ steps.linuxdeploy.outputs.linuxdeploy }} --appdir AppDir --plugin qt --output appimage
+        run: |
+          nss_package_files=$(dpkg-query --listfiles libnss3 libnspr4)
+          nss_libraries=()
+          while IFS= read -r library; do
+            if [[ "$library" == *.so && -f "$library" ]]; then
+              nss_libraries+=(--library "$library")
+            fi
+          done <<< "$nss_package_files"
+
+          ${{ steps.linuxdeploy.outputs.linuxdeploy }} --appdir AppDir --plugin qt \
+            "${nss_libraries[@]}" --output appimage
 
       - name: Build the deb and the rpm
         run: python3 packaging/linux/package.py --appdir AppDir --version "${{ inputs.version }}" --output "$PACKAGE"
