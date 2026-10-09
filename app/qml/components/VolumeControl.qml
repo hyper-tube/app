@@ -7,6 +7,7 @@ Item {
     id: root
 
     property bool compact: false
+    property bool showLevel: false
 
     readonly property int level: PlaybackController.muted || PlaybackController.volume === 0
         ? 0 : PlaybackController.volume < 50 ? 1 : 2
@@ -15,7 +16,8 @@ Item {
     readonly property real approach: 10
     readonly property bool engaged: root.compact && (button.hovered || trayHover.hovered || vertical.dragging)
 
-    implicitWidth: root.compact ? button.width : button.width + 6 + inline.implicitWidth
+    implicitWidth: root.compact ? button.width
+        : (button.width + 6) * (root.showLevel ? 2 : 1) + inline.implicitWidth
     implicitHeight: 40
 
     IconButton {
@@ -37,7 +39,7 @@ Item {
         anchors.leftMargin: 6
         anchors.verticalCenter: parent.verticalCenter
         visible: !root.compact
-        width: Math.max(0, root.width - button.width - anchors.leftMargin)
+        width: Math.max(0, root.width - (button.width + anchors.leftMargin) * (root.showLevel ? 2 : 1))
         implicitWidth: 84
         trackHeight: 4
         activeTrackHeight: 6
@@ -48,6 +50,17 @@ Item {
             PlaybackController.muted = false;
             PlaybackController.volume = level;
         }
+    }
+
+    StyledText {
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        visible: root.showLevel && !root.compact
+        width: button.width
+        text: qsTr("%1%").arg(Number(inline.position).toLocaleString(Qt.locale(), "f", 0))
+        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: Theme.font.smaller
+        color: Theme.colOnSurfaceVariant
     }
 
     Popup {

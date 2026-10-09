@@ -971,7 +971,7 @@
         <translation>Следующий эпизод</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+33"/>
         <source>Lyrics</source>
         <translation>Текст</translation>
     </message>
@@ -2367,7 +2367,7 @@
 <context>
     <name>VolumeControl</name>
     <message>
-        <location filename="../qml/components/VolumeControl.qml" line="+29"/>
+        <location filename="../qml/components/VolumeControl.qml" line="+31"/>
         <source>Unmute</source>
         <translation>Включить звук</translation>
     </message>
@@ -2375,6 +2375,11 @@
         <location line="+0"/>
         <source>Mute</source>
         <translation>Выключить звук</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <source>%1%</source>
+        <translation>%1%</translation>
     </message>
 </context>
 <context>

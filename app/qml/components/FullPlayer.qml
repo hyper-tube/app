@@ -361,7 +361,8 @@ Rectangle {
                 id: volume
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(220, parent.width)
+                width: Math.min(260, parent.width)
+                showLevel: true
             }
         }
 
