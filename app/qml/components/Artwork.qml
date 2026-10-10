@@ -30,7 +30,7 @@ Item {
 
         anchors.fill: parent
         visible: image.status === Image.Ready
-        layer.enabled: visible
+        layer.enabled: true
         layer.effect: RoundedMask {
             rounding: root.rounding
         }
