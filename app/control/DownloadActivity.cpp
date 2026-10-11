@@ -91,8 +91,8 @@ void DownloadActivity::adoptCard()
 {
     if (!m_cardId.isEmpty() && ControlCenter::instance().contains(m_cardId))
         return;
-    m_cardId = QStringLiteral("downloads.smart.")
-        + QString::number(QDateTime::currentMSecsSinceEpoch());
+    m_cardId =
+        QStringLiteral("downloads.smart.") + QString::number(QDateTime::currentMSecsSinceEpoch());
     m_saved = 0;
     m_failures = 0;
     m_failureTitle.clear();
@@ -133,8 +133,8 @@ QString DownloadActivity::summary() const
         parts.append(tr("%n songs could not be downloaded. They are retried automatically.",
                         nullptr, m_failures));
     else if (m_failures == 1)
-        parts.append(tr("**%1** could not be downloaded. It is retried automatically.")
-                         .arg(m_failureTitle));
+        parts.append(
+            tr("**%1** could not be downloaded. It is retried automatically.").arg(m_failureTitle));
     return parts.join(QLatin1Char(' '));
 }
 
