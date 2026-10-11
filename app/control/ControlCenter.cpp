@@ -57,6 +57,11 @@ int ControlCenter::unreadCount() const
                              [](const Notification &entry) { return entry.unread; }));
 }
 
+bool ControlCenter::contains(const QString &id) const
+{
+    return indexOf(id) >= 0;
+}
+
 bool ControlCenter::unread(const QString &id) const
 {
     const int row = indexOf(id);
@@ -92,16 +97,43 @@ int ControlCenter::indexOf(const QString &id) const
     return -1;
 }
 
-int ControlCenter::placeFor(const Notification &entry) const
+int ControlCenter::placeFor(const Notification &entry, int skipped) const
 {
+    int place = 0;
     for (int row = 0; row < m_entries.size(); ++row) {
+        if (row == skipped)
+            continue;
         const Notification &existing = m_entries.at(row);
         if (entry.activity && !existing.activity)
-            return row;
+            return place;
         if (entry.activity == existing.activity && entry.postedAt > existing.postedAt)
-            return row;
+            return place;
+        ++place;
     }
-    return m_entries.size();
+    return place;
+}
+
+void ControlCenter::replace(int row, Notification posted)
+{
+    const bool wasActivity = m_entries.at(row).activity;
+    posted.unread = m_entries.at(row).unread;
+    if (wasActivity == posted.activity) {
+        m_entries[row] = std::move(posted);
+        Q_EMIT dataChanged(index(row), index(row));
+        Q_EMIT progressChanged();
+        return;
+    }
+    const int target = placeFor(posted, row);
+    if (target != row) {
+        beginMoveRows({}, row, row, {}, target > row ? target + 1 : target);
+        m_entries.move(row, target);
+    }
+    m_entries[target] = std::move(posted);
+    if (target != row)
+        endMoveRows();
+    Q_EMIT dataChanged(index(target), index(target));
+    Q_EMIT changed();
+    Q_EMIT progressChanged();
 }
 
 void ControlCenter::publish(const Notification &entry)
@@ -113,18 +145,10 @@ void ControlCenter::publish(const Notification &entry)
         posted.postedAt = QDateTime::currentDateTime();
     const int existing = indexOf(posted.id);
     if (existing >= 0) {
-        const bool wasActivity = m_entries.at(existing).activity;
-        posted.unread = m_entries.at(existing).unread;
-        if (wasActivity == posted.activity) {
-            m_entries[existing] = std::move(posted);
-            Q_EMIT dataChanged(index(existing), index(existing));
-            Q_EMIT progressChanged();
-            return;
-        }
-        retract(posted.id);
-    } else {
-        posted.unread = posted.dismissible() && !posted.quiet;
+        replace(existing, std::move(posted));
+        return;
     }
+    posted.unread = posted.dismissible() && !posted.quiet;
     const int row = placeFor(posted);
     beginInsertRows({}, row, row);
     m_entries.insert(row, posted);

@@ -698,6 +698,8 @@ void Downloads::store(const player::Stream &stream)
         closeBatchItem();
     if (m_batchTotal == 0 && entry.forced)
         Q_EMIT feedback(tr("Download complete"));
+    if (!entry.forced)
+        Q_EMIT smartStored();
     Q_EMIT changed();
     Q_EMIT catalogueChanged();
     Q_EMIT progressChanged();

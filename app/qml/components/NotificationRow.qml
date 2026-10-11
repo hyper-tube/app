@@ -30,6 +30,14 @@ Item {
         root.closing = true;
     }
 
+    function conclude() {
+        ControlCenter.dismiss(root.entry.id);
+        if (root.entry.dismissible)
+            return;
+        root.offset = 0;
+        root.closing = false;
+    }
+
     height: (card.implicitHeight + root.gap) * root.settled
 
     Item {
@@ -257,7 +265,7 @@ Item {
                     easing.bezierCurve: Theme.curve.expressiveFastSpatial
                 }
                 ScriptAction {
-                    script: ControlCenter.dismiss(root.entry.id)
+                    script: root.conclude()
                 }
             }
         }

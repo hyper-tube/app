@@ -110,7 +110,7 @@
 <context>
     <name>control::DownloadActivity</name>
     <message numerus="yes">
-        <location filename="../control/DownloadActivity.cpp" line="+41"/>
+        <location filename="../control/DownloadActivity.cpp" line="+110"/>
         <source>%1 and %n more</source>
         <translation>
             <numerusform>%1 and %n more</numerusform>
@@ -118,7 +118,15 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location line="+19"/>
+        <location line="+21"/>
+        <source>%n songs saved for offline listening.</source>
+        <translation>
+            <numerusform>%n song saved for offline listening.</numerusform>
+            <numerusform>%n songs saved for offline listening.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location line="+2"/>
         <source>%n songs could not be downloaded. They are retried automatically.</source>
         <translation>
             <numerusform>%n song could not be downloaded. It is retried automatically.</numerusform>

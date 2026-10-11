@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QTimer>
 
 namespace control {
 
@@ -14,12 +15,21 @@ public:
 
 private:
     void refresh();
+    void settle();
+    void noteStored();
     void noteFailure(const QString &title);
     void clearFailures();
+    void adoptCard();
+    void publishProgress();
+    void publishSummary();
+    QString summary() const;
 
-    QString m_failureId;
+    QTimer m_settleTimer;
+    QString m_cardId;
     QString m_failureTitle;
+    int m_saved = 0;
     int m_failures = 0;
+    bool m_busy = false;
 };
 
 }

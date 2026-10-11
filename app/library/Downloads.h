@@ -88,6 +88,7 @@ Q_SIGNALS:
     void settingsChanged();
     void progressChanged();
     void feedback(const QString &message);
+    void smartStored();
     void smartFailed(const QString &title);
 
 private:

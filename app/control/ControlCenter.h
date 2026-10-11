@@ -38,6 +38,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     int unreadCount() const;
+    bool contains(const QString &id) const;
     bool unread(const QString &id) const;
     bool clearable() const;
     Status status() const;
@@ -59,7 +60,8 @@ Q_SIGNALS:
 
 private:
     int indexOf(const QString &id) const;
-    int placeFor(const Notification &entry) const;
+    int placeFor(const Notification &entry, int skipped = -1) const;
+    void replace(int row, Notification posted);
     void remember(const QString &id);
 
     QList<Notification> m_entries;

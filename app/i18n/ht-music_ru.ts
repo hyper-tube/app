@@ -1202,7 +1202,7 @@
 <context>
     <name>NotificationRow</name>
     <message>
-        <location filename="../qml/components/NotificationRow.qml" line="+113"/>
+        <location filename="../qml/components/NotificationRow.qml" line="+121"/>
         <source>Dismiss notification</source>
         <translation>Убрать уведомление</translation>
     </message>
@@ -2421,12 +2421,13 @@
 <context>
     <name>control::DownloadActivity</name>
     <message>
-        <location filename="../control/DownloadActivity.cpp" line="+39"/>
+        <location filename="../control/DownloadActivity.cpp" line="+108"/>
+        <location line="+13"/>
         <source>Smart downloads</source>
         <translation>Умные скачивания</translation>
     </message>
     <message numerus="yes">
-        <location line="+2"/>
+        <location line="-11"/>
         <source>%1 and %n more</source>
         <translation>
             <numerusform>%1 и ещё %n</numerusform>
@@ -2434,18 +2435,22 @@
             <numerusform>%1 и ещё %n</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <location line="+21"/>
+        <source>%n songs saved for offline listening.</source>
+        <translation>
+            <numerusform>%n трек сохранён для прослушивания офлайн.</numerusform>
+            <numerusform>%n трека сохранены для прослушивания офлайн.</numerusform>
+            <numerusform>%n треков сохранено для прослушивания офлайн.</numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+11"/>
+        <location line="-61"/>
         <source>A song</source>
         <translation>Трек</translation>
     </message>
-    <message>
-        <location line="+6"/>
-        <source>Downloads did not finish</source>
-        <translation>Скачивание не завершилось</translation>
-    </message>
     <message numerus="yes">
-        <location line="+2"/>
+        <location line="+63"/>
         <source>%n songs could not be downloaded. They are retried automatically.</source>
         <translation>
             <numerusform>Не удалось скачать %n трек. Попытка повторится автоматически.</numerusform>
@@ -2454,7 +2459,7 @@
         </translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>**%1** could not be downloaded. It is retried automatically.</source>
         <translation>Не удалось скачать **%1**. Попытка повторится автоматически.</translation>
     </message>
@@ -2520,7 +2525,7 @@
         <translation>Скачивание завершено</translation>
     </message>
     <message>
-        <location line="+89"/>
+        <location line="+91"/>
         <source>Live streams can&apos;t be downloaded.</source>
         <translation>Прямые трансляции нельзя скачать.</translation>
     </message>
