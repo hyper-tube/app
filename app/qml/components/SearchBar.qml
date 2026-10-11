@@ -52,7 +52,7 @@ Rectangle {
     }
 
     implicitHeight: 46
-    radius: Theme.rounding.full
+    radius: Theme.shape.searchField
     color: root.glass ? ColorUtils.withAlpha(Theme.colLayer2, 0.55)
         : focusRing.visible ? Theme.colLayer2 : Theme.colLayer1
     border.width: 1
@@ -112,6 +112,7 @@ Rectangle {
         font {
             family: Theme.font.main
             pixelSize: Theme.font.small
+            weight: Theme.font.weight
             variableAxes: Theme.font.axes
         }
 

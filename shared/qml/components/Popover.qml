@@ -6,7 +6,7 @@ import HtMusic
 Popup {
     id: root
 
-    property real rounding: Theme.rounding.normal
+    property real rounding: Theme.shape.popover
     property real inset: 6
     property real gap: 2
     property real anchorX: 0.5
@@ -52,7 +52,8 @@ Popup {
             blur: 28
             spread: 1
             offset: Qt.vector2d(0, 4)
-            color: ColorUtils.withAlpha(Theme.colShadow, 0.34)
+            visible: Theme.elevation.shadow > 0
+            color: ColorUtils.withAlpha(Theme.colShadow, 0.34 * Theme.elevation.shadow)
         }
 
         Rectangle {
@@ -64,6 +65,8 @@ Popup {
             height: implicitHeight * (0.42 + 0.58 * body.reveal)
             radius: root.rounding
             color: Theme.colLayer3
+            border.width: Theme.elevation.outline
+            border.color: Theme.colOutlineVariant
             clip: true
 
             Column {

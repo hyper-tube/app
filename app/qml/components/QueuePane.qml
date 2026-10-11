@@ -90,7 +90,7 @@ Item {
             implicitHeight: 64
             y: -(1 - root.originPresence) * 16
             opacity: root.originPresence
-            rounding: Theme.rounding.normal
+            rounding: Theme.shape.card
             colBackground: ColorUtils.withAlpha(Theme.colLayer2, 0.6)
             interactive: root.navigable
             Accessible.role: root.navigable ? Accessible.Button : Accessible.StaticText
@@ -106,8 +106,8 @@ Item {
                 height: 44
                 artId: root.navigable && root.origin.artId.length > 0 ? root.origin.artId
                     : PlaybackController.track.artId
-                rounding: root.navigable && root.origin.circular ? Theme.rounding.full
-                    : Theme.rounding.verysmall
+                rounding: root.navigable && root.origin.circular ? Theme.shape.avatar
+                    : Theme.shape.thumbnail
             }
 
             Column {
@@ -208,7 +208,7 @@ Item {
 
             width: list.width
             implicitHeight: 56
-            rounding: Theme.rounding.small
+            rounding: Theme.shape.row
             colBackground: row.current ? root.currentFill : "transparent"
 
             Behavior on presence {
@@ -229,7 +229,7 @@ Item {
                 height: 40
                 opacity: row.presence
                 artId: modelData.artId
-                rounding: Theme.rounding.verysmall
+                rounding: Theme.shape.thumbnail
 
                 Rectangle {
                     anchors.fill: parent

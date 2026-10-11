@@ -26,7 +26,7 @@ ToolTip {
     }
 
     background: Rectangle {
-        radius: Theme.rounding.verysmall
+        radius: Theme.shape.tooltip
         color: Theme.colInverseSurface
     }
 

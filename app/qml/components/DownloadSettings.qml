@@ -59,7 +59,7 @@ Column {
     Rectangle {
         width: parent.width
         height: 104
-        radius: Theme.rounding.normal
+        radius: Theme.rounding.medium
         color: Theme.colLayer2
 
         Column {
@@ -75,7 +75,7 @@ Column {
             Rectangle {
                 width: parent.width
                 height: 8
-                radius: 4
+                radius: Theme.shape.track
                 color: Theme.colLayer4
                 clip: true
 
@@ -84,7 +84,7 @@ Column {
 
                     width: parent.width * Math.min(1, Downloads.forcedBytes / root.ceiling)
                     height: parent.height
-                    radius: 4
+                    radius: Theme.shape.track
                     color: Theme.colTertiary
 
                     Behavior on width {
@@ -96,7 +96,7 @@ Column {
                     x: forced.width
                     width: Math.max(0, parent.width * Math.min(1, root.used / root.ceiling) - forced.width)
                     height: parent.height
-                    radius: 4
+                    radius: Theme.shape.track
                     color: Theme.colPrimary
                 }
             }

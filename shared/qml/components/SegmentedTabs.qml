@@ -20,7 +20,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: Theme.rounding.full
+        radius: Theme.shape.segmented
         color: ColorUtils.withAlpha(Theme.colLayer3, root.glass ? 0.4 : 0.75)
     }
 
@@ -29,7 +29,7 @@ Item {
         y: root.inset
         width: root.segmentWidth
         height: root.segmentHeight
-        radius: Theme.rounding.full
+        radius: Theme.shape.segmented
         color: Theme.colSecondaryContainer
 
         Behavior on x {
@@ -58,7 +58,7 @@ Item {
 
                 width: root.segmentWidth
                 height: root.segmentHeight
-                rounding: Theme.rounding.full
+                rounding: Theme.shape.segmented
                 colState: selected ? Theme.colOnSecondaryContainer : Theme.colOnSurface
 
                 StyledText {

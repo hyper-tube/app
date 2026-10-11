@@ -270,7 +270,7 @@
         <translation>Сортування</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+5"/>
         <source>Country: %1</source>
         <translation>Країна: %1</translation>
     </message>
@@ -610,7 +610,7 @@
         <translation>Скинути фільтри</translation>
     </message>
     <message>
-        <location line="+214"/>
+        <location line="+215"/>
         <source>You&apos;re offline</source>
         <translation>Ви не в мережі</translation>
     </message>
@@ -644,7 +644,7 @@
 <context>
     <name>ChipRow</name>
     <message>
-        <location filename="../qml/components/ChipRow.qml" line="+66"/>
+        <location filename="../qml/components/ChipRow.qml" line="+67"/>
         <source>Clear filters</source>
         <translation>Скинути фільтри</translation>
     </message>
@@ -971,7 +971,7 @@
         <translation>Наступний епізод</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+34"/>
         <source>Lyrics</source>
         <translation>Текст</translation>
     </message>
@@ -1446,7 +1446,7 @@
 <context>
     <name>PodcastHeader</name>
     <message>
-        <location filename="../qml/components/PodcastHeader.qml" line="+173"/>
+        <location filename="../qml/components/PodcastHeader.qml" line="+174"/>
         <source>Less</source>
         <translation>Згорнути</translation>
     </message>
@@ -1484,7 +1484,7 @@
 <context>
     <name>QueuePane</name>
     <message>
-        <location filename="../qml/components/QueuePane.qml" line="+19"/>
+        <location filename="../qml/components/QueuePane.qml" line="+21"/>
         <source>Live station</source>
         <translation>Станція в ефірі</translation>
     </message>
@@ -1519,7 +1519,7 @@
         <translation>Відтворюється з плейлиста</translation>
     </message>
     <message>
-        <location line="+295"/>
+        <location line="+294"/>
         <source>Not downloaded</source>
         <translation>Не завантажено</translation>
     </message>
@@ -1666,7 +1666,7 @@
         <translation>Пошук треків, альбомів, виконавців</translation>
     </message>
     <message>
-        <location line="+143"/>
+        <location line="+144"/>
         <source>Clear search</source>
         <translation>Очистити пошук</translation>
     </message>
@@ -1692,7 +1692,7 @@
 <context>
     <name>SelectionBar</name>
     <message>
-        <location filename="../qml/components/SelectionBar.qml" line="+63"/>
+        <location filename="../qml/components/SelectionBar.qml" line="+66"/>
         <source>Cancel selection</source>
         <translation>Скасувати вибір</translation>
     </message>
@@ -1764,7 +1764,7 @@
         <translation>Налаштування</translation>
     </message>
     <message>
-        <location line="+115"/>
+        <location line="+123"/>
         <source>Language</source>
         <translation>Мова</translation>
     </message>
@@ -1779,8 +1779,8 @@
         <translation>Тема</translation>
     </message>
     <message>
-        <location line="-161"/>
-        <location line="+167"/>
+        <location line="-169"/>
+        <location line="+230"/>
         <source>System</source>
         <translation>Системна</translation>
     </message>
@@ -1820,7 +1820,7 @@
         <translation>Джерело кольору системи не знайдено</translation>
     </message>
     <message>
-        <location line="-235"/>
+        <location line="-298"/>
         <source>Every color source found on this system. The one in use is marked.</source>
         <translation>Усі знайдені в системі джерела кольору. Використовуване позначено.</translation>
     </message>
@@ -1878,8 +1878,37 @@
         <source>Every color source found on this system. Pick the one to follow.</source>
         <translation>Усі знайдені в системі джерела кольору. Виберіть, за яким слідувати.</translation>
     </message>
+    <message numerus="yes">
+        <location line="+165"/>
+        <source>%n problem(s) in %1</source>
+        <translation>
+            <numerusform>%n проблема в темі %1</numerusform>
+            <numerusform>%n проблеми в темі %1</numerusform>
+            <numerusform>%n проблем у темі %1</numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+148"/>
+        <location line="+16"/>
+        <source>Your themes</source>
+        <translation>Ваші теми</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Each theme is a folder with a theme.json file. A saved change shows up straight away.</source>
+        <translation>Кожна тема - це тека з файлом theme.json. Збережені зміни застосовуються одразу.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Open folder</source>
+        <translation>Відкрити теку</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Mode</source>
+        <translation>Режим</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Window decorations</source>
         <translation>Оформлення вікна</translation>
     </message>
@@ -1965,7 +1994,7 @@
         <translation>Згладжувати різницю гучності між треками</translation>
     </message>
     <message numerus="yes">
-        <location line="-393"/>
+        <location line="-456"/>
         <source>Overlap tracks by %n seconds</source>
         <translation>
             <numerusform>Накладання треків на %n секунду</numerusform>
@@ -1974,7 +2003,7 @@
         </translation>
     </message>
     <message>
-        <location line="+404"/>
+        <location line="+467"/>
         <source>Transitions</source>
         <translation>Переходи</translation>
     </message>
@@ -2225,7 +2254,7 @@
         <translation>Вивантаження: %1</translation>
     </message>
     <message>
-        <location line="+133"/>
+        <location line="+136"/>
         <source>Dismiss notification</source>
         <translation>Прибрати сповіщення</translation>
     </message>
@@ -2459,7 +2488,7 @@
         </translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>**%1** could not be downloaded. It is retried automatically.</source>
         <translation>Не вдалося завантажити **%1**. Спроба повториться автоматично.</translation>
     </message>
@@ -2510,7 +2539,7 @@
         <translation>Не вдалося записати список завантажень.</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+55"/>
         <source>Could not finish writing the download.</source>
         <translation>Не вдалося дописати завантажений файл.</translation>
     </message>
@@ -2921,7 +2950,7 @@
 <context>
     <name>media::PlaybackController</name>
     <message>
-        <location filename="../media/PlaybackController.cpp" line="+330"/>
+        <location filename="../media/PlaybackController.cpp" line="+334"/>
         <location line="+897"/>
         <source>YouTube would not stream this upload.</source>
         <translation>YouTube відмовився відтворювати цей вивантажений трек.</translation>
@@ -2978,7 +3007,7 @@
 <context>
     <name>net::DownloadTransfer</name>
     <message>
-        <location filename="../net/DownloadTransfer.cpp" line="+45"/>
+        <location filename="../net/DownloadTransfer.cpp" line="+46"/>
         <source>The audio server refused the download (HTTP %1).</source>
         <translation>Аудіосервер відмовив у завантаженні (HTTP %1).</translation>
     </message>
@@ -3242,6 +3271,178 @@ Discord має бути запущений на цьому комп&apos;юте�
         <location line="+1"/>
         <source>Open settings</source>
         <translation>Відкрити налаштування</translation>
+    </message>
+</context>
+<context>
+    <name>theme::ThemeFile</name>
+    <message>
+        <location filename="../theme/ThemeFile.cpp" line="+70"/>
+        <source>The theme file could not be read</source>
+        <translation>Не вдалося прочитати файл теми</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>The theme file is not valid JSON: %1, at character %2</source>
+        <translation>Файл теми не є коректним JSON: %1, символ %2</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>The theme file has to hold a JSON object</source>
+        <translation>Файл теми має містити обʼєкт JSON</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>a number from %1 to %2</source>
+        <translation>числом від %1 до %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>a number from %1 to %2, or one of %3</source>
+        <translation>числом від %1 до %2 або одним зі значень: %3</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>a number of milliseconds from %1 to %2</source>
+        <translation>кількістю мілісекунд від %1 до %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>a list of Bezier control points in groups of six, ending in 1, 1</source>
+        <translation>списком контрольних точок кривої Безьє групами по шість, що закінчується на 1, 1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>the name of a font family</source>
+        <translation>назвою сімейства шрифтів</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The theme was written for a newer version of the app, so values this version does not know are skipped</source>
+        <translation>Тему написано для новішої версії програми, тому невідомі цій версії значення пропущено</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>%1 should be %2</source>
+        <translation>%1 має бути %2</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <location line="+30"/>
+        <location line="+21"/>
+        <source>%1 is not something a theme can set</source>
+        <translation>%1 не можна задати в темі</translation>
+    </message>
+    <message>
+        <location line="-45"/>
+        <location line="+33"/>
+        <location line="+20"/>
+        <source>%1 should be an object</source>
+        <translation>%1 має бути обʼєктом</translation>
+    </message>
+    <message>
+        <location line="-39"/>
+        <location line="+86"/>
+        <source>%1 is not a color</source>
+        <translation>%1 не є кольором</translation>
+    </message>
+    <message>
+        <location line="-33"/>
+        <location line="+8"/>
+        <source>%1 should be a list of font files</source>
+        <translation>%1 має бути списком файлів шрифтів</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>%1 should be an object of color roles</source>
+        <translation>%1 має бути обʼєктом із кольоровими ролями</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>%1 is not a color role</source>
+        <translation>%1 не є кольоровою роллю</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>%1 should be text</source>
+        <translation>%1 має бути текстом</translation>
+    </message>
+</context>
+<context>
+    <name>theme::ThemeLibrary</name>
+    <message>
+        <location filename="../theme/ThemeLibrary.cpp" line="+47"/>
+        <source>Default</source>
+        <translation>Стандартна</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Rounded corners and pill shaped controls</source>
+        <translation>Заокруглені кути та овальні елементи керування</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Square</source>
+        <translation>Квадратна</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Small corners, closer to YouTube Music on the web</source>
+        <translation>Невеликі заокруглення, ближче до вебверсії YouTube Music</translation>
+    </message>
+    <message>
+        <location line="+175"/>
+        <source>The theme %1 is not installed any more, so Default is used</source>
+        <translation>Тему %1 більше не встановлено, тому використовується стандартна</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>%1: %2</source>
+        <translation>%1: %2</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>No font family is called %1. Install it, or list its file under fonts</source>
+        <translation>Сімейство шрифтів %1 не знайдено. Установіть його або вкажіть його файл у fonts</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>%1 ends up extending itself</source>
+        <translation>Тема %1 зрештою розширює саму себе</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>%1 extends %2, which is not installed</source>
+        <translation>Тема %1 розширює тему %2, яку не встановлено</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The font %1 is outside the theme folder</source>
+        <translation>Шрифт %1 розташовано поза текою теми</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>The font %1 could not be loaded</source>
+        <translation>Не вдалося завантажити шрифт %1</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Built into the app</source>
+        <translation>Вбудована в програму</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The colors need a seed or a primary color, so they are not offered</source>
+        <translation>Для кольорів потрібен колір seed або primary, тому їх не запропоновано</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>By %1</source>
+        <translation>Автор: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>%1, by %2</source>
+        <translation>%1. Автор: %2</translation>
     </message>
 </context>
 <context>

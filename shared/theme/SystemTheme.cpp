@@ -5,6 +5,7 @@
 #include "PlasmaColors.h"
 #include "PlatformColors.h"
 #include "TerminalColors.h"
+#include "ThemeColors.h"
 
 #include <QCoreApplication>
 #include <QGuiApplication>
@@ -101,12 +102,6 @@ SystemTheme *SystemTheme::create(QQmlEngine *, QJSEngine *)
     return &instance();
 }
 
-bool SystemTheme::complete() const
-{
-    const ColorSource *source = active();
-    return source && source->complete();
-}
-
 bool SystemTheme::dark() const
 {
     return colorScheme() != Qt::ColorScheme::Light;
@@ -130,11 +125,11 @@ QList<ColorSourceInfo> SystemTheme::sources() const
     return found;
 }
 
-const ColorSource::Roles &SystemTheme::roles() const
+const ColorSource::Roles &SystemTheme::roles(bool dark) const
 {
     static const ColorSource::Roles kNone;
     const ColorSource *source = active();
-    return source ? source->roles() : kNone;
+    return source ? source->roles(dark) : kNone;
 }
 
 QColor SystemTheme::accent() const
@@ -154,6 +149,8 @@ void SystemTheme::select(const QString &id)
 
 void SystemTheme::discover()
 {
+    m_sources.append(new ThemeColors(this));
+
     for (const FileSource &file : materialFiles()) {
         if (!file.path.isEmpty())
             m_sources.append(new MaterialColors(file.id, file.name, file.path, this));

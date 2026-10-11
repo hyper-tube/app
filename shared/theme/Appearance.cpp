@@ -90,8 +90,7 @@ bool Appearance::dark() const
 
 bool Appearance::generates() const
 {
-    const SystemTheme &system = SystemTheme::instance();
-    return m_customSeed.isValid() || !system.complete() || dark() != system.dark();
+    return m_customSeed.isValid() || SystemTheme::instance().roles(dark()).isEmpty();
 }
 
 void Appearance::setMode(Mode mode)

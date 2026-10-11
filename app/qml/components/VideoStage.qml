@@ -50,7 +50,7 @@ Item {
     Artwork {
         anchors.fill: parent
         artId: root.artId
-        rounding: Theme.rounding.large
+        rounding: Theme.shape.stage
     }
 
     VideoSurface {
@@ -60,7 +60,7 @@ Item {
         scale: 0.97 + 0.03 * root.reveal
         layer.enabled: visible
         layer.effect: RoundedMask {
-            rounding: Theme.rounding.large
+            rounding: Theme.shape.stage
         }
     }
 

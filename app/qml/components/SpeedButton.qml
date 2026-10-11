@@ -16,7 +16,7 @@ RippleSurface {
 
     implicitWidth: Math.max(56, readout.implicitWidth + 24)
     implicitHeight: 34
-    rounding: Theme.rounding.full
+    rounding: Theme.shape.button
     colBackground: root.altered ? Theme.colSecondaryContainer
         : ColorUtils.withAlpha(Theme.colLayer3, root.glass ? 0.55 : 1)
     colState: root.altered ? Theme.colOnSecondaryContainer : Theme.colOnSurface
@@ -88,7 +88,7 @@ RippleSurface {
 
                     width: (options.width - options.spacing * (options.columns - 1)) / options.columns
                     implicitHeight: 38
-                    rounding: Theme.rounding.full
+                    rounding: Theme.shape.button
                     colBackground: option.current ? Theme.colPrimary : Theme.colLayer4
                     colState: option.current ? Theme.colOnPrimary : Theme.colOnSurface
                     acceptedButtons: Qt.LeftButton

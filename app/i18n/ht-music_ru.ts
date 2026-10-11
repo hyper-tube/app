@@ -270,7 +270,7 @@
         <translation>Сортировка</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+5"/>
         <source>Country: %1</source>
         <translation>Страна: %1</translation>
     </message>
@@ -610,7 +610,7 @@
         <translation>Сбросить фильтры</translation>
     </message>
     <message>
-        <location line="+214"/>
+        <location line="+215"/>
         <source>You&apos;re offline</source>
         <translation>Вы не в сети</translation>
     </message>
@@ -644,7 +644,7 @@
 <context>
     <name>ChipRow</name>
     <message>
-        <location filename="../qml/components/ChipRow.qml" line="+66"/>
+        <location filename="../qml/components/ChipRow.qml" line="+67"/>
         <source>Clear filters</source>
         <translation>Сбросить фильтры</translation>
     </message>
@@ -971,7 +971,7 @@
         <translation>Следующий эпизод</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+34"/>
         <source>Lyrics</source>
         <translation>Текст</translation>
     </message>
@@ -1446,7 +1446,7 @@
 <context>
     <name>PodcastHeader</name>
     <message>
-        <location filename="../qml/components/PodcastHeader.qml" line="+173"/>
+        <location filename="../qml/components/PodcastHeader.qml" line="+174"/>
         <source>Less</source>
         <translation>Свернуть</translation>
     </message>
@@ -1484,7 +1484,7 @@
 <context>
     <name>QueuePane</name>
     <message>
-        <location filename="../qml/components/QueuePane.qml" line="+19"/>
+        <location filename="../qml/components/QueuePane.qml" line="+21"/>
         <source>Live station</source>
         <translation>Станция в эфире</translation>
     </message>
@@ -1519,7 +1519,7 @@
         <translation>Играет из плейлиста</translation>
     </message>
     <message>
-        <location line="+295"/>
+        <location line="+294"/>
         <source>Not downloaded</source>
         <translation>Не скачано</translation>
     </message>
@@ -1666,7 +1666,7 @@
         <translation>Поиск треков, альбомов, исполнителей</translation>
     </message>
     <message>
-        <location line="+143"/>
+        <location line="+144"/>
         <source>Clear search</source>
         <translation>Очистить поиск</translation>
     </message>
@@ -1692,7 +1692,7 @@
 <context>
     <name>SelectionBar</name>
     <message>
-        <location filename="../qml/components/SelectionBar.qml" line="+63"/>
+        <location filename="../qml/components/SelectionBar.qml" line="+66"/>
         <source>Cancel selection</source>
         <translation>Отменить выбор</translation>
     </message>
@@ -1764,7 +1764,7 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <location line="+115"/>
+        <location line="+123"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
@@ -1779,8 +1779,8 @@
         <translation>Тема</translation>
     </message>
     <message>
-        <location line="-161"/>
-        <location line="+167"/>
+        <location line="-169"/>
+        <location line="+230"/>
         <source>System</source>
         <translation>Системная</translation>
     </message>
@@ -1820,7 +1820,7 @@
         <translation>Источник цвета системы не найден</translation>
     </message>
     <message>
-        <location line="-235"/>
+        <location line="-298"/>
         <source>Every color source found on this system. The one in use is marked.</source>
         <translation>Все найденные в системе источники цвета. Используемый отмечен.</translation>
     </message>
@@ -1878,8 +1878,37 @@
         <source>Every color source found on this system. Pick the one to follow.</source>
         <translation>Все найденные в системе источники цвета. Выберите, за каким следовать.</translation>
     </message>
+    <message numerus="yes">
+        <location line="+165"/>
+        <source>%n problem(s) in %1</source>
+        <translation>
+            <numerusform>%n проблема в теме %1</numerusform>
+            <numerusform>%n проблемы в теме %1</numerusform>
+            <numerusform>%n проблем в теме %1</numerusform>
+        </translation>
+    </message>
     <message>
-        <location line="+148"/>
+        <location line="+16"/>
+        <source>Your themes</source>
+        <translation>Ваши темы</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Each theme is a folder with a theme.json file. A saved change shows up straight away.</source>
+        <translation>Каждая тема - это папка с файлом theme.json. Сохранённые изменения применяются сразу.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Open folder</source>
+        <translation>Открыть папку</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Mode</source>
+        <translation>Режим</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Window decorations</source>
         <translation>Оформление окна</translation>
     </message>
@@ -1965,7 +1994,7 @@
         <translation>Сглаживать разницу громкости между треками</translation>
     </message>
     <message numerus="yes">
-        <location line="-393"/>
+        <location line="-456"/>
         <source>Overlap tracks by %n seconds</source>
         <translation>
             <numerusform>Наложение треков на %n секунду</numerusform>
@@ -1974,7 +2003,7 @@
         </translation>
     </message>
     <message>
-        <location line="+404"/>
+        <location line="+467"/>
         <source>Transitions</source>
         <translation>Переходы</translation>
     </message>
@@ -2225,7 +2254,7 @@
         <translation>Загрузка: %1</translation>
     </message>
     <message>
-        <location line="+133"/>
+        <location line="+136"/>
         <source>Dismiss notification</source>
         <translation>Убрать уведомление</translation>
     </message>
@@ -2459,7 +2488,7 @@
         </translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>**%1** could not be downloaded. It is retried automatically.</source>
         <translation>Не удалось скачать **%1**. Попытка повторится автоматически.</translation>
     </message>
@@ -2510,7 +2539,7 @@
         <translation>Не удалось записать список скачиваний.</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+55"/>
         <source>Could not finish writing the download.</source>
         <translation>Не удалось дописать скачанный файл.</translation>
     </message>
@@ -2921,7 +2950,7 @@
 <context>
     <name>media::PlaybackController</name>
     <message>
-        <location filename="../media/PlaybackController.cpp" line="+330"/>
+        <location filename="../media/PlaybackController.cpp" line="+334"/>
         <location line="+897"/>
         <source>YouTube would not stream this upload.</source>
         <translation>YouTube отказался проигрывать этот загруженный трек.</translation>
@@ -2978,7 +3007,7 @@
 <context>
     <name>net::DownloadTransfer</name>
     <message>
-        <location filename="../net/DownloadTransfer.cpp" line="+45"/>
+        <location filename="../net/DownloadTransfer.cpp" line="+46"/>
         <source>The audio server refused the download (HTTP %1).</source>
         <translation>Аудиосервер отказал в скачивании (HTTP %1).</translation>
     </message>
@@ -3242,6 +3271,178 @@ Discord должен быть запущен на этом компьютере.
         <location line="+1"/>
         <source>Open settings</source>
         <translation>Открыть настройки</translation>
+    </message>
+</context>
+<context>
+    <name>theme::ThemeFile</name>
+    <message>
+        <location filename="../theme/ThemeFile.cpp" line="+70"/>
+        <source>The theme file could not be read</source>
+        <translation>Не удалось прочитать файл темы</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>The theme file is not valid JSON: %1, at character %2</source>
+        <translation>Файл темы не является корректным JSON: %1, символ %2</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>The theme file has to hold a JSON object</source>
+        <translation>Файл темы должен содержать объект JSON</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>a number from %1 to %2</source>
+        <translation>числом от %1 до %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>a number from %1 to %2, or one of %3</source>
+        <translation>числом от %1 до %2 или одним из значений: %3</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>a number of milliseconds from %1 to %2</source>
+        <translation>числом миллисекунд от %1 до %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>a list of Bezier control points in groups of six, ending in 1, 1</source>
+        <translation>списком контрольных точек кривой Безье группами по шесть, который заканчивается на 1, 1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>the name of a font family</source>
+        <translation>названием семейства шрифтов</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The theme was written for a newer version of the app, so values this version does not know are skipped</source>
+        <translation>Тема написана для более новой версии приложения, поэтому незнакомые этой версии значения пропущены</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>%1 should be %2</source>
+        <translation>%1 должно быть %2</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <location line="+30"/>
+        <location line="+21"/>
+        <source>%1 is not something a theme can set</source>
+        <translation>%1 нельзя задать в теме</translation>
+    </message>
+    <message>
+        <location line="-45"/>
+        <location line="+33"/>
+        <location line="+20"/>
+        <source>%1 should be an object</source>
+        <translation>%1 должно быть объектом</translation>
+    </message>
+    <message>
+        <location line="-39"/>
+        <location line="+86"/>
+        <source>%1 is not a color</source>
+        <translation>%1 не является цветом</translation>
+    </message>
+    <message>
+        <location line="-33"/>
+        <location line="+8"/>
+        <source>%1 should be a list of font files</source>
+        <translation>%1 должно быть списком файлов шрифтов</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>%1 should be an object of color roles</source>
+        <translation>%1 должно быть объектом с цветовыми ролями</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>%1 is not a color role</source>
+        <translation>%1 не является цветовой ролью</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>%1 should be text</source>
+        <translation>%1 должно быть текстом</translation>
+    </message>
+</context>
+<context>
+    <name>theme::ThemeLibrary</name>
+    <message>
+        <location filename="../theme/ThemeLibrary.cpp" line="+47"/>
+        <source>Default</source>
+        <translation>Стандартная</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Rounded corners and pill shaped controls</source>
+        <translation>Скруглённые углы и овальные элементы управления</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Square</source>
+        <translation>Квадратная</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Small corners, closer to YouTube Music on the web</source>
+        <translation>Небольшие скругления, ближе к веб-версии YouTube Music</translation>
+    </message>
+    <message>
+        <location line="+175"/>
+        <source>The theme %1 is not installed any more, so Default is used</source>
+        <translation>Тема %1 больше не установлена, поэтому используется стандартная</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>%1: %2</source>
+        <translation>%1: %2</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>No font family is called %1. Install it, or list its file under fonts</source>
+        <translation>Семейство шрифтов %1 не найдено. Установите его или укажите его файл в fonts</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>%1 ends up extending itself</source>
+        <translation>Тема %1 в итоге расширяет саму себя</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>%1 extends %2, which is not installed</source>
+        <translation>Тема %1 расширяет тему %2, которая не установлена</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The font %1 is outside the theme folder</source>
+        <translation>Шрифт %1 находится за пределами папки темы</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>The font %1 could not be loaded</source>
+        <translation>Не удалось загрузить шрифт %1</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Built into the app</source>
+        <translation>Встроена в приложение</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The colors need a seed or a primary color, so they are not offered</source>
+        <translation>Для цветов нужен цвет seed или primary, поэтому они не предлагаются</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>By %1</source>
+        <translation>Автор: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>%1, by %2</source>
+        <translation>%1. Автор: %2</translation>
     </message>
 </context>
 <context>

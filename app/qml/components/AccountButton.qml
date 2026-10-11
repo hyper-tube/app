@@ -20,7 +20,7 @@ Item {
 
         implicitWidth: row.implicitWidth + 28
         anchors.fill: parent
-        rounding: Theme.rounding.full
+        rounding: Theme.shape.button
         colBackground: root.glass ? ColorUtils.withAlpha(Theme.colLayer2, 0.5)
             : Account.signedIn ? Theme.colLayer2 : Theme.colSecondaryContainer
         colState: Account.signedIn ? Theme.colOnSurface : Theme.colOnSecondaryContainer
@@ -37,7 +37,7 @@ Item {
                 height: 26
                 visible: Account.signedIn && Account.artId.length > 0
                 artId: Account.artId
-                rounding: Theme.rounding.full
+                rounding: Theme.shape.avatar
             }
 
             Sym {
@@ -98,12 +98,12 @@ Item {
                     height: 44
                     visible: Account.artId.length > 0
                     artId: Account.artId
-                    rounding: Theme.rounding.full
+                    rounding: Theme.shape.avatar
                 }
 
                 Rectangle {
                     anchors.fill: avatar
-                    radius: Theme.rounding.full
+                    radius: Theme.shape.avatar
                     color: Theme.colLayer4
                     visible: !avatar.visible
 

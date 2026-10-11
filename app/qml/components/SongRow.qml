@@ -41,7 +41,7 @@ RippleSurface {
     signal selectToggled
 
     implicitHeight: 60
-    rounding: Theme.rounding.small
+    rounding: Theme.shape.row
     colState: Theme.colOnSurface
 
     Behavior on selectReveal {
@@ -146,7 +146,7 @@ RippleSurface {
         height: 44
         opacity: root.presence
         artId: root.artId
-        rounding: root.circular ? Theme.rounding.full : Theme.rounding.verysmall
+        rounding: root.circular ? Theme.shape.avatar : Theme.shape.thumbnail
 
         Rectangle {
             id: cue

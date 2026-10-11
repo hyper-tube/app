@@ -27,7 +27,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         width: root.indicatorWidth
         height: 36
-        rounding: Theme.rounding.full
+        rounding: Theme.shape.navigation
         colBackground: root.selected ? Theme.colSecondaryContainer : "transparent"
         colState: root.selected ? Theme.colOnSecondaryContainer : Theme.colOnSurface
 

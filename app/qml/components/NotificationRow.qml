@@ -55,7 +55,7 @@ Item {
 
             width: parent.width
             implicitHeight: Math.max(66, column.implicitHeight + 26)
-            radius: Theme.rounding.normal
+            radius: Theme.shape.card
             color: Theme.colLayer4
             Accessible.role: Accessible.AlertMessage
             Accessible.name: root.entry.title
@@ -154,7 +154,7 @@ Item {
                         anchors.bottom: parent.bottom
                         width: parent.width
                         height: 4
-                        radius: height / 2
+                        radius: Theme.shape.track
                         color: ColorUtils.withAlpha(Theme.colOnSurface, 0.12)
 
                         Rectangle {

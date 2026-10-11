@@ -27,7 +27,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: Theme.rounding.full
+        radius: Theme.shape.segmented
         color: ColorUtils.withAlpha(Theme.colLayer1, 0.82)
         border.width: 1
         border.color: ColorUtils.withAlpha(Theme.colOutline, 0.3)
@@ -38,7 +38,7 @@ Item {
         y: root.inset
         width: root.segment
         height: root.lane
-        radius: Theme.rounding.full
+        radius: Theme.shape.segmented
         color: Theme.colPrimary
     }
 
@@ -49,7 +49,7 @@ Item {
         RippleSurface {
             width: root.segment
             height: root.lane
-            rounding: Theme.rounding.full
+            rounding: Theme.shape.segmented
             colState: root.video ? Theme.colOnSurface : Theme.colOnPrimary
             tooltip: Accessible.name
             Accessible.role: Accessible.Button
@@ -69,7 +69,7 @@ Item {
         RippleSurface {
             width: root.segment
             height: root.lane
-            rounding: Theme.rounding.full
+            rounding: Theme.shape.segmented
             colState: root.video ? Theme.colOnPrimary : Theme.colOnSurface
             tooltip: Accessible.name
             Accessible.role: Accessible.Button

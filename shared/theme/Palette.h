@@ -3,6 +3,9 @@
 #include <QColor>
 #include <QObject>
 #include <QQmlEngine>
+#include <QStringList>
+
+#include <span>
 
 namespace theme {
 
@@ -68,10 +71,16 @@ public:
 
     bool darkMode() const;
 
+    static QStringList roleNames();
+
 Q_SIGNALS:
     void changed();
 
 private:
+    struct Role;
+
+    static std::span<const Role> roles();
+
     void reload();
 
     QColor m_background;

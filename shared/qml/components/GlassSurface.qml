@@ -5,7 +5,7 @@ Item {
     id: root
 
     required property Item sourceItem
-    property real rounding: Theme.rounding.full
+    required property real rounding
 
     layer.enabled: visible
     layer.effect: RoundedMask {

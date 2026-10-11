@@ -31,13 +31,13 @@ ScrollBar {
             anchors.centerIn: parent
             width: root.barWidth
             height: parent.height - root.topPadding - root.bottomPadding
-            radius: width / 2
+            radius: Theme.shape.track
             color: ColorUtils.withAlpha(Theme.colOnSurface, 0.10)
         }
     }
 
     contentItem: Rectangle {
-        radius: width / 2
+        radius: Theme.shape.track
         color: root.pressed ? Theme.colOnSurface : Theme.colOnSurfaceVariant
 
         Behavior on color {

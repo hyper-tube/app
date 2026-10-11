@@ -25,11 +25,10 @@ public:
     static SystemTheme *create(QQmlEngine *, QJSEngine *);
 
     bool available() const { return active() != nullptr; }
-    bool complete() const;
     bool dark() const;
     QString sourceName() const;
     QList<ColorSourceInfo> sources() const;
-    const ColorSource::Roles &roles() const;
+    const ColorSource::Roles &roles(bool dark) const;
     QColor accent() const;
 
     Q_INVOKABLE void select(const QString &id);

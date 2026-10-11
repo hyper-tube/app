@@ -43,7 +43,7 @@ Item {
         id: surface
 
         anchors.fill: parent
-        rounding: Theme.rounding.full
+        rounding: Theme.shape.iconButton
         tooltip: qsTr("Control center")
         Accessible.name: qsTr("Control center")
 
@@ -88,7 +88,7 @@ Item {
                 y: parent.height / 2 + 7
                 width: 18
                 height: 3
-                radius: height / 2
+                radius: Theme.shape.track
                 color: ColorUtils.withAlpha(Theme.colOnSurfaceVariant, 0.28)
                 opacity: root.busyReveal
                 scale: 0.6 + 0.4 * root.busyReveal

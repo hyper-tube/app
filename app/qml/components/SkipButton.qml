@@ -14,7 +14,7 @@ RippleSurface {
 
     implicitWidth: root.diameter
     implicitHeight: root.diameter
-    rounding: Theme.rounding.full
+    rounding: Theme.shape.iconButton
     colState: Theme.colOnSurface
     acceptedButtons: Qt.LeftButton
     tooltip: Accessible.name

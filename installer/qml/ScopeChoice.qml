@@ -12,7 +12,7 @@ RippleSurface {
     signal chosen
 
     implicitHeight: Math.max(66, lines.implicitHeight + 28)
-    rounding: Theme.rounding.normal
+    rounding: Theme.rounding.medium
     colBackground: root.picked ? Theme.colSecondaryContainer : Theme.colLayer1
     colState: root.picked ? Theme.colOnSecondaryContainer : Theme.colOnSurface
     onClicked: root.chosen()

@@ -77,7 +77,7 @@ Item {
             Artwork {
                 anchors.fill: parent
                 artId: root.lead.artId
-                rounding: root.person ? Theme.rounding.full : Theme.rounding.normal
+                rounding: root.person ? Theme.shape.avatar : Theme.shape.cover
             }
 
             LiveBadge {
@@ -94,7 +94,7 @@ Item {
                 anchors.centerIn: parent
                 width: 54
                 height: 54
-                radius: Theme.rounding.full
+                radius: Theme.shape.playButton
                 color: ColorUtils.withAlpha(Theme.colLayer1, 0.85)
                 visible: root.active
 

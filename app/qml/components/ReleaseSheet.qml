@@ -110,7 +110,7 @@ ModalSheet {
                     visible: Updater.prerelease
                     width: prereleaseLabel.implicitWidth + 20
                     height: 26
-                    radius: height / 2
+                    radius: Theme.shape.badge
                     color: Theme.colTertiaryContainer
 
                     StyledText {
@@ -149,7 +149,7 @@ ModalSheet {
         anchors.right: parent.right
         anchors.rightMargin: 24
         anchors.bottom: footer.top
-        radius: Theme.rounding.normal
+        radius: Theme.rounding.medium
         color: Theme.colLayer2
         opacity: root.stage(2)
         transform: Translate { y: 20 * (1 - root.stage(2)) }
@@ -218,7 +218,7 @@ ModalSheet {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: 28
                                 height: 28
-                                radius: Theme.rounding.verysmall
+                                radius: Theme.rounding.extraSmall
                                 color: Theme.colSecondaryContainer
 
                                 Sym {

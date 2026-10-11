@@ -19,7 +19,7 @@ RippleSurface {
 
     implicitWidth: diameter
     implicitHeight: diameter
-    rounding: Theme.rounding.full
+    rounding: Theme.shape.iconButton
     colBackground: root.filled ? Theme.colPrimary : "transparent"
     colState: root.filled ? Theme.colOnPrimary : Theme.colOnSurface
 

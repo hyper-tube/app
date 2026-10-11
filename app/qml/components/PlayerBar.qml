@@ -26,7 +26,7 @@ Rectangle {
     }
 
     implicitHeight: Theme.size.playerBar
-    radius: Theme.rounding.normal
+    radius: Theme.shape.playerBar
     color: Theme.colLayer2
 
     Behavior on podcastReveal {
@@ -283,7 +283,7 @@ Rectangle {
                 Artwork {
                     anchors.fill: parent
                     artId: switcher.track.artId
-                    rounding: Theme.rounding.verysmall
+                    rounding: Theme.shape.thumbnail
                 }
             }
 

@@ -1,0 +1,32 @@
+{
+    "schema": 1,
+    "shape": {
+        "scale": {
+            "extraSmall": 2,
+            "small": 4,
+            "medium": 6,
+            "large": 8,
+            "extraLarge": 12
+        },
+        "card": "small",
+        "row": "extraSmall",
+        "searchField": "small",
+        "playerBar": "small",
+        "fullPlayer": "medium",
+        "thumbnail": "extraSmall",
+        "cover": "small",
+        "stage": "medium",
+        "button": "small",
+        "iconButton": "small",
+        "chip": "small",
+        "badge": "extraSmall",
+        "toggle": "extraSmall",
+        "segmented": "small",
+        "navigation": "small",
+        "track": 0,
+        "toolbar": "small",
+        "checkbox": "extraSmall",
+        "swatch": "small",
+        "plate": "small"
+    }
+}

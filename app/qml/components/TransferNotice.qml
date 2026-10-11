@@ -25,7 +25,7 @@ Item {
         height: 76
         y: 16 * (1 - root.reveal)
         opacity: Math.min(1, root.reveal)
-        radius: Theme.rounding.normal
+        radius: Theme.rounding.medium
         color: Theme.colLayer4
 
         Column {
@@ -43,13 +43,13 @@ Item {
             Rectangle {
                 width: parent.width
                 height: 4
-                radius: 2
+                radius: Theme.shape.track
                 color: Theme.colOutlineVariant
 
                 Rectangle {
                     width: parent.width * Math.max(0, Math.min(1, root.progress))
                     height: parent.height
-                    radius: 2
+                    radius: Theme.shape.track
                     color: Theme.colPrimary
 
                     Behavior on width {

@@ -31,7 +31,7 @@ Column {
                 phase: root.sweep
                 width: 96
                 height: 96
-                radius: Theme.rounding.small
+                radius: Theme.shape.artwork
                 colBase: Theme.colLayer3
             }
 
@@ -43,7 +43,7 @@ Column {
                     phase: root.sweep
                     width: (root.width - 160) * 0.7
                     height: 18
-                    radius: Theme.rounding.verysmall
+                    radius: Theme.rounding.extraSmall
                     colBase: Theme.colLayer4
                 }
 
@@ -51,7 +51,7 @@ Column {
                     phase: root.sweep
                     width: (root.width - 160) * 0.9
                     height: 14
-                    radius: Theme.rounding.verysmall
+                    radius: Theme.rounding.extraSmall
                     colBase: Theme.colLayer3
                 }
 
@@ -59,7 +59,7 @@ Column {
                     phase: root.sweep
                     width: 180
                     height: 12
-                    radius: Theme.rounding.verysmall
+                    radius: Theme.rounding.extraSmall
                     colBase: Theme.colLayer3
                 }
             }
@@ -85,7 +85,7 @@ Column {
                         y: root.inset
                         width: root.cellSize
                         height: root.cellSize
-                        radius: Theme.rounding.small
+                        radius: Theme.shape.artwork
                         colBase: Theme.colLayer3
                     }
 
@@ -95,7 +95,7 @@ Column {
                         y: root.inset + root.cellSize + 14
                         width: root.cellSize * 0.7
                         height: 12
-                        radius: Theme.rounding.verysmall
+                        radius: Theme.rounding.extraSmall
                         colBase: Theme.colLayer4
                     }
 
@@ -105,7 +105,7 @@ Column {
                         y: root.inset + root.cellSize + 34
                         width: root.cellSize * 0.45
                         height: 10
-                        radius: Theme.rounding.verysmall
+                        radius: Theme.rounding.extraSmall
                         colBase: Theme.colLayer3
                     }
                 }
@@ -124,7 +124,7 @@ Column {
                 phase: root.sweep
                 width: root.shelves ? 180 : parent.width * 0.65
                 height: root.shelves ? 20 : 44
-                radius: Theme.rounding.verysmall
+                radius: Theme.rounding.extraSmall
                 colBase: Theme.colLayer4
             }
 
@@ -139,7 +139,7 @@ Column {
                         phase: root.sweep
                         width: 168
                         height: 190
-                        radius: Theme.rounding.small
+                        radius: Theme.shape.artwork
                         colBase: Theme.colLayer3
                     }
                 }

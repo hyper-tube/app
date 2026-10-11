@@ -9,7 +9,7 @@ RippleSurface {
 
     implicitWidth: 240
     implicitHeight: 96
-    rounding: Theme.rounding.normal
+    rounding: Theme.shape.card
     colBackground: Theme.colLayer2
 
     Rectangle {
@@ -20,7 +20,7 @@ RippleSurface {
         anchors.verticalCenter: parent.verticalCenter
         width: 48
         height: 48
-        radius: Theme.rounding.full
+        radius: Theme.shape.plate
         color: Theme.colPrimaryContainer
 
         Sym {

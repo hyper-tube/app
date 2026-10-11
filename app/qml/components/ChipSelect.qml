@@ -27,7 +27,7 @@ RippleSurface {
 
     implicitWidth: content.implicitWidth + (root.glyphed ? 4 : 16) + 14
     implicitHeight: 40
-    rounding: Theme.rounding.full
+    rounding: Theme.shape.chip
     colBackground: Theme.colSecondaryContainer
     colState: Theme.colOnSecondaryContainer
     Accessible.role: Accessible.ComboBox
@@ -53,7 +53,7 @@ RippleSurface {
             anchors.verticalCenter: parent.verticalCenter
             width: 32
             height: 32
-            radius: Theme.rounding.full
+            radius: Math.max(0, root.rounding - 4)
             visible: root.glyphed
             color: Theme.colPrimary
 
@@ -134,7 +134,7 @@ RippleSurface {
                 width: menu.columnWidth
                 implicitHeight: option.glyphed ? 52 : 44
                 visible: !option.modelData.clearing
-                rounding: menu.rounding - menu.inset
+                rounding: Math.max(0, menu.rounding - menu.inset)
                 colBackground: option.selected ? ColorUtils.withAlpha(Theme.colSecondaryContainer, 0.6)
                     : "transparent"
 
@@ -146,7 +146,7 @@ RippleSurface {
                     anchors.verticalCenter: parent.verticalCenter
                     width: option.glyphed ? 36 : 0
                     height: 36
-                    radius: Theme.rounding.full
+                    radius: Theme.shape.chip
                     visible: option.glyphed
                     color: option.selected ? Theme.colPrimary : Theme.colLayer4
 

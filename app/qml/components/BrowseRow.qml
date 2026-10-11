@@ -366,6 +366,7 @@ Item {
 
                     text: chip.modelData.title
                     horizontalPadding: 16
+                    rounding: Theme.shape.chip
                     onClicked: Browser.activate(root.entries, chip.index)
                 }
             }

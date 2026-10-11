@@ -64,7 +64,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: width / 2
+            radius: Theme.shape.plate
             color: "transparent"
             border.width: 2
             border.color: Theme.colPrimary
@@ -75,7 +75,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: width / 2
+            radius: Theme.shape.plate
             color: Theme.colSecondaryContainer
         }
 

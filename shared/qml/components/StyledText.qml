@@ -14,6 +14,7 @@ Text {
     font {
         family: root.mono ? Theme.font.mono : Theme.font.main
         pixelSize: Theme.font.small
+        weight: root.title ? Theme.font.titleWeight : Theme.font.weight
         hintingPreference: Font.PreferDefaultHinting
         variableAxes: root.title ? Theme.font.axesTitle : Theme.font.axes
     }

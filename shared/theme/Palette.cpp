@@ -1,5 +1,6 @@
 #include "Palette.h"
 
+#include "ActiveTheme.h"
 #include "Appearance.h"
 #include "ColorUtils.h"
 #include "Scheme.h"
@@ -9,23 +10,20 @@
 #include <QHash>
 #include <QStyleHints>
 
-namespace {
+namespace theme {
 
-struct Role
+struct Palette::Role
 {
     const char *key;
     const char *fallback;
-    QColor theme::Palette::*member;
+    QColor Palette::*member;
 };
-
-}
-
-namespace theme {
 
 Palette::Palette(QObject *parent)
     : QObject(parent)
 {
     connect(&Appearance::instance(), &Appearance::changed, this, &Palette::reload);
+    connect(&ActiveTheme::instance(), &ActiveTheme::schemeChanged, this, &Palette::reload);
     reload();
 }
 
@@ -34,7 +32,15 @@ bool Palette::darkMode() const
     return ColorUtils::isDark(m_background);
 }
 
-void Palette::reload()
+QStringList Palette::roleNames()
+{
+    QStringList names;
+    for (const Role &role : roles())
+        names.append(QString::fromLatin1(role.key));
+    return names;
+}
+
+std::span<const Palette::Role> Palette::roles()
 {
     static const Role kRoles[] = {
         {"background", "#12101C", &Palette::m_background},
@@ -87,17 +93,23 @@ void Palette::reload()
         {"tertiary_fixed", "#F0DBFF", &Palette::m_tertiaryFixed},
         {"tertiary_fixed_dim", "#D8BBEE", &Palette::m_tertiaryFixedDim},
     };
+    return kRoles;
+}
 
+void Palette::reload()
+{
     const Appearance &appearance = Appearance::instance();
-    const ColorSource::Roles &provided = SystemTheme::instance().roles();
+    const bool dark = appearance.dark();
+    const ColorSource::Roles &provided = SystemTheme::instance().roles(dark);
+    const ThemeScheme::Roles &overrides = ActiveTheme::instance().scheme().overrides(dark);
 
     QHash<QString, QColor> generated;
     if (appearance.generates())
-        generated = schemeFrom(appearance.seed(), appearance.dark());
+        generated = schemeFrom(appearance.seed(), dark);
 
-    for (const Role &role : kRoles) {
+    for (const Role &role : roles()) {
         const QString key = QString::fromLatin1(role.key);
-        const QColor chosen = generated.value(key, provided.value(key));
+        const QColor chosen = overrides.value(key, generated.value(key, provided.value(key)));
         this->*role.member = chosen.isValid() ? chosen : QColor(QLatin1String(role.fallback));
     }
 

@@ -28,7 +28,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        radius: Theme.rounding.small
+        radius: Theme.shape.field
         color: "transparent"
         border.width: root.focused ? 2 : 1
         border.color: root.focused ? Theme.colPrimary : Theme.colOutlineVariant
@@ -79,6 +79,7 @@ Item {
         font {
             family: Theme.font.main
             pixelSize: Theme.font.small
+            weight: Theme.font.weight
             variableAxes: Theme.font.axes
         }
 

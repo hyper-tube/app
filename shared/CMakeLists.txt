@@ -13,6 +13,8 @@ qt_add_library(htmusic-shared STATIC
     core/Logging.cpp
     core/Paths.h
     core/Paths.cpp
+    theme/ActiveTheme.h
+    theme/ActiveTheme.cpp
     theme/Appearance.h
     theme/Appearance.cpp
     theme/ColorFile.h
@@ -38,6 +40,12 @@ qt_add_library(htmusic-shared STATIC
     theme/SystemTheme.cpp
     theme/TerminalColors.h
     theme/TerminalColors.cpp
+    theme/ThemeColors.h
+    theme/ThemeColors.cpp
+    theme/ThemeScheme.h
+    theme/Token.h
+    theme/Tokens.h
+    theme/Tokens.cpp
     platform/WindowChrome.h
     platform/WindowChrome.cpp
     platform/WindowFrame.h

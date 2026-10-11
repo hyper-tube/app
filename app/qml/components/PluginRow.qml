@@ -13,7 +13,7 @@ RippleSurface {
     signal openRequested
 
     implicitHeight: 74
-    rounding: Theme.rounding.normal
+    rounding: Theme.shape.card
     Accessible.role: Accessible.Button
     Accessible.name: root.plugin.info.name
 

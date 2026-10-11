@@ -13,7 +13,7 @@ Rectangle {
 
     implicitWidth: label.implicitWidth + beacon.width + row.spacing + root.implicitHeight
     implicitHeight: Math.round(root.pixelSize * 1.9)
-    radius: Theme.rounding.full
+    radius: Theme.shape.badge
     color: root.filled ? Theme.colError : ColorUtils.withAlpha(Theme.colError, 0.16)
     Accessible.role: Accessible.StaticText
     Accessible.name: qsTr("Live")
@@ -33,7 +33,7 @@ Rectangle {
 
             Rectangle {
                 anchors.fill: parent
-                radius: Theme.rounding.full
+                radius: width / 2
                 color: root.colContent
                 opacity: (1 - root.pulse) * 0.55
                 scale: 1 + root.pulse * 1.3
@@ -41,7 +41,7 @@ Rectangle {
 
             Rectangle {
                 anchors.fill: parent
-                radius: Theme.rounding.full
+                radius: width / 2
                 color: root.colContent
             }
         }

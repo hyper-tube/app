@@ -13,6 +13,7 @@ PillButton {
         ? root.page.sortOptions[root.page.sortIndex].title : root.country ? qsTr("Country") : qsTr("Sort")
     icon: root.country ? "public" : "sort"
     leadingPadding: 12
+    rounding: Theme.shape.chip
     interactive: !!root.page && !root.page.loading && !root.page.reordering
     Accessible.name: root.country ? qsTr("Country: %1").arg(text) : qsTr("Sort by: %1").arg(text)
     onClicked: menu.toggle()
@@ -46,7 +47,7 @@ PillButton {
 
                 width: options.width
                 implicitHeight: 44
-                rounding: Theme.rounding.small
+                rounding: Math.max(0, menu.rounding - menu.inset)
                 colBackground: option.modelData.selected ? Theme.colSecondaryContainer : "transparent"
 
                 StyledText {

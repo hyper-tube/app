@@ -159,7 +159,7 @@ ModalSheet {
 
                     width: list.width
                     implicitHeight: 62
-                    rounding: Theme.rounding.small
+                    rounding: Theme.shape.row
 
                     Artwork {
                         id: cover
@@ -170,7 +170,7 @@ ModalSheet {
                         width: 44
                         height: 44
                         artId: option.targetArtId
-                        rounding: Theme.rounding.verysmall
+                        rounding: Theme.shape.thumbnail
                     }
 
                     Column {

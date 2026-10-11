@@ -14,7 +14,7 @@ RippleSurface {
 
     implicitWidth: root.diameter
     implicitHeight: root.diameter
-    rounding: Theme.rounding.full
+    rounding: Theme.shape.playButton
     colBackground: Theme.colPrimary
     colState: Theme.colOnPrimary
     Accessible.name: root.playing ? qsTr("Pause") : qsTr("Play")

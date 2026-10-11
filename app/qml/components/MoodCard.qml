@@ -17,7 +17,7 @@ RippleSurface {
         anchors.bottom: parent.bottom
         anchors.margins: 8
         width: 4
-        radius: Theme.rounding.full
+        radius: Theme.shape.track
         color: Theme.colPrimary
     }
 

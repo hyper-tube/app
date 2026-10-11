@@ -58,6 +58,7 @@ Flow {
             toggled: chip.modelData.selected && !chip.clearing
             horizontalPadding: chip.clearing ? 10 : 16
             leadingPadding: chip.clearing ? 10 : chip.icon.length > 0 ? 12 : 16
+            rounding: Theme.shape.chip
             visible: !chip.clearing || root.clearable
             interactive: root.interactive
             opacity: chip.appear

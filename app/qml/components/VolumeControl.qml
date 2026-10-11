@@ -93,7 +93,8 @@ Item {
                 blur: 24
                 spread: 1
                 offset: Qt.vector2d(0, 3)
-                color: ColorUtils.withAlpha(Theme.colShadow, 0.34)
+                visible: Theme.elevation.shadow > 0
+                color: ColorUtils.withAlpha(Theme.colShadow, 0.34 * Theme.elevation.shadow)
             }
 
             Rectangle {
@@ -103,8 +104,10 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: parent.height - root.approach
-                radius: Theme.rounding.normal
+                radius: Theme.shape.popover
                 color: Theme.colLayer3
+                border.width: Theme.elevation.outline
+                border.color: Theme.colOutlineVariant
 
                 SeekBar {
                     id: vertical

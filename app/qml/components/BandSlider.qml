@@ -35,7 +35,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             width: 5
             height: parent.height
-            radius: Theme.rounding.full
+            radius: Theme.shape.track
             color: ColorUtils.withAlpha(Theme.colOnSurface, 0.18)
         }
 
@@ -44,7 +44,7 @@ Item {
             y: Math.min(parent.height / 2, root.handleY + handle.height / 2)
             width: 5
             height: Math.abs(parent.height / 2 - root.handleY - handle.height / 2)
-            radius: Theme.rounding.full
+            radius: Theme.shape.track
             color: Theme.colPrimary
         }
 
@@ -55,7 +55,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             width: root.engaged ? 22 : 18
             height: 8
-            radius: Theme.rounding.full
+            radius: Theme.shape.track
             color: Theme.colPrimary
 
             Behavior on width {

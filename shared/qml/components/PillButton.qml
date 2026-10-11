@@ -19,7 +19,7 @@ RippleSurface {
 
     implicitWidth: row.implicitWidth + root.leadingPadding + root.horizontalPadding
     implicitHeight: 38
-    rounding: Theme.rounding.full
+    rounding: Theme.shape.button
     colBackground: root.toggled ? Theme.colSecondaryContainer
         : root.ghost ? "transparent" : Theme.colLayer3
     colState: root.toggled ? Theme.colOnSecondaryContainer : Theme.colOnSurface

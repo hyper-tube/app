@@ -15,7 +15,7 @@ RippleSurface {
 
     implicitWidth: 44
     implicitHeight: 26
-    rounding: Theme.rounding.full
+    rounding: Theme.shape.toggle
     colBackground: ColorUtils.mix(Theme.colPrimary, Theme.colLayer4, root.reveal)
     colState: root.checked ? Theme.colOnPrimary : Theme.colOnSurface
     Accessible.role: Accessible.CheckBox
@@ -31,7 +31,7 @@ RippleSurface {
 
     Rectangle {
         anchors.fill: parent
-        radius: Theme.rounding.full
+        radius: Theme.shape.toggle
         color: "transparent"
         border.width: 2 * (1 - root.reveal)
         border.color: Theme.colOutline
@@ -42,7 +42,7 @@ RippleSurface {
         anchors.verticalCenter: parent.verticalCenter
         width: root.thumbSize
         height: root.thumbSize
-        radius: Theme.rounding.full
+        radius: Theme.shape.toggle
         color: ColorUtils.mix(Theme.colOnPrimary, Theme.colOutline, root.reveal)
     }
 

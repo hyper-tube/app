@@ -41,7 +41,7 @@ Item {
         anchors.right: parent.right
         width: root.fullWidth
         height: parent.height
-        rounding: Theme.rounding.full
+        rounding: Theme.shape.chip
         interactive: !Connectivity.online
         tooltip: qsTr("You're offline. Select to check the connection again.")
         Accessible.role: Accessible.Button

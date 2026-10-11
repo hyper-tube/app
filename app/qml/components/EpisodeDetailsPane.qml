@@ -74,7 +74,7 @@ Item {
                 implicitWidth: podcastRow.implicitWidth + 20
                 implicitHeight: 40
                 visible: EpisodeDetails.podcast.length > 0
-                rounding: Theme.rounding.full
+                rounding: Theme.shape.chip
                 colBackground: ColorUtils.withAlpha(Theme.colLayer3, 0.55)
                 interactive: EpisodeDetails.podcastId.length > 0
                 Accessible.role: Accessible.Button

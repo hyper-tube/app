@@ -37,7 +37,8 @@ Item {
         spread: 1
         offset: Qt.vector2d(0, 6)
         opacity: card.opacity
-        color: ColorUtils.withAlpha(Theme.colShadow, 0.4)
+        visible: Theme.elevation.shadow > 0
+        color: ColorUtils.withAlpha(Theme.colShadow, 0.4 * Theme.elevation.shadow)
     }
 
     Rectangle {
@@ -45,8 +46,10 @@ Item {
 
         width: controls.implicitWidth + 24
         height: 64
-        radius: Theme.rounding.full
+        radius: Theme.shape.toolbar
         color: Theme.colLayer4
+        border.width: Theme.elevation.outline
+        border.color: Theme.colOutlineVariant
         opacity: Math.min(1, root.reveal * 1.6)
 
         transform: Translate { y: (1 - root.reveal) * 28 }

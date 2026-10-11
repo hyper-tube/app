@@ -9,7 +9,7 @@ RippleSurface {
     signal menuRequested(real x, real y)
 
     implicitHeight: 68
-    rounding: Theme.rounding.normal
+    rounding: Theme.shape.card
     Accessible.name: root.entry.title + ", " + root.entry.subtitle + ", " + root.entry.rankLabel
 
     Artwork {
@@ -21,7 +21,7 @@ RippleSurface {
         width: 48
         height: 48
         artId: root.entry.artId
-        rounding: root.entry.circular ? Theme.rounding.full : Theme.rounding.small
+        rounding: root.entry.circular ? Theme.shape.avatar : Theme.shape.artwork
     }
 
     Column {

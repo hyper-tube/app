@@ -7,7 +7,7 @@ Rectangle {
     property real phase: 0
     property color colBase: Theme.colLayer3
 
-    radius: Theme.rounding.verysmall
+    radius: Theme.rounding.extraSmall
 
     gradient: Gradient {
         orientation: Gradient.Horizontal

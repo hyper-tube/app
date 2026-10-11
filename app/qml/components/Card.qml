@@ -24,7 +24,7 @@ RippleSurface {
 
     implicitWidth: root.artSize * (root.video ? 16 / 9 : 1) + root.inset * 2
     implicitHeight: root.artSize + root.inset * 2 + labels.implicitHeight + 12
-    rounding: Theme.rounding.normal
+    rounding: Theme.shape.card
 
     Item {
         id: cover
@@ -48,7 +48,7 @@ RippleSurface {
 
             anchors.fill: parent
             artId: root.artId
-            rounding: root.circular ? Theme.rounding.full : Theme.rounding.small
+            rounding: root.circular ? Theme.shape.avatar : Theme.shape.artwork
         }
 
         Rectangle {
@@ -73,7 +73,7 @@ RippleSurface {
             anchors.margins: 8
             width: 30
             height: 30
-            radius: Theme.rounding.full
+            radius: Theme.shape.plate
             color: ColorUtils.withAlpha(Theme.colLayer1, 0.85)
             visible: root.pinned
 
@@ -100,7 +100,7 @@ RippleSurface {
             anchors.centerIn: parent
             width: 54
             height: 54
-            radius: Theme.rounding.full
+            radius: Theme.shape.playButton
             color: ColorUtils.withAlpha(Theme.colLayer1, 0.85)
             visible: root.active && !root.cueVisible
 

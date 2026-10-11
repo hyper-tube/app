@@ -62,6 +62,14 @@ ModalSheet {
         }
     }
 
+    Connections {
+        target: ThemeLibrary
+
+        function onCurrentChanged() {
+            picker.adopt(Appearance.seed);
+        }
+    }
+
     Column {
         id: rail
 
@@ -85,7 +93,7 @@ ModalSheet {
                 objectName: tab.modelData.id
                 width: rail.width
                 implicitHeight: 46
-                rounding: Theme.rounding.full
+                rounding: Theme.shape.navigation
                 colBackground: tab.selected ? Theme.colSecondaryContainer : "transparent"
                 colState: tab.selected ? Theme.colOnSecondaryContainer : Theme.colOnSurface
 
@@ -174,6 +182,61 @@ ModalSheet {
                 SettingRow {
                     width: parent.width
                     title: qsTr("Theme")
+                    caption: ThemeLibrary.caption
+                    controlWidth: 246
+
+                    SelectField {
+                        width: 246
+                        height: 42
+                        options: ThemeLibrary.options
+                        value: ThemeLibrary.current
+                        onPicked: chosen => ThemeLibrary.select(chosen)
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: ThemeLibrary.problems.length > 0 ? problems.implicitHeight + 12 : 0
+                    clip: true
+
+                    NoticeCard {
+                        id: problems
+
+                        width: parent.width
+                        icon: "error"
+                        colAccent: Theme.colError
+                        title: qsTr("%n problem(s) in %1", "", ThemeLibrary.problems.length)
+                            .arg(ThemeLibrary.name)
+                        caption: ThemeLibrary.problems.join("\n")
+                    }
+
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: Theme.duration.resize
+                            easing.type: Easing.BezierSpline
+                            easing.bezierCurve: Theme.curve.emphasized
+                        }
+                    }
+                }
+
+                SettingRow {
+                    width: parent.width
+                    title: qsTr("Your themes")
+                    caption: qsTr("Each theme is a folder with a theme.json file. A saved change shows up straight away.")
+                    controlWidth: folderButton.implicitWidth
+
+                    PillButton {
+                        id: folderButton
+
+                        text: qsTr("Open folder")
+                        icon: "folder_open"
+                        onClicked: ThemeLibrary.openFolder()
+                    }
+                }
+
+                SettingRow {
+                    width: parent.width
+                    title: qsTr("Mode")
                     caption: qsTr("System follows what this desktop asks for, light or dark")
                     controlWidth: 246
 
@@ -333,7 +396,7 @@ ModalSheet {
 
                                         implicitWidth: custom.swatchSize
                                         implicitHeight: custom.swatchSize
-                                        rounding: Theme.rounding.full
+                                        rounding: Theme.shape.swatch
                                         colBackground: swatch.modelData
                                         colState: "#ffffff"
 
@@ -341,7 +404,7 @@ ModalSheet {
                                             anchors.centerIn: parent
                                             width: 18
                                             height: 18
-                                            radius: Theme.rounding.full
+                                            radius: Theme.shape.swatch
                                             visible: swatch.selected
                                             color: Theme.colLayer1
 

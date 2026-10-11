@@ -36,7 +36,7 @@ Item {
         closePolicy: Popup.CloseOnEscape
 
         background: Rectangle {
-            radius: Theme.rounding.large
+            radius: Theme.shape.sheet
             color: Theme.colLayer2
             border.width: 1
             border.color: Theme.colOutlineVariant

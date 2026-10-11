@@ -30,7 +30,7 @@ RippleSurface {
     signal menuRequested(real x, real y)
 
     implicitHeight: Math.max(cover.height, details.implicitHeight) + (root.compact ? 24 : 28)
-    rounding: Theme.rounding.normal
+    rounding: Theme.shape.card
     colState: Theme.colOnSurface
 
     Behavior on presence {
@@ -61,12 +61,12 @@ RippleSurface {
         Artwork {
             anchors.fill: parent
             artId: root.entry.artId
-            rounding: Theme.rounding.small
+            rounding: Theme.shape.artwork
         }
 
         Rectangle {
             anchors.fill: parent
-            radius: Theme.rounding.small
+            radius: Theme.shape.artwork
             color: ColorUtils.withAlpha(Theme.colLayer1, 0.62)
             opacity: root.cueVisible ? 1 : 0
 
@@ -213,14 +213,14 @@ RippleSurface {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: 2
+                    radius: Theme.shape.track
                     color: Theme.colSecondaryContainer
                 }
 
                 Rectangle {
                     width: parent.width * Math.max(0, Math.min(1, root.progress))
                     height: parent.height
-                    radius: 2
+                    radius: Theme.shape.track
                     color: Theme.colPrimary
                 }
             }

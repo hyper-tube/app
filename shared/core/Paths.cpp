@@ -57,4 +57,9 @@ QString crashReportDir()
     return ensure(root + QStringLiteral("/crash-reports"));
 }
 
+QString themeDir()
+{
+    return ensure(configDir() + QStringLiteral("/themes"));
+}
+
 }

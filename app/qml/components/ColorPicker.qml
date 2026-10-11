@@ -40,7 +40,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         height: 128
-        radius: Theme.rounding.small
+        radius: Theme.shape.field
         color: Qt.hsva(root.hue, 1, 1, 1)
 
         Rectangle {
@@ -67,7 +67,7 @@ Item {
             y: (1 - root.brightness) * parent.height - height / 2
             width: 16
             height: 16
-            radius: Theme.rounding.full
+            radius: Theme.shape.swatch
             color: "transparent"
             border.width: 3
             border.color: "#ffffff"
@@ -107,7 +107,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         height: 18
-        radius: Theme.rounding.full
+        radius: Theme.shape.track
 
         gradient: Gradient {
             orientation: Gradient.Horizontal
@@ -125,7 +125,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             width: 10
             height: parent.height + 8
-            radius: Theme.rounding.full
+            radius: Theme.shape.track
             color: "transparent"
             border.width: 3
             border.color: "#ffffff"
@@ -172,7 +172,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             width: 42
             height: 42
-            radius: Theme.rounding.full
+            radius: Theme.shape.swatch
             color: root.value
         }
 

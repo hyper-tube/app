@@ -160,7 +160,8 @@ Column {
                     blur: 28
                     spread: 1
                     offset: Qt.vector2d(0, 4)
-                    color: ColorUtils.withAlpha(Theme.colShadow, 0.34)
+                    visible: Theme.elevation.shadow > 0
+                    color: ColorUtils.withAlpha(Theme.colShadow, 0.34 * Theme.elevation.shadow)
                 }
 
                 Rectangle {
@@ -168,8 +169,10 @@ Column {
 
                     anchors.fill: parent
                     implicitHeight: Math.max(60, label.implicitHeight + 38)
-                    radius: Theme.rounding.normal
+                    radius: Theme.shape.popover
                     color: Theme.colLayer4
+                    border.width: Theme.elevation.outline
+                    border.color: Theme.colOutlineVariant
                     Accessible.role: Accessible.AlertMessage
                     Accessible.name: notice.message
 
@@ -231,7 +234,7 @@ Column {
                         anchors.leftMargin: card.radius
                         anchors.rightMargin: card.radius
                         height: 3
-                        radius: Theme.rounding.full
+                        radius: Theme.shape.track
                         color: ColorUtils.withAlpha(Theme.colOnSurface, 0.10)
 
                         Rectangle {

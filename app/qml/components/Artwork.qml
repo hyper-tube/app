@@ -5,7 +5,7 @@ Item {
     id: root
 
     property string artId: ""
-    property real rounding: Theme.rounding.small
+    property real rounding: Theme.shape.artwork
     property int resolution: {
         const pixels = Math.max(width, height) * Screen.devicePixelRatio;
         return pixels <= 64 ? 64 : pixels <= 128 ? 128 : pixels <= 256 ? 256

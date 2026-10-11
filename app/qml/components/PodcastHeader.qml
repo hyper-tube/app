@@ -44,7 +44,7 @@ Item {
         opacity: byline.reveal
         scale: 0.9 + 0.1 * byline.reveal
         transformOrigin: root.sideways ? Item.Left : Item.Center
-        rounding: Theme.rounding.full
+        rounding: Theme.shape.chip
         interactive: !!root.entry && root.bylined && root.entry.actions.profileId.length > 0
         Accessible.role: Accessible.Button
         Accessible.name: root.page ? root.page.byline : ""
@@ -61,7 +61,7 @@ Item {
                 height: 22
                 visible: !!root.page && root.page.bylineArtId.length > 0
                 artId: root.page ? root.page.bylineArtId : ""
-                rounding: Theme.rounding.full
+                rounding: Theme.shape.avatar
             }
 
             StyledText {
@@ -93,11 +93,12 @@ Item {
 
         RectangularShadow {
             anchors.fill: art
-            radius: Theme.rounding.large
+            radius: Theme.shape.stage
             blur: 36
             spread: 2
             offset: Qt.vector2d(0, 10)
-            color: ColorUtils.withAlpha(Theme.colShadow, 0.42)
+            visible: Theme.elevation.shadow > 0
+            color: ColorUtils.withAlpha(Theme.colShadow, 0.42 * Theme.elevation.shadow)
         }
 
         Artwork {
@@ -105,7 +106,7 @@ Item {
 
             anchors.fill: parent
             artId: root.page ? root.page.artId : ""
-            rounding: Theme.rounding.large
+            rounding: Theme.shape.stage
         }
     }
 

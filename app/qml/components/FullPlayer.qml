@@ -22,7 +22,7 @@ Rectangle {
 
     y: root.height
     visible: y < height
-    radius: Theme.rounding.large
+    radius: Theme.shape.fullPlayer
     color: Theme.colLayer0
 
     Behavior on podcastReveal {
@@ -377,6 +377,7 @@ Rectangle {
             GlassSurface {
                 anchors.fill: tabs
                 sourceItem: ambience
+                rounding: Theme.shape.segmented
             }
 
             SegmentedTabs {

@@ -16,6 +16,7 @@
 #include "platform/WindowChrome.h"
 #include "platform/WindowState.h"
 #include "plugin/PluginRegistry.h"
+#include "theme/ThemeLibrary.h"
 #include "update/Updater.h"
 
 #include <QApplication>
@@ -50,6 +51,7 @@ int run(int argc, char *argv[], QStringList &relaunch)
     reporting.restore();
 
     const auto &localization = core::Localization::instance();
+    theme::ThemeLibrary::instance().restore();
 
     library::ImageCache imageCache;
     QQmlApplicationEngine engine;

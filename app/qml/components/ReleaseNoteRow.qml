@@ -31,7 +31,7 @@ Item {
             visible: root.note.scope.length > 0
             width: Math.min(lead.width, scopeLabel.implicitWidth + 18)
             height: 22
-            radius: height / 2
+            radius: Theme.shape.badge
             color: Theme.colSecondaryContainer
 
             StyledText {
@@ -51,7 +51,7 @@ Item {
             visible: root.note.breaking
             width: Math.min(lead.width, breakingLabel.implicitWidth + 18)
             height: 22
-            radius: height / 2
+            radius: Theme.shape.badge
             color: "transparent"
             border.width: 1
             border.color: Theme.colError
@@ -112,7 +112,7 @@ Item {
         visible: root.hasCommit
         width: hash.implicitWidth + 16
         height: 24
-        rounding: Theme.rounding.full
+        rounding: Theme.shape.chip
         tooltip: qsTr("Open this change")
         Accessible.name: qsTr("Open change %1").arg(root.note.commit)
         onClicked: Qt.openUrlExternally(root.note.commitUrl)

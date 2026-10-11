@@ -56,7 +56,7 @@ Column {
             height: width
             visible: root.page && root.page.artId.length > 0
             artId: root.page ? root.page.artId : ""
-            rounding: root.page && root.page.entry.circular ? Theme.rounding.full : Theme.rounding.normal
+            rounding: root.page && root.page.entry.circular ? Theme.shape.avatar : Theme.shape.cover
         }
 
         RevealingSelect {

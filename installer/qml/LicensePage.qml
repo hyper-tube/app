@@ -34,7 +34,7 @@ Item {
         anchors.topMargin: 16
         anchors.bottom: footer.top
         anchors.bottomMargin: 16
-        radius: Theme.rounding.normal
+        radius: Theme.rounding.medium
         color: Theme.colLayer1
 
         Flickable {

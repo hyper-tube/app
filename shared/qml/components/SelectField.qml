@@ -30,7 +30,7 @@ Item {
         id: field
 
         anchors.fill: parent
-        rounding: Theme.rounding.small
+        rounding: Theme.shape.field
 
         Rectangle {
             anchors.fill: parent
@@ -143,7 +143,7 @@ Item {
 
                 width: menu.columnWidth
                 implicitHeight: option.modelData.caption ? 58 : 46
-                rounding: menu.rounding - menu.inset
+                rounding: Math.max(0, menu.rounding - menu.inset)
                 colBackground: option.current ? Theme.colSecondaryContainer : "transparent"
                 colState: option.current ? Theme.colOnSecondaryContainer : Theme.colOnSurface
 

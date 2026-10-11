@@ -45,14 +45,14 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: Theme.rounding.full
+            radius: Theme.shape.track
             color: ColorUtils.withAlpha(Theme.colOnSurface, 0.18)
         }
 
         Rectangle {
             width: Math.max(parent.height, parent.width * root.progress)
             height: parent.height
-            radius: Theme.rounding.full
+            radius: Theme.shape.track
             color: root.live ? Theme.colError : Theme.colPrimary
 
             Behavior on color {
@@ -72,7 +72,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         width: root.engaged ? 6 : 0
         height: root.engaged ? 20 : 0
-        radius: Theme.rounding.full
+        radius: Theme.shape.track
         color: Theme.colPrimary
 
         Behavior on width {

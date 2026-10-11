@@ -121,7 +121,7 @@ Item {
         y: root.targetY
         width: card.width
         height: card.height
-        radius: Theme.rounding.small
+        radius: Theme.shape.row
         visible: root.active
         color: ColorUtils.withAlpha(Theme.colPrimary, 0.06)
         border.width: 1
@@ -150,10 +150,11 @@ Item {
 
         RectangularShadow {
             anchors.fill: parent
-            radius: Theme.rounding.small
+            radius: Theme.shape.row
             blur: 24 * root.lift
             offset: Qt.vector2d(0, 6 * root.lift)
-            color: ColorUtils.withAlpha(Theme.colShadow, 0.28 * root.lift)
+            visible: Theme.elevation.shadow > 0
+            color: ColorUtils.withAlpha(Theme.colShadow, 0.28 * root.lift * Theme.elevation.shadow)
         }
 
         SongRow {

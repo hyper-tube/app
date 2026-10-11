@@ -11,7 +11,7 @@ Popover {
 
     readonly property real itemPadding: 14
     readonly property real itemGlyphSize: Theme.font.larger
-    readonly property real itemRounding: root.rounding - root.inset
+    readonly property real itemRounding: Math.max(0, root.rounding - root.inset)
     readonly property bool divided: root.header !== null && root.actions.length > 0
 
     signal triggered(int index)

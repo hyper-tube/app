@@ -7,7 +7,7 @@ RippleSurface {
     required property colorSourceInfo modelData
 
     implicitHeight: labels.implicitHeight + 16
-    rounding: Theme.rounding.verysmall
+    rounding: Theme.rounding.extraSmall
     interactive: SystemTheme.sources.length > 1
 
     Sym {

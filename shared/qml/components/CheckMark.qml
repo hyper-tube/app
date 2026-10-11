@@ -15,7 +15,7 @@ Rectangle {
 
     implicitWidth: 22
     implicitHeight: 22
-    radius: Theme.rounding.unsharpenmore
+    radius: Theme.shape.checkbox
     color: "transparent"
     border.width: 2
     border.color: ColorUtils.mix(Theme.colPrimary, Theme.colOutline, root.fillProgress)

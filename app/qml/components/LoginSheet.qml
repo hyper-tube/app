@@ -57,7 +57,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: Theme.rounding.large
+            radius: Theme.shape.sheet
             color: Theme.colLayer1
             border.width: 1
             border.color: Theme.colOutlineVariant
@@ -101,7 +101,7 @@ Item {
             anchors.topMargin: 0
             layer.enabled: true
             layer.effect: RoundedMask {
-                rounding: Theme.rounding.normal
+                rounding: Theme.rounding.medium
             }
 
             Rectangle {

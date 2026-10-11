@@ -59,7 +59,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             width: 68
             height: 68
-            radius: Theme.rounding.normal
+            radius: Theme.rounding.medium
             color: root.live ? Theme.colPrimaryContainer : Theme.colLayer3
 
             Behavior on color {
