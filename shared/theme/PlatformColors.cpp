@@ -11,6 +11,8 @@
 #elif defined(Q_OS_MACOS)
 #include "AppleColors.h"
 #elif defined(Q_OS_UNIX)
+#include "core/Logging.h"
+
 #include <QDBusArgument>
 #include <QDBusConnection>
 #include <QDBusInterface>
@@ -128,6 +130,7 @@ const QString kPortalPath = QStringLiteral("/org/freedesktop/portal/desktop");
 const QString kSettingsInterface = QStringLiteral("org.freedesktop.portal.Settings");
 const QString kAppearanceNamespace = QStringLiteral("org.freedesktop.appearance");
 const QString kAccentKey = QStringLiteral("accent-color");
+const QString kAccentSignature = QStringLiteral("(ddd)");
 const QString kColorSchemeKey = QStringLiteral("color-scheme");
 
 QString sourceName()
@@ -168,7 +171,13 @@ QColor readAccent()
     if (!value.canConvert<QDBusArgument>())
         return {};
 
-    QDBusArgument argument = value.value<QDBusArgument>();
+    const QDBusArgument argument = value.value<QDBusArgument>();
+    if (argument.currentSignature() != kAccentSignature) {
+        qCWarning(logTheme) << "portal accent color has signature" << argument.currentSignature()
+                            << "rather than" << kAccentSignature;
+        return {};
+    }
+
     double red = -1;
     double green = -1;
     double blue = -1;
