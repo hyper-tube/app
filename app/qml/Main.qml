@@ -183,9 +183,9 @@ Window {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.leftMargin: Theme.size.gutter - Theme.size.bleed
-            anchors.rightMargin: Theme.size.gutter - Theme.size.bleed
-            anchors.bottomMargin: 16
+            anchors.leftMargin: Theme.spacing.gutter - Theme.spacing.bleed
+            anchors.rightMargin: Theme.spacing.gutter - Theme.spacing.bleed
+            anchors.bottomMargin: Theme.spaced(16)
             clip: true
 
             Item {
@@ -194,10 +194,10 @@ Window {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.topMargin: 16
-                anchors.leftMargin: Theme.size.bleed
-                anchors.rightMargin: Theme.size.bleed
-                height: 46
+                anchors.topMargin: Theme.spaced(16)
+                anchors.leftMargin: Theme.spacing.bleed
+                anchors.rightMargin: Theme.spacing.bleed
+                height: Theme.sized(46)
                 z: 2
                 enabled: !pages.modalActive && !window.sheetVisible
 
@@ -205,10 +205,10 @@ Window {
                     id: search
 
                     anchors.left: reload.right
-                    anchors.leftMargin: 12
+                    anchors.leftMargin: Theme.spaced(12)
                     anchors.verticalCenter: parent.verticalCenter
                     width: Math.min(540, parent.width - back.width - reload.width
-                        - connection.width - notifications.width - account.width - 72)
+                        - connection.width - notifications.width - account.width - Theme.spaced(72))
                     placeholder: Connectivity.online ? qsTr("Search songs, albums, artists")
                         : qsTr("Search your downloads")
                     suggestionsEnabled: true
@@ -245,7 +245,7 @@ Window {
                     id: reload
 
                     anchors.left: back.right
-                    anchors.leftMargin: 4
+                    anchors.leftMargin: Theme.spaced(4)
                     anchors.verticalCenter: parent.verticalCenter
                     icon: "refresh"
                     Accessible.name: qsTr("Reload page")
@@ -258,7 +258,7 @@ Window {
                     id: connection
 
                     anchors.right: notifications.left
-                    anchors.rightMargin: 10
+                    anchors.rightMargin: Theme.spaced(10)
                     anchors.verticalCenter: parent.verticalCenter
                     width: implicitWidth
                     height: implicitHeight
@@ -270,7 +270,7 @@ Window {
                     id: notifications
 
                     anchors.right: account.left
-                    anchors.rightMargin: 10
+                    anchors.rightMargin: Theme.spaced(10)
                     anchors.verticalCenter: parent.verticalCenter
                     z: 1
                 }
@@ -294,11 +294,11 @@ Window {
                 id: pages
 
                 anchors.top: topBar.bottom
-                anchors.topMargin: 24
+                anchors.topMargin: Theme.spaced(24)
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: playerBar.top
-                anchors.bottomMargin: 16
+                anchors.bottomMargin: Theme.spaced(16)
                 enabled: !fullPlayer.visible && !window.sheetVisible
             }
 
@@ -306,7 +306,7 @@ Window {
                 id: playerBar
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(parent.width, Theme.size.contentMaxWidth) - Theme.size.bleed * 2
+                width: Math.min(parent.width, Theme.size.contentMaxWidth) - Theme.spacing.bleed * 2
                 anchors.bottom: parent.bottom
                 enabled: !fullPlayer.visible && !pages.modalActive && !window.sheetVisible
                 onExpandRequested: fullPlayer.open = true
@@ -330,10 +330,10 @@ Window {
 
     ToastHost {
         anchors.right: parent.right
-        anchors.rightMargin: Theme.size.gutter
+        anchors.rightMargin: Theme.spacing.gutter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 120
-        width: Math.min(440, parent.width - 48)
+        anchors.bottomMargin: Theme.size.playerBar + Theme.spaced(32)
+        width: Math.min(Theme.sized(440), parent.width - Theme.spaced(48))
         z: 20
     }
 

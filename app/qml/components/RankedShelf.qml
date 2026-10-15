@@ -18,7 +18,7 @@ Column {
     signal moreRequested
     signal endReached
 
-    spacing: 16
+    spacing: Theme.spaced(16)
 
     Item {
         width: parent.width
@@ -29,7 +29,7 @@ Column {
 
             anchors.left: parent.left
             anchors.right: arrows.left
-            anchors.rightMargin: 16
+            anchors.rightMargin: Theme.spaced(16)
             anchors.verticalCenter: parent.verticalCenter
             title: root.title
             subtitle: root.subtitle
@@ -40,7 +40,7 @@ Column {
 
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 2
+            spacing: Theme.spaced(2)
 
             PillButton {
                 anchors.verticalCenter: parent.verticalCenter
@@ -71,9 +71,9 @@ Column {
         id: strip
 
         width: parent.width
-        height: Math.min(root.rowsPerColumn, root.cells.length) * 72
+        height: Math.min(root.rowsPerColumn, root.cells.length) * Theme.sized(72)
         orientation: ListView.Horizontal
-        spacing: 12
+        spacing: Theme.spaced(12)
         clip: true
         boundsBehavior: Flickable.StopAtBounds
         acceptedButtons: Qt.NoButton
@@ -85,7 +85,7 @@ Column {
             required property int index
 
             width: root.columnWidth
-            spacing: 4
+            spacing: Theme.spaced(4)
 
             Repeater {
                 model: Math.min(root.rowsPerColumn, root.cells.length - group.index * root.rowsPerColumn)

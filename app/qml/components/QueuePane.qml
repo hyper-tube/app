@@ -79,7 +79,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: (originPlate.implicitHeight + 10) * root.originPresence
+        height: (originPlate.implicitHeight + Theme.spaced(10)) * root.originPresence
         visible: height > 0
         clip: true
 
@@ -87,10 +87,10 @@ Item {
             id: originPlate
 
             width: parent.width
-            implicitHeight: 64
+            implicitHeight: Theme.sized(64)
             y: -(1 - root.originPresence) * 16
             opacity: root.originPresence
-            rounding: Theme.rounding.normal
+            rounding: Theme.shape.card
             colBackground: ColorUtils.withAlpha(Theme.colLayer2, 0.6)
             interactive: root.navigable
             Accessible.role: root.navigable ? Accessible.Button : Accessible.StaticText
@@ -100,23 +100,23 @@ Item {
                 id: originArt
 
                 anchors.left: parent.left
-                anchors.leftMargin: 10
+                anchors.leftMargin: Theme.spaced(10)
                 anchors.verticalCenter: parent.verticalCenter
-                width: 44
-                height: 44
+                width: Theme.sized(44)
+                height: Theme.sized(44)
                 artId: root.navigable && root.origin.artId.length > 0 ? root.origin.artId
                     : PlaybackController.track.artId
-                rounding: root.navigable && root.origin.circular ? Theme.rounding.full
-                    : Theme.rounding.verysmall
+                rounding: root.navigable && root.origin.circular ? Theme.shape.avatar
+                    : Theme.shape.thumbnail
             }
 
             Column {
                 anchors.left: originArt.right
-                anchors.leftMargin: 12
+                anchors.leftMargin: Theme.spaced(12)
                 anchors.right: originCue.left
-                anchors.rightMargin: 12
+                anchors.rightMargin: Theme.spaced(12)
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 2
+                spacing: Theme.spaced(2)
 
                 StyledText {
                     width: parent.width
@@ -144,7 +144,7 @@ Item {
                 id: originCue
 
                 anchors.right: parent.right
-                anchors.rightMargin: 12
+                anchors.rightMargin: Theme.spaced(12)
                 anchors.verticalCenter: parent.verticalCenter
                 width: root.navigable ? chevron.iconSize : stationBadge.implicitWidth
                 height: stationBadge.implicitHeight
@@ -182,7 +182,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        spacing: 2
+        spacing: Theme.spaced(2)
         clip: true
         boundsBehavior: Flickable.StopAtBounds
         acceptedButtons: Qt.NoButton
@@ -207,8 +207,8 @@ Item {
             readonly property bool playingNow: row.current && PlaybackController.playing
 
             width: list.width
-            implicitHeight: 56
-            rounding: Theme.rounding.small
+            implicitHeight: Theme.sized(56)
+            rounding: Theme.shape.row
             colBackground: row.current ? root.currentFill : "transparent"
 
             Behavior on presence {
@@ -223,13 +223,13 @@ Item {
                 id: thumb
 
                 anchors.left: parent.left
-                anchors.leftMargin: 8
+                anchors.leftMargin: Theme.spaced(8)
                 anchors.verticalCenter: parent.verticalCenter
-                width: 40
-                height: 40
+                width: Theme.sized(40)
+                height: Theme.sized(40)
                 opacity: row.presence
                 artId: modelData.artId
-                rounding: Theme.rounding.verysmall
+                rounding: Theme.shape.thumbnail
 
                 Rectangle {
                     anchors.fill: parent
@@ -258,16 +258,16 @@ Item {
                         anchors.centerIn: parent
                         visible: row.playingNow
                         playing: visible && enabled
-                        barHeight: 16
+                        barHeight: Theme.sized(16)
                     }
                 }
             }
 
             Column {
                 anchors.left: thumb.right
-                anchors.leftMargin: 12
+                anchors.leftMargin: Theme.spaced(12)
                 anchors.right: length.left
-                anchors.rightMargin: 12
+                anchors.rightMargin: Theme.spaced(12)
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: row.presence
                 spacing: 1
@@ -294,7 +294,7 @@ Item {
                 id: rowLive
 
                 anchors.right: parent.right
-                anchors.rightMargin: 12
+                anchors.rightMargin: Theme.spaced(12)
                 anchors.verticalCenter: parent.verticalCenter
                 width: implicitWidth
                 height: implicitHeight
@@ -307,7 +307,7 @@ Item {
                 id: length
 
                 anchors.right: parent.right
-                anchors.rightMargin: 12
+                anchors.rightMargin: Theme.spaced(12)
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: row.reachable && !row.live ? 1 : 0
                 width: row.live ? rowLive.implicitWidth : implicitWidth
@@ -318,7 +318,7 @@ Item {
 
             Sym {
                 anchors.right: parent.right
-                anchors.rightMargin: 14
+                anchors.rightMargin: Theme.spaced(14)
                 anchors.verticalCenter: parent.verticalCenter
                 opacity: 1 - row.presence
                 text: "cloud_off"

@@ -7,7 +7,7 @@ Item {
     property var labels: []
     property int current: 0
     property bool glass: false
-    property real inset: 4
+    property real inset: Theme.spaced(4)
 
     readonly property int count: root.labels.length
     readonly property real segmentWidth: root.count > 0
@@ -15,12 +15,12 @@ Item {
         : 0
     readonly property real segmentHeight: root.height - root.inset * 2
 
-    implicitWidth: Math.max(160, root.count * 116)
-    implicitHeight: 42
+    implicitWidth: Math.max(Theme.sized(160), root.count * Theme.sized(116))
+    implicitHeight: Theme.sized(42)
 
     Rectangle {
         anchors.fill: parent
-        radius: Theme.rounding.full
+        radius: Theme.shape.segmented
         color: ColorUtils.withAlpha(Theme.colLayer3, root.glass ? 0.4 : 0.75)
     }
 
@@ -29,7 +29,7 @@ Item {
         y: root.inset
         width: root.segmentWidth
         height: root.segmentHeight
-        radius: Theme.rounding.full
+        radius: Theme.shape.segmented
         color: Theme.colSecondaryContainer
 
         Behavior on x {
@@ -58,7 +58,7 @@ Item {
 
                 width: root.segmentWidth
                 height: root.segmentHeight
-                rounding: Theme.rounding.full
+                rounding: Theme.shape.segmented
                 colState: selected ? Theme.colOnSecondaryContainer : Theme.colOnSurface
 
                 StyledText {

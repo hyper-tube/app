@@ -10,7 +10,7 @@ RippleSurface {
     property bool ghost: false
     property bool busy: false
     property int iconSize: Theme.font.normal
-    property real horizontalPadding: 18
+    property real horizontalPadding: Theme.spaced(18)
     property real leadingPadding: root.horizontalPadding
     property real busyReveal: root.busy ? 1 : 0
 
@@ -18,8 +18,8 @@ RippleSurface {
         : Theme.colOnSurfaceVariant
 
     implicitWidth: row.implicitWidth + root.leadingPadding + root.horizontalPadding
-    implicitHeight: 38
-    rounding: Theme.rounding.full
+    implicitHeight: Theme.sized(38)
+    rounding: Theme.shape.button
     colBackground: root.toggled ? Theme.colSecondaryContainer
         : root.ghost ? "transparent" : Theme.colLayer3
     colState: root.toggled ? Theme.colOnSecondaryContainer : Theme.colOnSurface
@@ -37,7 +37,7 @@ RippleSurface {
 
         x: root.leadingPadding
         anchors.verticalCenter: parent.verticalCenter
-        spacing: root.icon ? 8 : 0
+        spacing: root.icon ? Theme.spaced(8) : 0
 
         Sym {
             id: glyph
@@ -64,7 +64,7 @@ RippleSurface {
     BusySpinner {
         x: row.x + glyph.x + (glyph.width - width) / 2
         y: row.y + glyph.y + (glyph.height - height) / 2
-        width: root.iconSize + 2
+        width: root.iconSize + Theme.sized(2)
         height: width
         visible: glyph.visible && root.busyReveal > 0
         opacity: root.busyReveal

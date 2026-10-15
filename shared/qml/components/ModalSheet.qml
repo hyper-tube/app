@@ -7,8 +7,8 @@ Item {
 
     property bool open: false
     property string title: ""
-    property real sheetWidth: Math.min(920, root.width - 96)
-    property real sheetHeight: Math.min(root.height - 64, Math.max(340, root.contentHeight + 62))
+    property real sheetWidth: Math.min(Theme.sized(920), root.width - Theme.spaced(96))
+    property real sheetHeight: Math.min(root.height - Theme.spaced(64), Math.max(Theme.sized(340), root.contentHeight + Theme.spaced(62)))
     property real contentHeight: body.implicitHeight
 
     readonly property alias body: body
@@ -95,7 +95,7 @@ Item {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: Theme.rounding.large
+                    radius: Theme.shape.sheet
                     color: Theme.colLayer1
                     border.width: 1
                     border.color: Theme.colOutlineVariant
@@ -113,13 +113,13 @@ Item {
                     anchors.top: parent.top
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: 62
+                    height: Theme.sized(62)
 
                     StyledText {
                         anchors.left: parent.left
-                        anchors.leftMargin: 24
+                        anchors.leftMargin: Theme.spaced(24)
                         anchors.right: dismiss.left
-                        anchors.rightMargin: 12
+                        anchors.rightMargin: Theme.spaced(12)
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.title
                         title: true
@@ -140,7 +140,7 @@ Item {
                         id: dismiss
 
                         anchors.right: parent.right
-                        anchors.rightMargin: 14
+                        anchors.rightMargin: Theme.spaced(14)
                         anchors.verticalCenter: parent.verticalCenter
                         icon: "close"
                         Accessible.name: qsTr("Close")

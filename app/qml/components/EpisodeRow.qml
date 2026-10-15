@@ -29,8 +29,8 @@ RippleSurface {
     signal playRequested
     signal menuRequested(real x, real y)
 
-    implicitHeight: Math.max(cover.height, details.implicitHeight) + (root.compact ? 24 : 28)
-    rounding: Theme.rounding.normal
+    implicitHeight: Math.max(cover.height, details.implicitHeight) + (root.compact ? Theme.spaced(24) : Theme.spaced(28))
+    rounding: Theme.shape.card
     colState: Theme.colOnSurface
 
     Behavior on presence {
@@ -52,21 +52,21 @@ RippleSurface {
     Item {
         id: cover
 
-        x: root.compact ? 10 : 14
-        y: root.compact ? 12 : 14
-        width: root.compact ? 72 : 96
+        x: root.compact ? Theme.spaced(10) : Theme.spaced(14)
+        y: root.compact ? Theme.spaced(12) : Theme.spaced(14)
+        width: root.compact ? Theme.sized(72) : Theme.sized(96)
         height: width
         opacity: root.presence
 
         Artwork {
             anchors.fill: parent
             artId: root.entry.artId
-            rounding: Theme.rounding.small
+            rounding: Theme.shape.artwork
         }
 
         Rectangle {
             anchors.fill: parent
-            radius: Theme.rounding.small
+            radius: Theme.shape.artwork
             color: ColorUtils.withAlpha(Theme.colLayer1, 0.62)
             opacity: root.cueVisible ? 1 : 0
 
@@ -83,7 +83,7 @@ RippleSurface {
                 opacity: root.playingNow ? 0 : 1
                 scale: root.hovered ? 1 : 0.8
                 text: "play_arrow"
-                iconSize: root.compact ? 28 : 34
+                iconSize: root.compact ? Theme.sized(28) : Theme.sized(34)
                 fill: 1
                 color: Theme.colOnSurface
 
@@ -99,9 +99,9 @@ RippleSurface {
             PlayingIndicator {
                 anchors.centerIn: parent
                 visible: root.playingNow
-                barWidth: 4
-                barHeight: 22
-                barSpacing: 4
+                barWidth: Theme.sized(4)
+                barHeight: Theme.sized(22)
+                barSpacing: Theme.sized(4)
                 playing: visible && enabled
             }
         }
@@ -109,7 +109,7 @@ RippleSurface {
         LiveBadge {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-            anchors.margins: 6
+            anchors.margins: Theme.spaced(6)
             width: implicitWidth
             height: implicitHeight
             visible: root.entry.track.live
@@ -121,11 +121,11 @@ RippleSurface {
         id: details
 
         anchors.left: cover.right
-        anchors.leftMargin: root.compact ? 14 : 18
+        anchors.leftMargin: root.compact ? Theme.spaced(14) : Theme.spaced(18)
         anchors.right: actions.left
-        anchors.rightMargin: root.compact ? 6 : 12
+        anchors.rightMargin: root.compact ? Theme.spaced(6) : Theme.spaced(12)
         y: cover.y
-        spacing: 6
+        spacing: Theme.spaced(6)
         opacity: root.presence
 
         StyledText {
@@ -153,8 +153,8 @@ RippleSurface {
         }
 
         Row {
-            spacing: 8
-            height: 22
+            spacing: Theme.spaced(8)
+            height: Theme.sized(22)
 
             StyledText {
                 anchors.verticalCenter: parent.verticalCenter
@@ -166,22 +166,22 @@ RippleSurface {
 
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                width: 3
-                height: 3
-                radius: 2
+                width: Theme.sized(3)
+                height: Theme.sized(3)
+                radius: width / 2
                 visible: root.entry.subtitle.length > 0 && (root.remaining.length > 0 || root.entry.played)
                 color: Theme.colInactive
             }
 
             Row {
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 5
+                spacing: Theme.spaced(5)
                 visible: root.entry.played
 
                 Sym {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "check_circle"
-                    iconSize: 15
+                    iconSize: Theme.sized(15)
                     fill: 1
                     color: Theme.colPrimary
                 }
@@ -206,21 +206,21 @@ RippleSurface {
 
             Item {
                 anchors.verticalCenter: parent.verticalCenter
-                width: (root.compact ? 56 : 96) * root.startedReveal
-                height: 4
+                width: (root.compact ? Theme.sized(56) : Theme.sized(96)) * root.startedReveal
+                height: Theme.sized(4)
                 visible: root.startedReveal > 0
                 opacity: root.startedReveal
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: 2
+                    radius: Theme.shape.track
                     color: Theme.colSecondaryContainer
                 }
 
                 Rectangle {
                     width: parent.width * Math.max(0, Math.min(1, root.progress))
                     height: parent.height
-                    radius: 2
+                    radius: Theme.shape.track
                     color: Theme.colPrimary
                 }
             }
@@ -231,9 +231,9 @@ RippleSurface {
         id: actions
 
         anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: Theme.spaced(10)
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 2
+        spacing: Theme.spaced(2)
 
         Sym {
             anchors.verticalCenter: parent.verticalCenter
@@ -253,7 +253,7 @@ RippleSurface {
             icon: root.entry.actions.later ? "playlist_add_check" : "playlist_add"
             toggled: root.entry.actions.later
             iconSize: Theme.font.larger
-            diameter: 38
+            diameter: Theme.sized(38)
             Accessible.name: root.entry.actions.later ? qsTr("Remove from Episodes for Later")
                 : qsTr("Queue to Episodes for Later")
             onClicked: LibraryActions.setQueuedForLater(root.entry.track.videoId, !root.entry.actions.later)
@@ -273,7 +273,7 @@ RippleSurface {
             anchors.verticalCenter: parent.verticalCenter
             icon: "more_vert"
             iconSize: Theme.font.normal
-            diameter: 38
+            diameter: Theme.sized(38)
             opacity: root.hovered ? 1 : 0
             interactive: root.hovered
             Accessible.name: qsTr("More actions")

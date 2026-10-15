@@ -7,7 +7,7 @@ Item {
 
     readonly property real emphasisScale: 1.16
     readonly property real scaleReserve: Lyrics.synced ? 1.2 : 1
-    readonly property real rightInset: 24
+    readonly property real rightInset: Theme.spaced(24)
     readonly property bool populated: Lyrics.available
 
     function follow() {
@@ -60,14 +60,14 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: source.top
-        anchors.bottomMargin: 8
+        anchors.bottomMargin: Theme.spaced(8)
         visible: root.populated
         model: Lyrics.lines
-        spacing: 10
+        spacing: Theme.spaced(10)
         clip: true
         boundsBehavior: Flickable.StopAtBounds
-        topMargin: 12
-        bottomMargin: 24
+        topMargin: Theme.spaced(12)
+        bottomMargin: Theme.spaced(24)
 
         ScrollBar.vertical: PageScrollBar {}
 
@@ -128,7 +128,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        height: attribution.visible ? attribution.contentHeight + 6 : 0
+        height: attribution.visible ? attribution.contentHeight + Theme.spaced(6) : 0
 
         StyledText {
             id: attribution

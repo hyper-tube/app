@@ -11,16 +11,16 @@ Item {
     signal historyRequested
 
     implicitWidth: surface.implicitWidth
-    implicitHeight: 40
+    implicitHeight: Theme.sized(40)
 
     RippleSurface {
         id: surface
 
         tooltip: Account.signedIn ? qsTr("Account options") : qsTr("Sign in")
 
-        implicitWidth: row.implicitWidth + 28
+        implicitWidth: row.implicitWidth + Theme.spaced(28)
         anchors.fill: parent
-        rounding: Theme.rounding.full
+        rounding: Theme.shape.button
         colBackground: root.glass ? ColorUtils.withAlpha(Theme.colLayer2, 0.5)
             : Account.signedIn ? Theme.colLayer2 : Theme.colSecondaryContainer
         colState: Account.signedIn ? Theme.colOnSurface : Theme.colOnSecondaryContainer
@@ -29,15 +29,15 @@ Item {
             id: row
 
             anchors.centerIn: parent
-            spacing: 8
+            spacing: Theme.spaced(8)
 
             Artwork {
                 anchors.verticalCenter: parent.verticalCenter
-                width: 26
-                height: 26
+                width: Theme.sized(26)
+                height: Theme.sized(26)
                 visible: Account.signedIn && Account.artId.length > 0
                 artId: Account.artId
-                rounding: Theme.rounding.full
+                rounding: Theme.shape.avatar
             }
 
             Sym {
@@ -74,11 +74,11 @@ Item {
         id: menu
 
         parent: root
-        width: 268
+        width: Theme.sized(268)
         x: root.width - width
-        y: root.height + 8
+        y: root.height + Theme.spaced(8)
         anchorX: (menu.width - root.width / 2) / menu.width
-        itemHeight: 40
+        itemHeight: Theme.sized(40)
         actions: [
             { "icon": "history", "text": qsTr("History") },
             { "icon": "logout", "text": qsTr("Sign out"), "destructive": true }
@@ -86,7 +86,7 @@ Item {
 
         header: Component {
             Item {
-                implicitHeight: 44
+                implicitHeight: Theme.sized(44)
 
                 Artwork {
                     id: avatar
@@ -94,34 +94,34 @@ Item {
                     anchors.left: parent.left
                     anchors.leftMargin: menu.itemPadding
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 44
-                    height: 44
+                    width: Theme.sized(44)
+                    height: Theme.sized(44)
                     visible: Account.artId.length > 0
                     artId: Account.artId
-                    rounding: Theme.rounding.full
+                    rounding: Theme.shape.avatar
                 }
 
                 Rectangle {
                     anchors.fill: avatar
-                    radius: Theme.rounding.full
+                    radius: Theme.shape.avatar
                     color: Theme.colLayer4
                     visible: !avatar.visible
 
                     Sym {
                         anchors.centerIn: parent
                         text: "account_circle"
-                        iconSize: 26
+                        iconSize: Theme.sized(26)
                         color: Theme.colOnSurfaceVariant
                     }
                 }
 
                 Column {
                     anchors.left: avatar.right
-                    anchors.leftMargin: 12
+                    anchors.leftMargin: Theme.spaced(12)
                     anchors.right: parent.right
                     anchors.rightMargin: menu.itemPadding
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 2
+                    spacing: Theme.spaced(2)
 
                     StyledText {
                         width: parent.width

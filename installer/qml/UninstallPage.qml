@@ -5,7 +5,7 @@ import HtMusic.Setup
 Item {
     id: root
 
-    readonly property real margin: Theme.size.gutter * 2
+    readonly property real margin: Theme.spacing.gutter * 2
 
     signal back
     signal remove

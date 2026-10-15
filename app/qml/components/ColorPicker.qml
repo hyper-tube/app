@@ -31,7 +31,7 @@ Item {
         hexField.clearFocus();
     }
 
-    implicitHeight: field.height + strip.height + hex.height + 20
+    implicitHeight: field.height + strip.height + hex.height + Theme.spaced(20)
 
     Rectangle {
         id: field
@@ -39,8 +39,8 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: 128
-        radius: Theme.rounding.small
+        height: Theme.sized(128)
+        radius: Theme.shape.field
         color: Qt.hsva(root.hue, 1, 1, 1)
 
         Rectangle {
@@ -65,9 +65,9 @@ Item {
         Rectangle {
             x: root.saturation * parent.width - width / 2
             y: (1 - root.brightness) * parent.height - height / 2
-            width: 16
-            height: 16
-            radius: Theme.rounding.full
+            width: Theme.sized(16)
+            height: Theme.sized(16)
+            radius: Theme.shape.swatch
             color: "transparent"
             border.width: 3
             border.color: "#ffffff"
@@ -103,11 +103,11 @@ Item {
         id: strip
 
         anchors.top: field.bottom
-        anchors.topMargin: 10
+        anchors.topMargin: Theme.spaced(10)
         anchors.left: parent.left
         anchors.right: parent.right
-        height: 18
-        radius: Theme.rounding.full
+        height: Theme.sized(18)
+        radius: Theme.shape.track
 
         gradient: Gradient {
             orientation: Gradient.Horizontal
@@ -123,9 +123,9 @@ Item {
         Rectangle {
             x: root.hue * parent.width - width / 2
             anchors.verticalCenter: parent.verticalCenter
-            width: 10
-            height: parent.height + 8
-            radius: Theme.rounding.full
+            width: Theme.sized(10)
+            height: parent.height + Theme.sized(8)
+            radius: Theme.shape.track
             color: "transparent"
             border.width: 3
             border.color: "#ffffff"
@@ -160,19 +160,19 @@ Item {
         id: hex
 
         anchors.top: strip.bottom
-        anchors.topMargin: 10
+        anchors.topMargin: Theme.spaced(10)
         anchors.left: parent.left
         anchors.right: parent.right
-        height: 42
+        height: Theme.sized(42)
 
         Rectangle {
             id: preview
 
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            width: 42
-            height: 42
-            radius: Theme.rounding.full
+            width: Theme.sized(42)
+            height: Theme.sized(42)
+            radius: Theme.shape.swatch
             color: root.value
         }
 
@@ -180,7 +180,7 @@ Item {
             id: hexField
 
             anchors.left: preview.right
-            anchors.leftMargin: 10
+            anchors.leftMargin: Theme.spaced(10)
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             icon: ""

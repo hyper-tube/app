@@ -5,12 +5,12 @@ import HtMusic
 Popover {
     id: root
 
-    readonly property real listCeiling: 420
+    readonly property real listCeiling: Theme.sized(420)
     readonly property bool empty: ControlCenter.count === 0
 
     property real emptyReveal: root.empty ? 1 : 0
 
-    width: 396
+    width: Theme.sized(396)
     gap: 0
 
     Behavior on emptyReveal {
@@ -23,13 +23,13 @@ Popover {
 
     Item {
         width: root.columnWidth
-        implicitHeight: 44
+        implicitHeight: Theme.sized(44)
 
         StyledText {
             anchors.left: parent.left
-            anchors.leftMargin: 14
+            anchors.leftMargin: Theme.spaced(14)
             anchors.right: sweep.left
-            anchors.rightMargin: 8
+            anchors.rightMargin: Theme.spaced(8)
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Control center")
             title: true
@@ -40,11 +40,11 @@ Popover {
             id: sweep
 
             anchors.right: parent.right
-            anchors.rightMargin: 4
+            anchors.rightMargin: Theme.spaced(4)
             anchors.verticalCenter: parent.verticalCenter
             icon: "clear_all"
-            iconSize: 20
-            diameter: 36
+            iconSize: Theme.sized(20)
+            diameter: Theme.sized(36)
             interactive: ControlCenter.clearable
             opacity: ControlCenter.clearable ? 1 : 0.3
             Accessible.name: qsTr("Dismiss all notifications")
@@ -54,14 +54,14 @@ Popover {
 
     Item {
         width: root.columnWidth
-        implicitHeight: cards.children.length > 0 ? cards.implicitHeight + 8 : 0
+        implicitHeight: cards.children.length > 0 ? cards.implicitHeight + Theme.spaced(8) : 0
 
         Column {
             id: cards
 
-            x: 4
-            width: parent.width - 8
-            spacing: 8
+            x: Theme.spaced(4)
+            width: parent.width - Theme.spaced(8)
+            spacing: Theme.spaced(8)
 
             Repeater {
                 model: PluginRegistry.cards
@@ -112,12 +112,12 @@ Popover {
 
     Item {
         width: root.columnWidth
-        implicitHeight: 148 * root.emptyReveal
+        implicitHeight: Theme.sized(148) * root.emptyReveal
         clip: true
 
         EmptyState {
             width: parent.width
-            height: 148
+            height: Theme.sized(148)
             opacity: root.emptyReveal
             scale: 0.9 + 0.1 * root.emptyReveal
             icon: "notifications_off"

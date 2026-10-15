@@ -4,7 +4,7 @@ import HtMusic
 Popover {
     id: root
 
-    readonly property real contentInset: 14
+    readonly property real contentInset: Theme.spaced(14)
     readonly property real innerWidth: root.columnWidth - root.contentInset * 2
     readonly property string lengthTitle:
         PlaybackSettings.transitionMode === PlaybackSettings.Smart
@@ -12,12 +12,12 @@ Popover {
         : qsTr("Crossfade length")
     readonly property string lengthLabel: qsTr("%1s").arg(PlaybackSettings.crossfadeSeconds)
 
-    width: 452
-    gap: 6
+    width: Theme.sized(452)
+    gap: Theme.spaced(6)
 
     Item {
         width: root.columnWidth
-        height: 42
+        height: Theme.sized(42)
 
         StyledText {
             anchors.left: parent.left
@@ -30,11 +30,11 @@ Popover {
 
         PillButton {
             anchors.right: parent.right
-            anchors.rightMargin: root.contentInset - 4
+            anchors.rightMargin: root.contentInset - Theme.spaced(4)
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Reset")
             ghost: true
-            horizontalPadding: 12
+            horizontalPadding: Theme.spaced(12)
             onClicked: {
                 PlaybackSettings.resetEqualizer();
                 PlaybackSettings.transitionMode = PlaybackSettings.TransitionsOff;
@@ -63,9 +63,9 @@ Popover {
         SegmentedTabs {
             id: modes
 
-            y: heading.height + 8
+            y: heading.height + Theme.spaced(8)
             width: parent.width
-            height: 40
+            height: Theme.sized(40)
             labels: [qsTr("Off"), qsTr("Crossfade", "transition mode"), qsTr("Smart")]
             current: PlaybackSettings.transitionMode
             onCurrentChanged: {
@@ -79,20 +79,20 @@ Popover {
 
             y: modes.y + modes.height
             width: parent.width
-            height: transitionBlock.lengthReveal * (length.implicitHeight + 12)
+            height: transitionBlock.lengthReveal * (length.implicitHeight + Theme.spaced(12))
             opacity: transitionBlock.lengthReveal
             clip: true
 
             Column {
                 id: length
 
-                y: 12
+                y: Theme.spaced(12)
                 width: parent.width
-                spacing: 4
+                spacing: Theme.spaced(4)
 
                 Item {
                     width: parent.width
-                    height: 22
+                    height: Theme.sized(22)
 
                     StyledText {
                         anchors.left: parent.left
@@ -132,7 +132,7 @@ Popover {
     Item {
         x: -root.inset
         width: root.width
-        height: 15
+        height: Theme.sized(15)
 
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
@@ -144,7 +144,7 @@ Popover {
 
     Item {
         width: root.columnWidth
-        height: 40
+        height: Theme.sized(40)
 
         StyledText {
             anchors.left: parent.left
@@ -165,7 +165,7 @@ Popover {
 
     Item {
         width: root.columnWidth
-        height: bands.height + presets.height + 14
+        height: bands.height + presets.height + Theme.spaced(14)
         opacity: PlaybackSettings.equalizerEnabled ? 1 : 0.35
         enabled: PlaybackSettings.equalizerEnabled
 
@@ -183,7 +183,7 @@ Popover {
             x: root.contentInset
             width: root.innerWidth
             columns: 3
-            spacing: 8
+            spacing: Theme.spaced(8)
 
             Repeater {
                 model: PlaybackSettings.presets
@@ -204,9 +204,9 @@ Popover {
             id: bands
 
             anchors.top: presets.bottom
-            anchors.topMargin: 14
+            anchors.topMargin: Theme.spaced(14)
             anchors.horizontalCenter: parent.horizontalCenter
-            height: 170
+            height: Theme.sized(170)
 
             Repeater {
                 model: PlaybackSettings.bands

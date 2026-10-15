@@ -25,9 +25,9 @@ RippleSurface {
         root.shownIcon = root.chosen ? root.chosen.icon : "";
     }
 
-    implicitWidth: content.implicitWidth + (root.glyphed ? 4 : 16) + 14
-    implicitHeight: 40
-    rounding: Theme.rounding.full
+    implicitWidth: content.implicitWidth + (root.glyphed ? Theme.spaced(4) : Theme.spaced(16)) + Theme.spaced(14)
+    implicitHeight: Theme.sized(40)
+    rounding: Theme.shape.chip
     colBackground: Theme.colSecondaryContainer
     colState: Theme.colOnSecondaryContainer
     Accessible.role: Accessible.ComboBox
@@ -45,22 +45,22 @@ RippleSurface {
     Row {
         id: content
 
-        x: root.glyphed ? 4 : 16
+        x: root.glyphed ? Theme.spaced(4) : Theme.spaced(16)
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 8
+        spacing: Theme.spaced(8)
 
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
-            width: 32
-            height: 32
-            radius: Theme.rounding.full
+            width: Theme.sized(32)
+            height: Theme.sized(32)
+            radius: Math.max(0, root.rounding - Theme.spaced(4))
             visible: root.glyphed
             color: Theme.colPrimary
 
             Sym {
                 anchors.centerIn: parent
                 text: root.shownIcon
-                iconSize: 18
+                iconSize: Theme.sized(18)
                 fill: 1
                 color: Theme.colOnPrimary
                 opacity: root.labelPresence
@@ -89,7 +89,7 @@ RippleSurface {
         Sym {
             anchors.verticalCenter: parent.verticalCenter
             text: "expand_more"
-            iconSize: 20
+            iconSize: Theme.sized(20)
             color: Theme.colOnSecondaryContainer
             rotation: 180 * root.openness
         }
@@ -100,17 +100,17 @@ RippleSurface {
 
         parent: root
         x: root.alignRight ? root.width - width : 0
-        y: root.height + 8
-        width: 264
+        y: root.height + Theme.spaced(8)
+        width: Theme.sized(264)
         anchorX: root.alignRight ? 1 : 0
         anchorY: 0
 
         StyledText {
             width: menu.columnWidth
             visible: root.heading.length > 0
-            leftPadding: 14
-            topPadding: 8
-            bottomPadding: 6
+            leftPadding: Theme.spaced(14)
+            topPadding: Theme.spaced(8)
+            bottomPadding: Theme.spaced(6)
             text: root.heading
             title: true
             font.pixelSize: Theme.font.smallest
@@ -132,9 +132,9 @@ RippleSurface {
                 readonly property bool glyphed: option.modelData.icon.length > 0
 
                 width: menu.columnWidth
-                implicitHeight: option.glyphed ? 52 : 44
+                implicitHeight: option.glyphed ? Theme.sized(52) : Theme.sized(44)
                 visible: !option.modelData.clearing
-                rounding: menu.rounding - menu.inset
+                rounding: Math.max(0, menu.rounding - menu.inset)
                 colBackground: option.selected ? ColorUtils.withAlpha(Theme.colSecondaryContainer, 0.6)
                     : "transparent"
 
@@ -142,18 +142,18 @@ RippleSurface {
                     id: plate
 
                     anchors.left: parent.left
-                    anchors.leftMargin: 8
+                    anchors.leftMargin: Theme.spaced(8)
                     anchors.verticalCenter: parent.verticalCenter
-                    width: option.glyphed ? 36 : 0
-                    height: 36
-                    radius: Theme.rounding.full
+                    width: option.glyphed ? Theme.sized(36) : 0
+                    height: Theme.sized(36)
+                    radius: Theme.shape.chip
                     visible: option.glyphed
                     color: option.selected ? Theme.colPrimary : Theme.colLayer4
 
                     Sym {
                         anchors.centerIn: parent
                         text: option.modelData.icon
-                        iconSize: 20
+                        iconSize: Theme.sized(20)
                         fill: option.selected ? 1 : 0
                         color: option.selected ? Theme.colOnPrimary : Theme.colOnSurfaceVariant
                     }
@@ -161,9 +161,9 @@ RippleSurface {
 
                 StyledText {
                     anchors.left: plate.right
-                    anchors.leftMargin: option.glyphed ? 12 : 6
+                    anchors.leftMargin: option.glyphed ? Theme.spaced(12) : Theme.spaced(6)
                     anchors.right: mark.left
-                    anchors.rightMargin: 10
+                    anchors.rightMargin: Theme.spaced(10)
                     anchors.verticalCenter: parent.verticalCenter
                     text: option.modelData.title
                     title: option.selected
@@ -175,7 +175,7 @@ RippleSurface {
                     id: mark
 
                     anchors.right: parent.right
-                    anchors.rightMargin: 12
+                    anchors.rightMargin: Theme.spaced(12)
                     anchors.verticalCenter: parent.verticalCenter
                     checked: option.selected
                 }

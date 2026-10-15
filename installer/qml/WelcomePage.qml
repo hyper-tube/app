@@ -6,7 +6,7 @@ Item {
     id: root
 
     readonly property bool maintaining: Session.mode !== Setup.Mode.Install
-    readonly property real margin: Theme.size.gutter * 2
+    readonly property real margin: Theme.spacing.gutter * 2
 
     signal install
     signal customize

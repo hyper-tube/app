@@ -44,9 +44,9 @@ ModalSheet {
         : qsTr("Every color source found on this system. The one in use is marked.")
 
     title: qsTr("Settings")
-    sheetHeight: Math.min(root.height - 64,
-        Math.max(root.headerHeight + rail.implicitHeight + 20,
-            root.headerHeight + pages.implicitHeight + 40))
+    sheetHeight: Math.min(root.height - Theme.spaced(64),
+        Math.max(root.headerHeight + rail.implicitHeight + Theme.spaced(20),
+            root.headerHeight + pages.implicitHeight + Theme.spaced(40)))
 
     onOpenChanged: {
         if (root.open)
@@ -62,14 +62,22 @@ ModalSheet {
         }
     }
 
+    Connections {
+        target: ThemeLibrary
+
+        function onCurrentChanged() {
+            picker.adopt(Appearance.seed);
+        }
+    }
+
     Column {
         id: rail
 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: 14
-        width: 208
-        spacing: 4
+        anchors.leftMargin: Theme.spaced(14)
+        width: Theme.sized(208)
+        spacing: Theme.spaced(4)
 
         Repeater {
             model: root.sections
@@ -84,8 +92,8 @@ ModalSheet {
 
                 objectName: tab.modelData.id
                 width: rail.width
-                implicitHeight: 46
-                rounding: Theme.rounding.full
+                implicitHeight: Theme.sized(46)
+                rounding: Theme.shape.navigation
                 colBackground: tab.selected ? Theme.colSecondaryContainer : "transparent"
                 colState: tab.selected ? Theme.colOnSecondaryContainer : Theme.colOnSurface
 
@@ -93,7 +101,7 @@ ModalSheet {
                     id: tabGlyph
 
                     anchors.left: parent.left
-                    anchors.leftMargin: 18
+                    anchors.leftMargin: Theme.spaced(18)
                     anchors.verticalCenter: parent.verticalCenter
                     text: tab.modelData.icon
                     iconSize: Theme.font.larger
@@ -103,7 +111,7 @@ ModalSheet {
 
                 StyledText {
                     anchors.left: tabGlyph.right
-                    anchors.leftMargin: 14
+                    anchors.leftMargin: Theme.spaced(14)
                     anchors.verticalCenter: parent.verticalCenter
                     text: tab.modelData.label
                     title: tab.selected
@@ -120,11 +128,11 @@ ModalSheet {
 
         anchors.top: parent.top
         anchors.left: rail.right
-        anchors.leftMargin: 20
+        anchors.leftMargin: Theme.spaced(20)
         anchors.right: parent.right
-        anchors.rightMargin: 12
+        anchors.rightMargin: Theme.spaced(12)
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20
+        anchors.bottomMargin: Theme.spaced(20)
         contentHeight: pages.implicitHeight
         clip: true
 
@@ -142,7 +150,7 @@ ModalSheet {
 
             property real reveal: 1
 
-            width: view.width - 16
+            width: view.width - Theme.spaced(16)
             implicitHeight: appearance.height + playback.height + sound.height
                 + downloads.height + system.height + diagnostics.height + about.height
             opacity: pages.reveal
@@ -154,17 +162,17 @@ ModalSheet {
                 width: parent.width
                 visible: root.section === "appearance"
                 height: visible ? implicitHeight : 0
-                spacing: 4
+                spacing: Theme.spaced(4)
 
                 SettingRow {
                     width: parent.width
                     title: qsTr("Language")
                     caption: qsTr("Also what YouTube Music answers this client in")
-                    controlWidth: 246
+                    controlWidth: Theme.sized(246)
 
                     SelectField {
-                        width: 246
-                        height: 42
+                        width: Theme.sized(246)
+                        height: Theme.sized(42)
                         options: Localization.options
                         value: Localization.language
                         onPicked: chosen => Localization.language = chosen
@@ -174,11 +182,66 @@ ModalSheet {
                 SettingRow {
                     width: parent.width
                     title: qsTr("Theme")
+                    caption: ThemeLibrary.caption
+                    controlWidth: Theme.sized(246)
+
+                    SelectField {
+                        width: Theme.sized(246)
+                        height: Theme.sized(42)
+                        options: ThemeLibrary.options
+                        value: ThemeLibrary.current
+                        onPicked: chosen => ThemeLibrary.select(chosen)
+                    }
+                }
+
+                Item {
+                    width: parent.width
+                    height: ThemeLibrary.problems.length > 0 ? problems.implicitHeight + Theme.spaced(12) : 0
+                    clip: true
+
+                    NoticeCard {
+                        id: problems
+
+                        width: parent.width
+                        icon: "error"
+                        colAccent: Theme.colError
+                        title: qsTr("%n problem(s) in %1", "", ThemeLibrary.problems.length)
+                            .arg(ThemeLibrary.name)
+                        caption: ThemeLibrary.problems.join("\n")
+                    }
+
+                    Behavior on height {
+                        NumberAnimation {
+                            duration: Theme.duration.resize
+                            easing.type: Easing.BezierSpline
+                            easing.bezierCurve: Theme.curve.emphasized
+                        }
+                    }
+                }
+
+                SettingRow {
+                    width: parent.width
+                    title: qsTr("Your themes")
+                    caption: qsTr("Each theme is a folder with a theme.json file. A saved change shows up straight away.")
+                    controlWidth: folderButton.implicitWidth
+
+                    PillButton {
+                        id: folderButton
+
+                        text: qsTr("Open folder")
+                        icon: "folder_open"
+                        onClicked: ThemeLibrary.openFolder()
+                    }
+                }
+
+                SettingRow {
+                    width: parent.width
+                    title: qsTr("Mode")
                     caption: qsTr("System follows what this desktop asks for, light or dark")
-                    controlWidth: 246
+                    controlWidth: Theme.sized(246)
 
                     SegmentedTabs {
-                        width: 246
+                        width: Theme.sized(246)
                         labels: [qsTr("System"), qsTr("Light"), qsTr("Dark")]
                         current: Appearance.mode
                         onCurrentChanged: Appearance.mode = current
@@ -190,10 +253,10 @@ ModalSheet {
                     visible: WindowChrome.selectable
                     title: qsTr("Window decorations")
                     caption: qsTr("Draw the title bar here, or leave it to the desktop")
-                    controlWidth: 246
+                    controlWidth: Theme.sized(246)
 
                     SegmentedTabs {
-                        width: 246
+                        width: Theme.sized(246)
                         labels: [qsTr("HyperTube"), qsTr("System", "window decorations")]
                         current: WindowChrome.decorations
                         onCurrentChanged: WindowChrome.decorations = current
@@ -202,7 +265,7 @@ ModalSheet {
 
                 Item {
                     width: parent.width
-                    height: WindowChrome.restartPending ? restart.implicitHeight + 12 : 0
+                    height: WindowChrome.restartPending ? restart.implicitHeight + Theme.spaced(12) : 0
                     clip: true
 
                     NoticeCard {
@@ -235,7 +298,7 @@ ModalSheet {
                     visible: Appearance.systemColorAvailable
                     title: qsTr("Follow the system color")
                     caption: qsTr("Take the accent from the palette this desktop generates")
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: Appearance.followsSystemColor
@@ -265,7 +328,7 @@ ModalSheet {
                         id: noticePane
 
                         width: parent.width
-                        height: colorPanels.noticeReveal * (notice.implicitHeight + 16)
+                        height: colorPanels.noticeReveal * (notice.implicitHeight + Theme.spaced(16))
                         opacity: colorPanels.noticeReveal
                         clip: true
 
@@ -294,21 +357,21 @@ ModalSheet {
 
                         y: noticePane.height
                         width: parent.width
-                        height: colorPanels.pickerReveal * (custom.implicitHeight + 8)
+                        height: colorPanels.pickerReveal * (custom.implicitHeight + Theme.spaced(8))
                         opacity: colorPanels.pickerReveal
                         clip: true
 
                         Column {
                             id: custom
 
-                            readonly property real swatchSize: 40
-                            readonly property real swatchSpacing: 9
+                            readonly property real swatchSize: Theme.sized(40)
+                            readonly property real swatchSpacing: Theme.spaced(9)
                             readonly property real paletteWidth: Math.min(custom.width,
                                 root.swatches.length * custom.swatchSize
                                     + (root.swatches.length - 1) * custom.swatchSpacing)
 
                             width: parent.width
-                            spacing: 12
+                            spacing: Theme.spaced(12)
 
                             SettingRow {
                                 width: parent.width
@@ -333,22 +396,22 @@ ModalSheet {
 
                                         implicitWidth: custom.swatchSize
                                         implicitHeight: custom.swatchSize
-                                        rounding: Theme.rounding.full
+                                        rounding: Theme.shape.swatch
                                         colBackground: swatch.modelData
                                         colState: "#ffffff"
 
                                         Rectangle {
                                             anchors.centerIn: parent
-                                            width: 18
-                                            height: 18
-                                            radius: Theme.rounding.full
+                                            width: Theme.sized(18)
+                                            height: Theme.sized(18)
+                                            radius: Theme.shape.swatch
                                             visible: swatch.selected
                                             color: Theme.colLayer1
 
                                             Sym {
                                                 anchors.centerIn: parent
                                                 text: "check"
-                                                iconSize: 14
+                                                iconSize: Theme.sized(14)
                                                 color: Theme.colOnSurface
                                             }
                                         }
@@ -387,13 +450,13 @@ ModalSheet {
                 width: parent.width
                 visible: root.section === "playback"
                 height: visible ? implicitHeight : 0
-                spacing: 4
+                spacing: Theme.spaced(4)
 
                 SettingRow {
                     width: parent.width
                     title: qsTr("Autoplay")
                     caption: qsTr("Keep playing similar music when the queue runs out")
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: PlaybackSettings.autoplay
@@ -405,7 +468,7 @@ ModalSheet {
                     width: parent.width
                     title: qsTr("Skip tracks that fail to play")
                     caption: qsTr("Move on to the next track instead of stopping when one fails")
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: PlaybackSettings.skipFailedTracks
@@ -417,7 +480,7 @@ ModalSheet {
                     width: parent.width
                     title: qsTr("Play videos by default")
                     caption: qsTr("Open the music video instead of the artwork when a track has one")
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: PlaybackSettings.playVideos
@@ -429,7 +492,7 @@ ModalSheet {
                     width: parent.width
                     title: qsTr("Normalize loudness")
                     caption: qsTr("Even out the volume difference between tracks")
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: PlaybackSettings.normalizeLoudness
@@ -441,12 +504,12 @@ ModalSheet {
                     width: parent.width
                     title: qsTr("Transitions")
                     caption: root.transitionCaption
-                    controlWidth: 246
+                    controlWidth: Theme.sized(246)
 
                     SegmentedTabs {
                         id: modes
 
-                        width: 246
+                        width: Theme.sized(246)
                         labels: [qsTr("Off"), qsTr("Crossfade", "transition mode"), qsTr("Smart")]
                         current: PlaybackSettings.transitionMode
                         onCurrentChanged: {
@@ -471,7 +534,7 @@ ModalSheet {
                         id: lengthPane
 
                         width: parent.width
-                        height: transitionPanels.lengthReveal * (lengthRow.implicitHeight + 4)
+                        height: transitionPanels.lengthReveal * (lengthRow.implicitHeight + Theme.spaced(4))
                         opacity: transitionPanels.lengthReveal
                         clip: true
 
@@ -481,10 +544,10 @@ ModalSheet {
                             width: parent.width
                             title: root.transitionLengthTitle
                             caption: root.transitionLengthCaption
-                            controlWidth: 220
+                            controlWidth: Theme.sized(220)
 
                             SeekBar {
-                                width: 220
+                                width: Theme.sized(220)
                                 continuous: true
                                 position: PlaybackSettings.crossfadeSeconds
                                 duration: PlaybackSettings.maximumCrossfadeSeconds
@@ -498,7 +561,7 @@ ModalSheet {
 
                         y: lengthPane.height
                         width: parent.width
-                        height: transitionPanels.tempoReveal * (tempoRow.implicitHeight + 4)
+                        height: transitionPanels.tempoReveal * (tempoRow.implicitHeight + Theme.spaced(4))
                         opacity: transitionPanels.tempoReveal
                         clip: true
 
@@ -508,7 +571,7 @@ ModalSheet {
                             width: parent.width
                             title: qsTr("Match tempo")
                             caption: qsTr("Stretch the incoming track so both beat grids run together")
-                            controlWidth: 52
+                            controlWidth: Theme.sized(52)
 
                             ToggleSwitch {
                                 checked: PlaybackSettings.matchTempo
@@ -542,13 +605,13 @@ ModalSheet {
                 width: parent.width
                 visible: root.section === "sound"
                 height: visible ? implicitHeight : 0
-                spacing: 4
+                spacing: Theme.spaced(4)
 
                 SettingRow {
                     width: parent.width
                     title: qsTr("Equalizer")
                     caption: qsTr("A ten band graphic equalizer on the playback filter chain")
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: PlaybackSettings.equalizerEnabled
@@ -558,7 +621,7 @@ ModalSheet {
 
                 Item {
                     width: parent.width
-                    height: equalizer.implicitHeight + 16
+                    height: equalizer.implicitHeight + Theme.spaced(16)
                     opacity: PlaybackSettings.equalizerEnabled ? 1 : 0.35
                     enabled: PlaybackSettings.equalizerEnabled
 
@@ -574,14 +637,14 @@ ModalSheet {
                         id: equalizer
 
                         width: parent.width
-                        spacing: 16
+                        spacing: Theme.spaced(16)
 
                         Grid {
                             id: presets
 
                             width: parent.width
                             columns: 3
-                            spacing: 8
+                            spacing: Theme.spaced(8)
 
                             Repeater {
                                 model: PlaybackSettings.presets
@@ -601,7 +664,7 @@ ModalSheet {
 
                         Row {
                             width: parent.width
-                            height: 190
+                            height: Theme.sized(190)
 
                             Repeater {
                                 model: PlaybackSettings.bands
@@ -637,7 +700,7 @@ ModalSheet {
                 width: parent.width
                 visible: root.section === "system"
                 height: visible ? implicitHeight : 0
-                spacing: 4
+                spacing: Theme.spaced(4)
 
                 SettingRow {
                     width: parent.width
@@ -647,7 +710,7 @@ ModalSheet {
                     caption: SystemSettings.background === SystemSettings.Dock
                         ? qsTr("Closing the window leaves %1 playing in the Dock").arg(AppInfo.name)
                         : qsTr("Closing the window leaves %1 playing in the notification area").arg(AppInfo.name)
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: SystemSettings.closeToTray
@@ -660,7 +723,7 @@ ModalSheet {
                     visible: SystemSettings.startupAvailable
                     title: qsTr("Launch on system startup")
                     caption: qsTr("Start %1 when you sign in to Windows").arg(AppInfo.name)
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: SystemSettings.launchAtSignIn
@@ -675,14 +738,14 @@ ModalSheet {
                 width: parent.width
                 visible: root.section === "diagnostics"
                 height: visible ? implicitHeight : 0
-                spacing: 4
+                spacing: Theme.spaced(4)
 
                 SettingRow {
                     width: parent.width
                     visible: DiagnosticsSettings.available
                     title: qsTr("Share crash reports and diagnostics")
                     caption: qsTr("Send crash reports, errors and recent activity to developers. This helps us identify and fix errors when they occur.")
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: DiagnosticsSettings.enabled
@@ -695,7 +758,7 @@ ModalSheet {
                     width: parent.width
                     title: qsTr("Logs")
                     caption: AppInfo.logFile
-                    controlWidth: 112
+                    controlWidth: Theme.sized(112)
 
                     PillButton {
                         icon: "folder_open"
@@ -711,7 +774,7 @@ ModalSheet {
                 width: parent.width
                 visible: root.section === "about"
                 height: visible ? implicitHeight : 0
-                spacing: 4
+                spacing: Theme.spaced(4)
 
                 SettingRow {
                     width: parent.width
@@ -750,7 +813,7 @@ ModalSheet {
                     width: parent.width
                     title: qsTr("Check for updates automatically")
                     caption: qsTr("Look for a new version shortly after %1 starts and every few hours").arg(AppInfo.name)
-                    controlWidth: 52
+                    controlWidth: Theme.sized(52)
 
                     ToggleSwitch {
                         checked: Updater.automatic
@@ -763,7 +826,7 @@ ModalSheet {
                     width: parent.width
                     title: qsTr("Website")
                     caption: AppInfo.website
-                    controlWidth: 112
+                    controlWidth: Theme.sized(112)
 
                     PillButton {
                         icon: "open_in_new"
@@ -776,7 +839,7 @@ ModalSheet {
                     width: parent.width
                     title: qsTr("Source code")
                     caption: AppInfo.repository
-                    controlWidth: 112
+                    controlWidth: Theme.sized(112)
 
                     PillButton {
                         icon: "open_in_new"

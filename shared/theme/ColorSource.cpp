@@ -28,17 +28,36 @@ Qt::ColorScheme ColorSource::schemeFor(const QColor &background)
 
 void ColorSource::adopt(const Roles &roles, const QColor &accent, Qt::ColorScheme colorScheme)
 {
-    if (m_roles == roles && m_accent == accent && m_colorScheme == colorScheme)
+    if (colorScheme == Qt::ColorScheme::Light)
+        adopt(roles, {}, accent, colorScheme);
+    else
+        adopt({}, roles, accent, colorScheme);
+}
+
+void ColorSource::adopt(const Roles &light, const Roles &dark, const QColor &accent,
+                        Qt::ColorScheme colorScheme)
+{
+    if (m_light == light && m_dark == dark && m_accent == accent && m_colorScheme == colorScheme)
         return;
-    m_roles = roles;
+    m_light = light;
+    m_dark = dark;
     m_accent = accent;
     m_colorScheme = colorScheme;
     Q_EMIT changed();
 }
 
+void ColorSource::relabel(const QString &name, const QString &location)
+{
+    if (m_name == name && m_location == location)
+        return;
+    m_name = name;
+    m_location = location;
+    Q_EMIT changed();
+}
+
 void ColorSource::clear()
 {
-    adopt({}, QColor(), Qt::ColorScheme::Unknown);
+    adopt({}, {}, QColor(), Qt::ColorScheme::Unknown);
 }
 
 }

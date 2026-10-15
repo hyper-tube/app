@@ -16,9 +16,9 @@ Item {
         id: heading
 
         anchors.left: parent.left
-        anchors.leftMargin: Theme.size.gutter * 2
+        anchors.leftMargin: Theme.spacing.gutter * 2
         anchors.top: parent.top
-        anchors.topMargin: Theme.size.gutter
+        anchors.topMargin: Theme.spacing.gutter
         text: qsTr("Options")
         title: true
         font.pixelSize: Theme.font.huge
@@ -29,8 +29,8 @@ Item {
 
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: Theme.size.gutter * 2
-        anchors.rightMargin: Theme.size.gutter * 2
+        anchors.leftMargin: Theme.spacing.gutter * 2
+        anchors.rightMargin: Theme.spacing.gutter * 2
         anchors.top: heading.bottom
         anchors.topMargin: 12
         anchors.bottom: footer.top
@@ -189,7 +189,7 @@ Item {
 
         Row {
             anchors.right: parent.right
-            anchors.rightMargin: Theme.size.gutter * 2
+            anchors.rightMargin: Theme.spacing.gutter * 2
             anchors.verticalCenter: parent.verticalCenter
             spacing: 12
 

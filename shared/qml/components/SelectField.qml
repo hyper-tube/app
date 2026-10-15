@@ -15,8 +15,8 @@ Item {
 
     signal picked(string value)
 
-    implicitWidth: 260
-    implicitHeight: 52
+    implicitWidth: Theme.sized(260)
+    implicitHeight: Theme.sized(52)
 
     function indexOf(value) {
         for (let i = 0; i < root.options.length; ++i) {
@@ -30,7 +30,7 @@ Item {
         id: field
 
         anchors.fill: parent
-        rounding: Theme.rounding.small
+        rounding: Theme.shape.field
 
         Rectangle {
             anchors.fill: parent
@@ -49,10 +49,10 @@ Item {
         }
 
         Rectangle {
-            x: 12
+            x: Theme.spaced(12)
             y: -7
-            width: caption.implicitWidth + 8
-            height: 14
+            width: caption.implicitWidth + Theme.spaced(8)
+            height: Theme.sized(14)
             visible: root.label.length > 0
             color: Theme.colLayer1
 
@@ -70,7 +70,7 @@ Item {
             id: leading
 
             anchors.left: parent.left
-            anchors.leftMargin: 14
+            anchors.leftMargin: Theme.spaced(14)
             anchors.verticalCenter: parent.verticalCenter
             visible: leading.text.length > 0
             width: visible ? leading.iconSize : 0
@@ -81,9 +81,9 @@ Item {
 
         StyledText {
             anchors.left: leading.visible ? leading.right : parent.left
-            anchors.leftMargin: leading.visible ? 10 : 14
+            anchors.leftMargin: leading.visible ? Theme.spaced(10) : Theme.spaced(14)
             anchors.right: arrow.left
-            anchors.rightMargin: 8
+            anchors.rightMargin: Theme.spaced(8)
             anchors.verticalCenter: parent.verticalCenter
             text: root.selected ? root.selected.label : ""
             title: true
@@ -95,7 +95,7 @@ Item {
             id: arrow
 
             anchors.right: parent.right
-            anchors.rightMargin: 14
+            anchors.rightMargin: Theme.spaced(14)
             anchors.verticalCenter: parent.verticalCenter
             text: "expand_more"
             iconSize: Theme.font.larger
@@ -122,12 +122,12 @@ Item {
         z: 120
         parent: field
         width: root.width
-        y: menu.dropUp ? -menu.height - 6 : root.height + 6
+        y: menu.dropUp ? -menu.height - Theme.spaced(6) : root.height + Theme.spaced(6)
         anchorY: menu.dropUp ? 1 : 0
 
         onAboutToShow: {
             const bottom = root.mapToItem(null, 0, root.height).y;
-            menu.dropUp = root.Window.height - bottom < menu.height + 12;
+            menu.dropUp = root.Window.height - bottom < menu.height + Theme.spaced(12);
         }
 
         Repeater {
@@ -142,8 +142,8 @@ Item {
                 readonly property bool current: option.index === root.selectedIndex
 
                 width: menu.columnWidth
-                implicitHeight: option.modelData.caption ? 58 : 46
-                rounding: menu.rounding - menu.inset
+                implicitHeight: option.modelData.caption ? Theme.sized(58) : Theme.sized(46)
+                rounding: Math.max(0, menu.rounding - menu.inset)
                 colBackground: option.current ? Theme.colSecondaryContainer : "transparent"
                 colState: option.current ? Theme.colOnSecondaryContainer : Theme.colOnSurface
 
@@ -151,7 +151,7 @@ Item {
                     id: glyph
 
                     anchors.left: parent.left
-                    anchors.leftMargin: 14
+                    anchors.leftMargin: Theme.spaced(14)
                     anchors.verticalCenter: parent.verticalCenter
                     visible: glyph.text.length > 0
                     width: visible ? glyph.iconSize : 0
@@ -163,11 +163,11 @@ Item {
 
                 Column {
                     anchors.left: glyph.visible ? glyph.right : parent.left
-                    anchors.leftMargin: glyph.visible ? 10 : 14
+                    anchors.leftMargin: glyph.visible ? Theme.spaced(10) : Theme.spaced(14)
                     anchors.right: tick.left
-                    anchors.rightMargin: 8
+                    anchors.rightMargin: Theme.spaced(8)
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 2
+                    spacing: Theme.spaced(2)
 
                     StyledText {
                         width: parent.width
@@ -192,7 +192,7 @@ Item {
                     id: tick
 
                     anchors.right: parent.right
-                    anchors.rightMargin: 14
+                    anchors.rightMargin: Theme.spaced(14)
                     anchors.verticalCenter: parent.verticalCenter
                     visible: option.current
                     width: visible ? tick.iconSize : 0

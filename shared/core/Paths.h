@@ -10,5 +10,6 @@ QString cacheDir();
 QString artworkCacheDir();
 QString logDir();
 QString crashReportDir();
+QString themeDir();
 
 }

@@ -31,7 +31,7 @@ RippleSurface {
     readonly property bool reachable: Connectivity.online || root.downloaded || !root.playable
     readonly property bool playingNow: root.active && PlaybackController.playing
     readonly property bool cueVisible: root.hovered || root.active
-    readonly property real checkInset: 32 * root.selectReveal
+    readonly property real checkInset: Theme.sized(32) * root.selectReveal
 
     signal playRequested
     signal menuRequested(real x, real y)
@@ -40,8 +40,8 @@ RippleSurface {
     signal dragFinished(bool cancelled)
     signal selectToggled
 
-    implicitHeight: 60
-    rounding: Theme.rounding.small
+    implicitHeight: Theme.size.row
+    rounding: Theme.shape.row
     colState: Theme.colOnSurface
 
     Behavior on selectReveal {
@@ -78,7 +78,7 @@ RippleSurface {
 
     CheckMark {
         anchors.left: parent.left
-        anchors.leftMargin: 14
+        anchors.leftMargin: Theme.spaced(14)
         anchors.verticalCenter: parent.verticalCenter
         checked: root.selected
         visible: root.selectReveal > 0
@@ -90,9 +90,9 @@ RippleSurface {
         id: ordinal
 
         anchors.left: parent.left
-        anchors.leftMargin: 14 + root.checkInset
+        anchors.leftMargin: Theme.spaced(14) + root.checkInset
         anchors.verticalCenter: parent.verticalCenter
-        width: root.numbered ? 24 : 0
+        width: root.numbered ? Theme.sized(24) : 0
         visible: root.numbered
         opacity: root.cueVisible ? 0 : 1
         text: root.position
@@ -131,7 +131,7 @@ RippleSurface {
     PlayingIndicator {
         anchors.horizontalCenter: ordinal.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        width: 24
+        width: Theme.sized(24)
         visible: root.numbered && root.playingNow
         playing: visible && enabled
     }
@@ -140,13 +140,13 @@ RippleSurface {
         id: cover
 
         anchors.left: root.numbered ? ordinal.right : parent.left
-        anchors.leftMargin: root.numbered ? 14 : 14 + root.checkInset
+        anchors.leftMargin: root.numbered ? Theme.spaced(14) : Theme.spaced(14) + root.checkInset
         anchors.verticalCenter: parent.verticalCenter
-        width: 44
-        height: 44
+        width: Theme.sized(44)
+        height: Theme.sized(44)
         opacity: root.presence
         artId: root.artId
-        rounding: root.circular ? Theme.rounding.full : Theme.rounding.verysmall
+        rounding: root.circular ? Theme.shape.avatar : Theme.shape.thumbnail
 
         Rectangle {
             id: cue
@@ -186,12 +186,12 @@ RippleSurface {
         id: names
 
         anchors.left: cover.right
-        anchors.leftMargin: 14
+        anchors.leftMargin: Theme.spaced(14)
         anchors.right: albumLabel.left
-        anchors.rightMargin: 18
+        anchors.rightMargin: Theme.spaced(18)
         anchors.verticalCenter: parent.verticalCenter
         opacity: root.presence
-        spacing: 2
+        spacing: Theme.spaced(2)
 
         StyledText {
             width: parent.width
@@ -215,7 +215,7 @@ RippleSurface {
         id: albumLabel
 
         anchors.right: trailing.left
-        anchors.rightMargin: 18
+        anchors.rightMargin: Theme.spaced(18)
         anchors.verticalCenter: parent.verticalCenter
         width: root.showAlbum ? Math.max(0, root.width * 0.24) : 0
         visible: root.showAlbum && root.width > 720
@@ -230,9 +230,9 @@ RippleSurface {
         id: trailing
 
         anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: Theme.spaced(10)
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 4
+        spacing: Theme.spaced(4)
 
         Sym {
             anchors.verticalCenter: parent.verticalCenter
@@ -254,7 +254,7 @@ RippleSurface {
 
         Item {
             anchors.verticalCenter: parent.verticalCenter
-            width: Math.max(44, root.live ? liveBadge.implicitWidth : 0)
+            width: Math.max(Theme.sized(44), root.live ? liveBadge.implicitWidth : 0)
             height: liveBadge.implicitHeight
 
             StyledText {
@@ -286,7 +286,7 @@ RippleSurface {
             visible: Account.signedIn && root.videoId.length > 0
             opacity: root.liked || root.hovered ? 1 : 0
             iconSize: Theme.font.normal
-            diameter: 36
+            diameter: Theme.sized(36)
             videoId: root.videoId
             liked: root.liked
             interactive: canRate && opacity > 0
@@ -304,8 +304,8 @@ RippleSurface {
             id: handle
 
             anchors.verticalCenter: parent.verticalCenter
-            width: 32 * root.reorderReveal
-            height: 36
+            width: Theme.sized(32) * root.reorderReveal
+            height: Theme.sized(36)
             visible: root.reorderReveal > 0
             opacity: root.reorderReveal * (0.4 + 0.6 * root.reorderReadiness)
             enabled: root.reorderEnabled
@@ -315,7 +315,7 @@ RippleSurface {
             Sym {
                 anchors.centerIn: parent
                 text: "drag_handle"
-                iconSize: 20
+                iconSize: Theme.sized(20)
                 color: hover.hovered || drag.active ? Theme.colPrimary : Theme.colInactive
             }
 
@@ -358,7 +358,7 @@ RippleSurface {
             anchors.verticalCenter: parent.verticalCenter
             icon: "more_vert"
             iconSize: Theme.font.normal
-            diameter: 36
+            diameter: Theme.sized(36)
             opacity: root.hovered ? 1 : 0
             interactive: root.hovered
             Accessible.name: qsTr("More actions")

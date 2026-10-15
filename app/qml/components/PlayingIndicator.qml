@@ -5,13 +5,13 @@ Item {
     id: root
 
     property bool playing: false
-    property real barWidth: 3
-    property real barHeight: 18
-    property real barSpacing: 3
+    property real barWidth: Theme.sized(3)
+    property real barHeight: Theme.sized(18)
+    property real barSpacing: Theme.sized(3)
     property color colBars: Theme.colPrimary
 
-    implicitWidth: root.barWidth * 3 + root.barSpacing * 2 + 6
-    implicitHeight: root.barHeight + 6
+    implicitWidth: root.barWidth * 3 + root.barSpacing * 2 + Theme.sized(6)
+    implicitHeight: root.barHeight + Theme.sized(6)
 
     Row {
         anchors.centerIn: parent

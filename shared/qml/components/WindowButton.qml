@@ -13,7 +13,7 @@ RippleSurface {
 
     implicitWidth: 32
     implicitHeight: 32
-    rounding: Theme.rounding.full
+    rounding: Theme.shape.iconButton
     colBackground: Theme.colLayer2
     colState: Theme.colOnSurface
     stateOpacity: root.pressed || root.systemPressed ? Theme.state.press

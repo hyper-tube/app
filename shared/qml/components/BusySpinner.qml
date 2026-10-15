@@ -19,8 +19,8 @@ ShaderEffect {
         return value * value * (3 - 2 * value);
     }
 
-    implicitWidth: 32
-    implicitHeight: 32
+    implicitWidth: Theme.sized(32)
+    implicitHeight: Theme.sized(32)
     Accessible.role: Accessible.Indicator
     Accessible.name: qsTr("Loading")
 

@@ -27,8 +27,8 @@ Item {
 
         parent: Overlay.overlay
         anchors.centerIn: parent
-        width: Math.min(440, parent.width - 64)
-        padding: 24
+        width: Math.min(Theme.sized(440), parent.width - Theme.spaced(64))
+        padding: Theme.spaced(24)
         z: 110
         modal: true
         focus: true
@@ -36,7 +36,7 @@ Item {
         closePolicy: Popup.CloseOnEscape
 
         background: Rectangle {
-            radius: Theme.rounding.large
+            radius: Theme.shape.sheet
             color: Theme.colLayer2
             border.width: 1
             border.color: Theme.colOutlineVariant
@@ -47,7 +47,7 @@ Item {
         }
 
         contentItem: Column {
-            spacing: 20
+            spacing: Theme.spaced(20)
 
             Keys.onPressed: event => {
                 if (event.key === Qt.Key_Escape)
@@ -82,7 +82,7 @@ Item {
 
             Row {
                 anchors.right: parent.right
-                spacing: 8
+                spacing: Theme.spaced(8)
 
                 PillButton {
                     text: qsTr("Cancel")

@@ -41,8 +41,8 @@ Item {
         property real reveal: root.open ? 1 : 0
 
         anchors.horizontalCenter: parent.horizontalCenter
-        width: Math.min(560, parent.width - 96)
-        height: Math.min(760, parent.height - 64)
+        width: Math.min(Theme.sized(560), parent.width - Theme.spaced(96))
+        height: Math.min(Theme.sized(760), parent.height - Theme.spaced(64))
         y: (parent.height - height) / 2 + 24 * (1 - reveal)
         opacity: reveal
         scale: 0.96 + 0.04 * reveal
@@ -57,7 +57,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: Theme.rounding.large
+            radius: Theme.shape.sheet
             color: Theme.colLayer1
             border.width: 1
             border.color: Theme.colOutlineVariant
@@ -69,11 +69,11 @@ Item {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            height: 60
+            height: Theme.sized(60)
 
             StyledText {
                 anchors.left: parent.left
-                anchors.leftMargin: 24
+                anchors.leftMargin: Theme.spaced(24)
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("Sign in to YouTube Music")
                 title: true
@@ -82,7 +82,7 @@ Item {
 
             IconButton {
                 anchors.right: parent.right
-                anchors.rightMargin: 12
+                anchors.rightMargin: Theme.spaced(12)
                 anchors.verticalCenter: parent.verticalCenter
                 icon: "close"
                 Accessible.name: qsTr("Close")
@@ -97,11 +97,11 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.margins: 12
+            anchors.margins: Theme.spaced(12)
             anchors.topMargin: 0
             layer.enabled: true
             layer.effect: RoundedMask {
-                rounding: Theme.rounding.normal
+                rounding: Theme.rounding.medium
             }
 
             Rectangle {
@@ -133,7 +133,7 @@ Item {
         Column {
             anchors.centerIn: viewClip
             visible: !viewLoader.active || WebLogin.harvesting
-            spacing: 12
+            spacing: Theme.spaced(12)
 
             BusySpinner {
                 anchors.horizontalCenter: parent.horizontalCenter

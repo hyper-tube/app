@@ -13,8 +13,8 @@ Item {
     property real barFill: ControlCenter.progress
     property real dotPop: 1
 
-    implicitWidth: 40
-    implicitHeight: 40
+    implicitWidth: Theme.sized(40)
+    implicitHeight: Theme.sized(40)
 
     Behavior on busyReveal {
         NumberAnimation {
@@ -35,7 +35,8 @@ Item {
     Behavior on barFill {
         NumberAnimation {
             duration: Theme.duration.fast
-            easing.type: Easing.OutCubic
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Theme.curve.decelerate
         }
     }
 
@@ -43,7 +44,7 @@ Item {
         id: surface
 
         anchors.fill: parent
-        rounding: Theme.rounding.full
+        rounding: Theme.shape.iconButton
         tooltip: qsTr("Control center")
         Accessible.name: qsTr("Control center")
 
@@ -85,10 +86,10 @@ Item {
 
             Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
-                y: parent.height / 2 + 7
-                width: 18
-                height: 3
-                radius: height / 2
+                y: parent.height / 2 + Theme.sized(7)
+                width: Theme.sized(18)
+                height: Theme.sized(3)
+                radius: Theme.shape.track
                 color: ColorUtils.withAlpha(Theme.colOnSurfaceVariant, 0.28)
                 opacity: root.busyReveal
                 scale: 0.6 + 0.4 * root.busyReveal
@@ -106,10 +107,10 @@ Item {
     }
 
     Rectangle {
-        x: root.width / 2 + 7
-        y: root.height / 2 - 15
-        width: 8
-        height: 8
+        x: root.width / 2 + Theme.sized(7)
+        y: root.height / 2 - Theme.sized(15)
+        width: Theme.sized(8)
+        height: Theme.sized(8)
         radius: width / 2
         color: Theme.colPrimary
         opacity: root.alertReveal
@@ -123,8 +124,9 @@ Item {
             target: root
             property: "dotPop"
             to: 1.6
-            duration: 140
-            easing.type: Easing.OutCubic
+            duration: Math.round(Theme.duration.spatialFast * 0.4)
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Theme.curve.decelerate
         }
         NumberAnimation {
             target: root
@@ -165,7 +167,7 @@ Item {
 
         parent: root
         x: root.width - width
-        y: root.height + 10
+        y: root.height + Theme.spaced(10)
         anchorX: (panel.width - root.width / 2) / panel.width
     }
 }

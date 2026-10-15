@@ -26,8 +26,8 @@ Item {
 
     readonly property bool inline: root.size === ErrorState.Inline
     readonly property bool large: root.size === ErrorState.Page
-    readonly property real plateSize: root.large ? 96 : root.inline ? 36 : 64
-    readonly property real glyphSize: root.large ? 44 : root.inline ? 19 : 30
+    readonly property real plateSize: root.large ? Theme.sized(96) : root.inline ? Theme.sized(36) : Theme.sized(64)
+    readonly property real glyphSize: root.large ? Theme.sized(44) : root.inline ? Theme.sized(19) : Theme.sized(30)
 
     signal actionTriggered
     signal secondaryTriggered
@@ -36,9 +36,10 @@ Item {
         return Math.max(0, Math.min(1, (root.reveal - index * 0.12) / 0.64));
     }
 
-    implicitWidth: root.inline ? root.plateSize + 14 + Math.max(inlineTitle.implicitWidth,
-        inlineCaption.implicitWidth) + 12 + inlineAction.implicitWidth : (root.large ? 420 : 320)
-    implicitHeight: root.inline ? 52 : block.implicitHeight
+    implicitWidth: root.inline ? root.plateSize + Theme.spaced(14) + Math.max(inlineTitle.implicitWidth,
+        inlineCaption.implicitWidth) + Theme.spaced(12) + inlineAction.implicitWidth
+        : (root.large ? Theme.sized(420) : Theme.sized(320))
+    implicitHeight: root.inline ? Theme.sized(52) : block.implicitHeight
     visible: root.reveal > 0
     enabled: root.shown
     Accessible.role: Accessible.AlertMessage
@@ -64,7 +65,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: width / 2
+            radius: Theme.shape.plate
             color: "transparent"
             border.width: 2
             border.color: Theme.colPrimary
@@ -75,7 +76,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: width / 2
+            radius: Theme.shape.plate
             color: Theme.colSecondaryContainer
         }
 
@@ -92,10 +93,10 @@ Item {
 
         x: (root.width - width) / 2
         y: Math.max(0, (root.height - implicitHeight) / 2)
-        width: Math.max(0, Math.min(root.large ? 420 : 320, root.width - 32))
+        width: Math.max(0, Math.min(root.large ? Theme.sized(420) : Theme.sized(320), root.width - Theme.spaced(32)))
         visible: !root.inline
-        topPadding: root.plateSize + (root.large ? 24 : 16)
-        spacing: 8
+        topPadding: root.plateSize + (root.large ? Theme.spaced(24) : Theme.spaced(16))
+        spacing: Theme.spaced(8)
 
         StyledText {
             width: parent.width
@@ -122,8 +123,8 @@ Item {
 
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            topPadding: root.large ? 16 : 10
-            spacing: 8
+            topPadding: root.large ? Theme.spaced(16) : Theme.spaced(10)
+            spacing: Theme.spaced(8)
             opacity: root.stage(3)
             transform: Translate { y: 14 * (1 - root.stage(3)) }
 
@@ -146,7 +147,7 @@ Item {
     }
 
     Item {
-        x: root.plateSize + 14
+        x: root.plateSize + Theme.spaced(14)
         width: Math.max(0, root.width - x)
         height: root.height
         visible: root.inline
@@ -154,7 +155,7 @@ Item {
         Column {
             anchors.left: parent.left
             anchors.right: inlineAction.left
-            anchors.rightMargin: 12
+            anchors.rightMargin: Theme.spaced(12)
             anchors.verticalCenter: parent.verticalCenter
             spacing: 1
             opacity: root.stage(1)

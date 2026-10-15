@@ -14,9 +14,9 @@ RippleSurface {
             .replace(/0$/, ""));
     }
 
-    implicitWidth: Math.max(56, readout.implicitWidth + 24)
-    implicitHeight: 34
-    rounding: Theme.rounding.full
+    implicitWidth: Math.max(Theme.sized(56), readout.implicitWidth + Theme.spaced(24))
+    implicitHeight: Theme.sized(34)
+    rounding: Theme.shape.button
     colBackground: root.altered ? Theme.colSecondaryContainer
         : ColorUtils.withAlpha(Theme.colLayer3, root.glass ? 0.55 : 1)
     colState: root.altered ? Theme.colOnSecondaryContainer : Theme.colOnSurface
@@ -40,18 +40,18 @@ RippleSurface {
 
         parent: root
         x: (root.width - width) / 2
-        y: -height - 12
-        width: 244
+        y: -height - Theme.spaced(12)
+        width: Theme.sized(244)
         anchorX: 0.5
         anchorY: 1
 
         Item {
             width: menu.columnWidth
-            height: 44
+            height: Theme.sized(44)
 
             StyledText {
                 anchors.left: parent.left
-                anchors.leftMargin: 12
+                anchors.leftMargin: Theme.spaced(12)
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("Playback speed")
                 title: true
@@ -59,7 +59,7 @@ RippleSurface {
 
             StyledText {
                 anchors.right: parent.right
-                anchors.rightMargin: 12
+                anchors.rightMargin: Theme.spaced(12)
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.label(root.speed)
                 font.pixelSize: Theme.font.smallie
@@ -70,11 +70,11 @@ RippleSurface {
         Grid {
             id: options
 
-            x: 6
-            width: menu.columnWidth - 12
+            x: Theme.spaced(6)
+            width: menu.columnWidth - Theme.spaced(12)
             columns: 4
-            spacing: 6
-            bottomPadding: 6
+            spacing: Theme.spaced(6)
+            bottomPadding: Theme.spaced(6)
 
             Repeater {
                 model: PlaybackSettings.podcastSpeeds
@@ -87,8 +87,8 @@ RippleSurface {
                     readonly property bool current: Math.abs(option.modelData - root.speed) < 0.001
 
                     width: (options.width - options.spacing * (options.columns - 1)) / options.columns
-                    implicitHeight: 38
-                    rounding: Theme.rounding.full
+                    implicitHeight: Theme.sized(38)
+                    rounding: Theme.shape.button
                     colBackground: option.current ? Theme.colPrimary : Theme.colLayer4
                     colState: option.current ? Theme.colOnPrimary : Theme.colOnSurface
                     acceptedButtons: Qt.LeftButton

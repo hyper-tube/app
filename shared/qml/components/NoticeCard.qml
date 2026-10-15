@@ -17,7 +17,7 @@ Item {
         id: surface
 
         width: parent.width
-        height: layout.implicitHeight + 32
+        height: layout.implicitHeight + Theme.spaced(32)
         radius: Theme.rounding.small
         color: Theme.colLayer2
 
@@ -25,12 +25,12 @@ Item {
             id: layout
 
             anchors.left: parent.left
-            anchors.leftMargin: 16
+            anchors.leftMargin: Theme.spaced(16)
             anchors.right: parent.right
-            anchors.rightMargin: 16
+            anchors.rightMargin: Theme.spaced(16)
             anchors.top: parent.top
-            anchors.topMargin: 16
-            spacing: 12
+            anchors.topMargin: Theme.spaced(16)
+            spacing: Theme.spaced(12)
 
             Item {
                 width: parent.width
@@ -51,10 +51,10 @@ Item {
                     id: heading
 
                     anchors.left: glyph.right
-                    anchors.leftMargin: 14
+                    anchors.leftMargin: Theme.spaced(14)
                     anchors.right: parent.right
                     anchors.top: parent.top
-                    spacing: 2
+                    spacing: Theme.spaced(2)
 
                     StyledText {
                         width: parent.width
@@ -80,7 +80,7 @@ Item {
 
                 width: parent.width
                 visible: extra.height > 0
-                spacing: 2
+                spacing: Theme.spaced(2)
             }
         }
     }

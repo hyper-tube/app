@@ -31,7 +31,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location line="+93"/>
+        <location line="+97"/>
         <source>%n downloads continue when you&apos;re back online.</source>
         <translation>
             <numerusform>%n download continues when you&apos;re back online.</numerusform>
@@ -80,7 +80,7 @@
 <context>
     <name>SelectionBar</name>
     <message numerus="yes">
-        <location filename="../qml/components/SelectionBar.qml" line="+70"/>
+        <location filename="../qml/components/SelectionBar.qml" line="+73"/>
         <source>%n selected</source>
         <translation>
             <numerusform>%n selected</numerusform>
@@ -104,6 +104,14 @@
         <translation>
             <numerusform>Overlap tracks by %n second</numerusform>
             <numerusform>Overlap tracks by %n seconds</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location line="+170"/>
+        <source>%n problem(s) in %1</source>
+        <translation>
+            <numerusform>%n problem in %1</numerusform>
+            <numerusform>%n problems in %1</numerusform>
         </translation>
     </message>
 </context>

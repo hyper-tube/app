@@ -225,6 +225,12 @@ qt_add_executable(ht-music
     platform/ShortcutKeys.cpp
     platform/SystemSettings.h
     platform/SystemSettings.cpp
+    theme/ThemeFile.h
+    theme/ThemeFile.cpp
+    theme/ThemeLibrary.h
+    theme/ThemeLibrary.cpp
+    theme/ThemeSchema.h
+    theme/ThemeSchema.cpp
 )
 
 if(LINUX OR (UNIX AND NOT APPLE))
@@ -314,6 +320,12 @@ qt_add_resources(ht-music "innertube"
     FILES innertube/clients.json
 )
 
+qt_add_resources(ht-music "themes"
+    PREFIX "/themes"
+    BASE ${PROJECT_SOURCE_DIR}/assets/themes
+    FILES ${PROJECT_SOURCE_DIR}/assets/themes/square/theme.json
+)
+
 qt_add_resources(ht-music "models"
     PREFIX "/models"
     BASE ${PROJECT_SOURCE_DIR}/assets/models
@@ -339,6 +351,7 @@ target_include_directories(ht-music PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/auth
     ${CMAKE_CURRENT_SOURCE_DIR}/innertube/parsers
     ${CMAKE_CURRENT_SOURCE_DIR}/platform
+    ${CMAKE_CURRENT_SOURCE_DIR}/theme
 )
 
 set_source_files_properties(qml/components/Toasts.qml qml/components/Actions.qml

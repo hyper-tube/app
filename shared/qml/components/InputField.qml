@@ -23,12 +23,12 @@ Item {
         input.focus = false;
     }
 
-    implicitWidth: 260
-    implicitHeight: 15 + Math.max(root.lineHeight, root.lines * root.lineHeight) + 15
+    implicitWidth: Theme.sized(260)
+    implicitHeight: Theme.spaced(15) + Math.max(root.lineHeight, root.lines * root.lineHeight) + Theme.spaced(15)
 
     Rectangle {
         anchors.fill: parent
-        radius: Theme.rounding.small
+        radius: Theme.shape.field
         color: "transparent"
         border.width: root.focused ? 2 : 1
         border.color: root.focused ? Theme.colPrimary : Theme.colOutlineVariant
@@ -43,10 +43,10 @@ Item {
     }
 
     Rectangle {
-        x: 12
+        x: Theme.spaced(12)
         y: -7
-        width: caption.implicitWidth + 8
-        height: 14
+        width: caption.implicitWidth + Theme.spaced(8)
+        height: Theme.sized(14)
         visible: root.label.length > 0
         color: Theme.colLayer1
 
@@ -65,8 +65,8 @@ Item {
 
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: 14
-        anchors.rightMargin: 14
+        anchors.leftMargin: Theme.spaced(14)
+        anchors.rightMargin: Theme.spaced(14)
         anchors.verticalCenter: parent.verticalCenter
         height: Math.max(root.lineHeight, root.lines * root.lineHeight)
         color: Theme.colOnSurface
@@ -79,6 +79,7 @@ Item {
         font {
             family: Theme.font.main
             pixelSize: Theme.font.small
+            weight: Theme.font.weight
             variableAxes: Theme.font.axes
         }
 

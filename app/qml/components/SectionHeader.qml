@@ -18,7 +18,7 @@ Item {
 
         anchors.left: parent.left
         anchors.right: more.visible ? more.left : parent.right
-        anchors.rightMargin: more.visible ? 16 : 0
+        anchors.rightMargin: more.visible ? Theme.spaced(16) : 0
         anchors.verticalCenter: parent.verticalCenter
         spacing: 1
 

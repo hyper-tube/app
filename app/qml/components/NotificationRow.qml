@@ -6,7 +6,7 @@ Item {
 
     required property var entry
 
-    readonly property real gap: 8
+    readonly property real gap: Theme.spaced(8)
     readonly property real rise: 14
     readonly property real threshold: 0.3
     readonly property real settled: Math.max(0, Math.min(1, root.reveal))
@@ -54,8 +54,8 @@ Item {
             id: card
 
             width: parent.width
-            implicitHeight: Math.max(66, column.implicitHeight + 26)
-            radius: Theme.rounding.normal
+            implicitHeight: Math.max(Theme.sized(66), column.implicitHeight + Theme.spaced(26))
+            radius: Theme.shape.card
             color: Theme.colLayer4
             Accessible.role: Accessible.AlertMessage
             Accessible.name: root.entry.title
@@ -63,10 +63,10 @@ Item {
             Rectangle {
                 id: badge
 
-                x: 13
-                y: 13
-                width: 40
-                height: 40
+                x: Theme.spaced(13)
+                y: Theme.spaced(13)
+                width: Theme.sized(40)
+                height: Theme.sized(40)
                 radius: Theme.rounding.small
                 color: root.entry.activity || root.entry.unread ? Theme.colSecondaryContainer
                     : Theme.colLayer3
@@ -75,7 +75,7 @@ Item {
                     anchors.centerIn: parent
                     text: root.entry.activity ? "download"
                         : root.entry.icon.length > 0 ? root.entry.icon : "campaign"
-                    iconSize: 21
+                    iconSize: Theme.sized(21)
                     fill: root.entry.unread ? 1 : 0
                     color: root.entry.activity || root.entry.unread
                         ? Theme.colOnSecondaryContainer : Theme.colOnSurfaceVariant
@@ -86,11 +86,11 @@ Item {
                 id: column
 
                 anchors.left: badge.right
-                anchors.leftMargin: 12
+                anchors.leftMargin: Theme.spaced(12)
                 anchors.right: parent.right
-                anchors.rightMargin: 14
-                y: 13
-                spacing: 5
+                anchors.rightMargin: Theme.spaced(14)
+                y: Theme.spaced(13)
+                spacing: Theme.spaced(5)
 
                 Item {
                     width: parent.width
@@ -101,7 +101,7 @@ Item {
 
                         anchors.left: parent.left
                         anchors.right: close.left
-                        anchors.rightMargin: 6
+                        anchors.rightMargin: Theme.spaced(6)
                         text: root.entry.title
                         title: true
                         elide: Text.ElideRight
@@ -114,8 +114,8 @@ Item {
                         anchors.right: parent.right
                         anchors.verticalCenter: heading.verticalCenter
                         icon: "close"
-                        iconSize: 17
-                        diameter: root.entry.dismissible ? 30 : 0
+                        iconSize: Theme.sized(17)
+                        diameter: root.entry.dismissible ? Theme.sized(30) : 0
                         visible: root.entry.dismissible
                         opacity: hover.hovered ? 1 : 0
                         Accessible.name: qsTr("Dismiss notification")
@@ -147,14 +147,14 @@ Item {
 
                 Item {
                     width: parent.width
-                    height: root.entry.activity ? 10 : 0
+                    height: root.entry.activity ? Theme.sized(10) : 0
                     visible: root.entry.activity
 
                     Rectangle {
                         anchors.bottom: parent.bottom
                         width: parent.width
-                        height: 4
-                        radius: height / 2
+                        height: Theme.sized(4)
+                        radius: Theme.shape.track
                         color: ColorUtils.withAlpha(Theme.colOnSurface, 0.12)
 
                         Rectangle {
@@ -166,7 +166,8 @@ Item {
                             Behavior on width {
                                 NumberAnimation {
                                     duration: Theme.duration.fast
-                                    easing.type: Easing.OutCubic
+                                    easing.type: Easing.BezierSpline
+                                    easing.bezierCurve: Theme.curve.decelerate
                                 }
                             }
                         }
@@ -178,7 +179,7 @@ Item {
                     text: root.entry.action
                     icon: root.entry.actionIcon.length > 0 ? root.entry.actionIcon : "open_in_new"
                     toggled: true
-                    horizontalPadding: 14
+                    horizontalPadding: Theme.spaced(14)
                     onClicked: ControlCenter.invokeAction(root.entry.id)
                 }
 

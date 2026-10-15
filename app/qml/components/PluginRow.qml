@@ -12,8 +12,8 @@ RippleSurface {
 
     signal openRequested
 
-    implicitHeight: 74
-    rounding: Theme.rounding.normal
+    implicitHeight: Theme.sized(74)
+    rounding: Theme.shape.card
     Accessible.role: Accessible.Button
     Accessible.name: root.plugin.info.name
 
@@ -28,10 +28,10 @@ RippleSurface {
     Rectangle {
         id: tile
 
-        x: 12
+        x: Theme.spaced(12)
         anchors.verticalCenter: parent.verticalCenter
-        width: 46
-        height: 46
+        width: Theme.sized(46)
+        height: Theme.sized(46)
         radius: Theme.rounding.small
         color: root.plugin.enabled ? Theme.colPrimaryContainer : Theme.colLayer3
 
@@ -46,17 +46,17 @@ RippleSurface {
         PluginGlyph {
             anchors.centerIn: parent
             info: root.plugin.info
-            glyphSize: 23
+            glyphSize: Theme.sized(23)
             fill: root.plugin.enabled ? 1 : 0
             colGlyph: root.plugin.enabled ? Theme.colOnPrimaryContainer
                 : Theme.colOnSurfaceVariant
         }
 
         Rectangle {
-            x: parent.width - width + 3
-            y: -3
-            width: 13
-            height: 13
+            x: parent.width - width + Theme.sized(3)
+            y: -Theme.sized(3)
+            width: Theme.sized(13)
+            height: Theme.sized(13)
             radius: width / 2
             color: Theme.colError
             border.width: 2
@@ -68,11 +68,11 @@ RippleSurface {
 
     Column {
         anchors.left: tile.right
-        anchors.leftMargin: 14
+        anchors.leftMargin: Theme.spaced(14)
         anchors.right: toggle.left
-        anchors.rightMargin: 16
+        anchors.rightMargin: Theme.spaced(16)
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 3
+        spacing: Theme.spaced(3)
 
         StyledText {
             width: parent.width
@@ -96,7 +96,7 @@ RippleSurface {
         id: toggle
 
         anchors.right: parent.right
-        anchors.rightMargin: 14
+        anchors.rightMargin: Theme.spaced(14)
         anchors.verticalCenter: parent.verticalCenter
         checked: root.plugin.enabled
         Accessible.name: qsTr("Enable %1").arg(root.plugin.info.name)

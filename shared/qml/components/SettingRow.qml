@@ -10,16 +10,16 @@ Item {
 
     default property alias control: control.data
 
-    implicitHeight: Math.max(52, labels.implicitHeight + 18, control.height + 8)
+    implicitHeight: Math.max(Theme.sized(52), labels.implicitHeight + Theme.spaced(18), control.height + Theme.spaced(8))
 
     Column {
         id: labels
 
         anchors.left: parent.left
         anchors.right: control.left
-        anchors.rightMargin: 20
+        anchors.rightMargin: Theme.spaced(20)
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 2
+        spacing: Theme.spaced(2)
 
         StyledText {
             width: parent.width

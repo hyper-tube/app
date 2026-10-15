@@ -13,10 +13,10 @@ ToolTip {
     scale: 0.9 + 0.1 * reveal
     delay: 550
     timeout: -1
-    padding: 10
-    horizontalPadding: 14
-    margins: 8
-    y: parent.height + 8
+    padding: Theme.spaced(10)
+    horizontalPadding: Theme.spaced(14)
+    margins: Theme.spaced(8)
+    y: parent.height + Theme.spaced(8)
     z: 200
 
     contentItem: StyledText {
@@ -26,7 +26,7 @@ ToolTip {
     }
 
     background: Rectangle {
-        radius: Theme.rounding.verysmall
+        radius: Theme.shape.tooltip
         color: Theme.colInverseSurface
     }
 

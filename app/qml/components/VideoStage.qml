@@ -50,7 +50,7 @@ Item {
     Artwork {
         anchors.fill: parent
         artId: root.artId
-        rounding: Theme.rounding.large
+        rounding: Theme.shape.stage
     }
 
     VideoSurface {
@@ -60,7 +60,7 @@ Item {
         scale: 0.97 + 0.03 * root.reveal
         layer.enabled: visible
         layer.effect: RoundedMask {
-            rounding: Theme.rounding.large
+            rounding: Theme.shape.stage
         }
     }
 
@@ -82,7 +82,7 @@ Item {
 
         anchors.left: parent.left
         anchors.top: parent.top
-        anchors.margins: 14
+        anchors.margins: Theme.spaced(14)
         width: implicitWidth
         height: implicitHeight
         pixelSize: Theme.font.smaller
@@ -106,7 +106,7 @@ Item {
 
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 12
+        anchors.margins: Theme.spaced(12)
         video: PlaybackController.videoShown
         opacity: appear
         scale: 0.82 + 0.18 * appear

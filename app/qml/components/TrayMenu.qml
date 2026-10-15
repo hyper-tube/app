@@ -9,14 +9,14 @@ Window {
     property bool open: false
 
     readonly property real shadowMargin: 34
-    readonly property real rounding: Theme.rounding.normal
-    readonly property real inset: 6
-    readonly property real gap: 2
-    readonly property real itemPadding: 14
+    readonly property real rounding: Theme.shape.popover
+    readonly property real inset: Theme.spaced(6)
+    readonly property real gap: Theme.spaced(2)
+    readonly property real itemPadding: Theme.spaced(14)
     readonly property real itemGlyphSize: Theme.font.larger
-    readonly property real itemHeight: 44
-    readonly property real dividerHeight: 13
-    readonly property real minimumWidth: 236
+    readonly property real itemHeight: Theme.sized(44)
+    readonly property real dividerHeight: Theme.sized(13)
+    readonly property real minimumWidth: Theme.sized(236)
 
     readonly property var entries: [
         { "icon": PlaybackController.playing ? "pause" : "play_arrow",
@@ -115,7 +115,8 @@ Window {
             blur: 28
             spread: 1
             offset: Qt.vector2d(0, 4)
-            color: ColorUtils.withAlpha(Theme.colShadow, 0.34)
+            visible: Theme.elevation.shadow > 0
+            color: ColorUtils.withAlpha(Theme.colShadow, 0.34 * Theme.elevation.shadow)
         }
 
         Item {
@@ -135,6 +136,8 @@ Window {
                 height: root.plateHeight
                 radius: root.rounding
                 color: Theme.colLayer3
+                border.width: Theme.elevation.outline
+                border.color: Theme.colOutlineVariant
 
                 Column {
                     id: column
@@ -175,7 +178,7 @@ Window {
                                 y: entry.divided ? root.dividerHeight : 0
                                 width: root.columnWidth
                                 implicitHeight: root.itemHeight
-                                rounding: root.rounding - root.inset
+                                rounding: Math.max(0, root.rounding - root.inset)
 
                                 Sym {
                                     id: glyph

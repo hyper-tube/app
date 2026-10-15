@@ -103,7 +103,7 @@ Column {
             property real remaining
             property real reveal: 0
 
-            readonly property real gap: 10
+            readonly property real gap: Theme.spaced(10)
             readonly property real rise: 28
             readonly property real settled: Math.min(1, notice.reveal)
             readonly property color colAccent: notice.error ? Theme.colError : Theme.colPrimary
@@ -160,16 +160,19 @@ Column {
                     blur: 28
                     spread: 1
                     offset: Qt.vector2d(0, 4)
-                    color: ColorUtils.withAlpha(Theme.colShadow, 0.34)
+                    visible: Theme.elevation.shadow > 0
+                    color: ColorUtils.withAlpha(Theme.colShadow, 0.34 * Theme.elevation.shadow)
                 }
 
                 Rectangle {
                     id: card
 
                     anchors.fill: parent
-                    implicitHeight: Math.max(60, label.implicitHeight + 38)
-                    radius: Theme.rounding.normal
+                    implicitHeight: Math.max(Theme.sized(60), label.implicitHeight + Theme.spaced(38))
+                    radius: Theme.shape.popover
                     color: Theme.colLayer4
+                    border.width: Theme.elevation.outline
+                    border.color: Theme.colOutlineVariant
                     Accessible.role: Accessible.AlertMessage
                     Accessible.name: notice.message
 
@@ -181,16 +184,16 @@ Column {
                         id: body
 
                         anchors.fill: parent
-                        anchors.bottomMargin: countdown.height + 6
+                        anchors.bottomMargin: countdown.height + Theme.spaced(6)
 
                         Sym {
                             id: glyph
 
                             anchors.left: parent.left
-                            anchors.leftMargin: 18
+                            anchors.leftMargin: Theme.spaced(18)
                             anchors.verticalCenter: parent.verticalCenter
                             text: notice.error ? "error" : "check_circle"
-                            iconSize: 22
+                            iconSize: Theme.sized(22)
                             fill: 1
                             color: notice.colAccent
                         }
@@ -200,8 +203,8 @@ Column {
 
                             anchors.left: glyph.right
                             anchors.right: dismiss.left
-                            anchors.leftMargin: 14
-                            anchors.rightMargin: 8
+                            anchors.leftMargin: Theme.spaced(14)
+                            anchors.rightMargin: Theme.spaced(8)
                             anchors.verticalCenter: parent.verticalCenter
                             text: notice.message
                             wrapMode: Text.WordWrap
@@ -211,11 +214,11 @@ Column {
                             id: dismiss
 
                             anchors.right: parent.right
-                            anchors.rightMargin: 8
+                            anchors.rightMargin: Theme.spaced(8)
                             anchors.verticalCenter: parent.verticalCenter
                             icon: "close"
-                            iconSize: 18
-                            diameter: 34
+                            iconSize: Theme.sized(18)
+                            diameter: Theme.sized(34)
                             Accessible.name: qsTr("Dismiss notification")
                             onClicked: root.dismiss(notice.noticeId)
                         }
@@ -225,13 +228,13 @@ Column {
                         id: countdown
 
                         anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 7
+                        anchors.bottomMargin: Theme.spaced(7)
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.leftMargin: card.radius
                         anchors.rightMargin: card.radius
-                        height: 3
-                        radius: Theme.rounding.full
+                        height: Theme.sized(3)
+                        radius: Theme.shape.track
                         color: ColorUtils.withAlpha(Theme.colOnSurface, 0.10)
 
                         Rectangle {

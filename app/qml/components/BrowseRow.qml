@@ -43,7 +43,7 @@ Item {
     readonly property bool nearViewport: y < viewport.contentY + viewport.height + 500
         && y + height > viewport.contentY - 100
 
-    readonly property real usableWidth: root.contentWidth - Theme.size.bleed * 2
+    readonly property real usableWidth: root.contentWidth - Theme.spacing.bleed * 2
 
     signal menuRequested(var request)
     signal selectionToggled(ItemModel model, int index)
@@ -68,7 +68,7 @@ Item {
     Loader {
         id: loader
 
-        x: (root.width - root.contentWidth) / 2 + Theme.size.bleed
+        x: (root.width - root.contentWidth) / 2 + Theme.spacing.bleed
         width: root.usableWidth
         opacity: root.dragged ? 0 : root.reveal
         scale: 0.98 + 0.02 * root.reveal
@@ -160,13 +160,13 @@ Item {
             readonly property bool clearable: !!root.page && root.page.chipSelected
 
             width: root.usableWidth
-            implicitHeight: notice.implicitHeight + 48
+            implicitHeight: notice.implicitHeight + Theme.spaced(48)
 
             Column {
                 id: notice
 
                 anchors.centerIn: parent
-                spacing: 18
+                spacing: Theme.spaced(18)
 
                 EmptyState {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -192,7 +192,7 @@ Item {
 
         StyledText {
             width: root.usableWidth
-            bottomPadding: 16
+            bottomPadding: Theme.spaced(16)
             text: root.sectionDescription
             textFormat: Text.PlainText
             font.pixelSize: Theme.font.small
@@ -209,13 +209,13 @@ Item {
             readonly property bool compact: !!root.page && root.page.kind === "search"
 
             width: root.usableWidth
-            implicitHeight: header.visible ? header.implicitHeight + (compact ? 18 : 28) : 0
+            implicitHeight: header.visible ? header.implicitHeight + (compact ? Theme.spaced(18) : Theme.spaced(28)) : 0
 
             SectionHeader {
                 id: header
 
                 width: parent.width
-                y: 12
+                y: Theme.spaced(12)
                 visible: title.length > 0 || subtitle.length > 0 || root.canSeeAll
                 title: root.page && root.sectionTitle === root.page.title ? "" : root.sectionTitle
                 subtitle: root.sectionSubtitle
@@ -231,8 +231,8 @@ Item {
 
         Row {
             width: root.usableWidth
-            height: root.cellSize + 88
-            spacing: 4
+            height: root.cellSize + Theme.sized(88)
+            spacing: Theme.spaced(4)
 
             Repeater {
                 model: root.cells
@@ -326,8 +326,8 @@ Item {
 
         Flow {
             width: root.usableWidth
-            spacing: 10
-            bottomPadding: 12
+            spacing: Theme.spaced(10)
+            bottomPadding: Theme.spaced(12)
 
             Repeater {
                 model: root.cells
@@ -338,7 +338,7 @@ Item {
                     required property var modelData
                     required property int index
 
-                    width: Math.max(220, (root.usableWidth - 20) / 3)
+                    width: Math.max(Theme.sized(220), (root.usableWidth - Theme.spaced(20)) / 3)
                     title: destination.modelData.title
                     icon: destination.modelData.glyph.length > 0 ? destination.modelData.glyph : "explore"
                     onClicked: Browser.activate(root.entries, destination.index)
@@ -352,8 +352,8 @@ Item {
 
         Flow {
             width: root.usableWidth
-            spacing: 6
-            bottomPadding: 12
+            spacing: Theme.spaced(6)
+            bottomPadding: Theme.spaced(12)
 
             Repeater {
                 model: root.cells
@@ -365,7 +365,8 @@ Item {
                     required property int index
 
                     text: chip.modelData.title
-                    horizontalPadding: 16
+                    horizontalPadding: Theme.spaced(16)
+                    rounding: Theme.shape.chip
                     onClicked: Browser.activate(root.entries, chip.index)
                 }
             }
@@ -377,7 +378,7 @@ Item {
 
         Item {
             width: root.usableWidth
-            implicitHeight: root.moreAvailable || root.busy ? 52 : 20
+            implicitHeight: root.moreAvailable || root.busy ? Theme.sized(52) : Theme.spaced(20)
 
             BusySpinner {
                 anchors.centerIn: parent
@@ -386,8 +387,8 @@ Item {
 
             ErrorState {
                 anchors.centerIn: parent
-                width: Math.min(560, parent.width)
-                height: 52
+                width: Math.min(Theme.sized(560), parent.width)
+                height: Theme.sized(52)
                 size: ErrorState.Inline
                 shown: root.moreAvailable && !root.busy && !!root.page && root.page.error.length > 0
                 busy: Connectivity.checking

@@ -20,8 +20,8 @@ ModalSheet {
     property string savedPrivacy: "PRIVATE"
 
     title: qsTr("Edit playlist")
-    sheetWidth: Math.min(560, root.width - 96)
-    sheetHeight: Math.min(root.height - 64, root.headerHeight + form.implicitHeight + 40)
+    sheetWidth: Math.min(Theme.sized(560), root.width - Theme.spaced(96))
+    sheetHeight: Math.min(root.height - Theme.spaced(64), root.headerHeight + form.implicitHeight + Theme.spaced(40))
 
     function load(entry) {
         root.playlistId = entry.playlistTarget;
@@ -40,10 +40,10 @@ ModalSheet {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.leftMargin: 24
-        anchors.rightMargin: 24
-        anchors.topMargin: 12
-        spacing: 24
+        anchors.leftMargin: Theme.spaced(24)
+        anchors.rightMargin: Theme.spaced(24)
+        anchors.topMargin: Theme.spaced(12)
+        spacing: Theme.spaced(24)
 
         InputField {
             id: name
@@ -77,7 +77,7 @@ ModalSheet {
 
         Row {
             anchors.right: parent.right
-            spacing: 8
+            spacing: Theme.spaced(8)
 
             PillButton {
                 text: qsTr("Cancel")
@@ -97,7 +97,7 @@ ModalSheet {
 
         Item {
             width: parent.width
-            height: 4
+            height: Theme.spaced(4)
         }
     }
 

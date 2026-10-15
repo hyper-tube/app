@@ -121,7 +121,7 @@ Item {
         y: root.targetY
         width: card.width
         height: card.height
-        radius: Theme.rounding.small
+        radius: Theme.shape.row
         visible: root.active
         color: ColorUtils.withAlpha(Theme.colPrimary, 0.06)
         border.width: 1
@@ -140,20 +140,21 @@ Item {
     Item {
         id: card
 
-        x: (root.width - root.contentWidth) / 2 + Theme.size.bleed
+        x: (root.width - root.contentWidth) / 2 + Theme.spacing.bleed
         y: root.cardY
-        width: root.contentWidth - Theme.size.bleed * 2
-        height: 60
+        width: root.contentWidth - Theme.spacing.bleed * 2
+        height: Theme.sized(60)
         visible: root.active
         scale: 1 + 0.012 * root.lift
         enabled: false
 
         RectangularShadow {
             anchors.fill: parent
-            radius: Theme.rounding.small
+            radius: Theme.shape.row
             blur: 24 * root.lift
             offset: Qt.vector2d(0, 6 * root.lift)
-            color: ColorUtils.withAlpha(Theme.colShadow, 0.28 * root.lift)
+            visible: Theme.elevation.shadow > 0
+            color: ColorUtils.withAlpha(Theme.colShadow, 0.28 * root.lift * Theme.elevation.shadow)
         }
 
         SongRow {

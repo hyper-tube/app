@@ -35,7 +35,7 @@ Flow {
         root.seen = shown;
     }
 
-    spacing: 8
+    spacing: Theme.spaced(8)
 
     Repeater {
         id: chipRepeater
@@ -54,10 +54,11 @@ Flow {
 
             text: chip.modelData.title
             icon: chip.clearing ? "close" : chip.modelData.selected ? root.selectedIcon : ""
-            iconSize: chip.clearing ? 18 : Theme.font.normal
+            iconSize: chip.clearing ? Theme.sized(18) : Theme.font.normal
             toggled: chip.modelData.selected && !chip.clearing
-            horizontalPadding: chip.clearing ? 10 : 16
-            leadingPadding: chip.clearing ? 10 : chip.icon.length > 0 ? 12 : 16
+            horizontalPadding: chip.clearing ? Theme.spaced(10) : Theme.spaced(16)
+            leadingPadding: chip.clearing ? Theme.spaced(10) : chip.icon.length > 0 ? Theme.spaced(12) : Theme.spaced(16)
+            rounding: Theme.shape.chip
             visible: !chip.clearing || root.clearable
             interactive: root.interactive
             opacity: chip.appear

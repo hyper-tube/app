@@ -5,7 +5,7 @@ Item {
     id: root
 
     property string artId: ""
-    property real rounding: Theme.rounding.small
+    property real rounding: Theme.shape.artwork
     property int resolution: {
         const pixels = Math.max(width, height) * Screen.devicePixelRatio;
         return pixels <= 64 ? 64 : pixels <= 128 ? 128 : pixels <= 256 ? 256
@@ -20,7 +20,7 @@ Item {
         Sym {
             anchors.centerIn: parent
             text: "music_note"
-            iconSize: Math.max(16, Math.min(parent.width, parent.height) * 0.34)
+            iconSize: Math.max(Theme.sized(16), Math.min(parent.width, parent.height) * 0.34)
             color: Theme.colInactive
         }
     }

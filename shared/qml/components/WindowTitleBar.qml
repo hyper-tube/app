@@ -7,7 +7,7 @@ Item {
     property bool minimizeButton: true
     property bool maximizeButton: true
 
-    readonly property real markInset: WindowChrome.leadingInset + Theme.size.gutter
+    readonly property real markInset: WindowChrome.leadingInset + Theme.spacing.gutter
 
     implicitHeight: WindowChrome.barHeight
 
@@ -63,7 +63,7 @@ Item {
         id: buttons
 
         anchors.right: parent.right
-        anchors.rightMargin: Theme.size.gutter
+        anchors.rightMargin: Theme.spacing.gutter
         y: WindowChrome.gripThickness
         spacing: 6
         visible: WindowChrome.controls

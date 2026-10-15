@@ -9,7 +9,7 @@ Item {
     property real progress: 0
     property real reveal: root.active ? 1 : 0
 
-    height: 86 * root.reveal
+    height: Theme.sized(86) * root.reveal
     visible: root.reveal > 0
 
     Behavior on reveal {
@@ -22,16 +22,16 @@ Item {
 
     Rectangle {
         width: parent.width
-        height: 76
+        height: Theme.sized(76)
         y: 16 * (1 - root.reveal)
         opacity: Math.min(1, root.reveal)
-        radius: Theme.rounding.normal
+        radius: Theme.rounding.medium
         color: Theme.colLayer4
 
         Column {
             anchors.fill: parent
-            anchors.margins: 14
-            spacing: 10
+            anchors.margins: Theme.spaced(14)
+            spacing: Theme.spaced(10)
 
             StyledText {
                 width: parent.width
@@ -42,18 +42,22 @@ Item {
 
             Rectangle {
                 width: parent.width
-                height: 4
-                radius: 2
+                height: Theme.sized(4)
+                radius: Theme.shape.track
                 color: Theme.colOutlineVariant
 
                 Rectangle {
                     width: parent.width * Math.max(0, Math.min(1, root.progress))
                     height: parent.height
-                    radius: 2
+                    radius: Theme.shape.track
                     color: Theme.colPrimary
 
                     Behavior on width {
-                        NumberAnimation { duration: Theme.duration.fast; easing.type: Easing.OutCubic }
+                        NumberAnimation {
+                            duration: Theme.duration.fast
+                            easing.type: Easing.BezierSpline
+                            easing.bezierCurve: Theme.curve.decelerate
+                        }
                     }
                 }
             }

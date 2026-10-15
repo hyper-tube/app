@@ -6,6 +6,7 @@ import HtMusic
 QtObject {
     id: root
 
+    readonly property var tokens: ActiveTheme.values
     readonly property bool darkMode: Palette.darkMode
 
     readonly property color colLayer0: Palette.background
@@ -45,77 +46,134 @@ QtObject {
     readonly property color colScrim: Palette.scrim
 
     readonly property QtObject state: QtObject {
-        readonly property real hover: 0.08
-        readonly property real press: 0.10
-        readonly property real drag: 0.16
-        readonly property real ripple: 0.13
+        readonly property real hover: root.tokens["state.hover"]
+        readonly property real press: root.tokens["state.press"]
+        readonly property real drag: root.tokens["state.drag"]
+        readonly property real ripple: root.tokens["state.ripple"]
     }
 
     readonly property QtObject rounding: QtObject {
-        readonly property int unsharpen: 2
-        readonly property int unsharpenmore: 6
-        readonly property int verysmall: 8
-        readonly property int small: 12
-        readonly property int normal: 17
-        readonly property int large: 23
-        readonly property int verylarge: 30
-        readonly property int full: 9999
+        readonly property real extraSmall: root.tokens["shape.scale.extraSmall"]
+        readonly property real small: root.tokens["shape.scale.small"]
+        readonly property real medium: root.tokens["shape.scale.medium"]
+        readonly property real large: root.tokens["shape.scale.large"]
+        readonly property real extraLarge: root.tokens["shape.scale.extraLarge"]
+        readonly property real full: root.tokens["shape.scale.full"]
+    }
+
+    readonly property QtObject shape: QtObject {
+        readonly property real sheet: root.tokens["shape.sheet"]
+        readonly property real popover: root.tokens["shape.popover"]
+        readonly property real tooltip: root.tokens["shape.tooltip"]
+        readonly property real card: root.tokens["shape.card"]
+        readonly property real row: root.tokens["shape.row"]
+        readonly property real field: root.tokens["shape.field"]
+        readonly property real searchField: root.tokens["shape.searchField"]
+        readonly property real playerBar: root.tokens["shape.playerBar"]
+        readonly property real fullPlayer: root.tokens["shape.fullPlayer"]
+        readonly property real artwork: root.tokens["shape.artwork"]
+        readonly property real thumbnail: root.tokens["shape.thumbnail"]
+        readonly property real cover: root.tokens["shape.cover"]
+        readonly property real stage: root.tokens["shape.stage"]
+        readonly property real avatar: root.tokens["shape.avatar"]
+        readonly property real button: root.tokens["shape.button"]
+        readonly property real iconButton: root.tokens["shape.iconButton"]
+        readonly property real playButton: root.tokens["shape.playButton"]
+        readonly property real chip: root.tokens["shape.chip"]
+        readonly property real badge: root.tokens["shape.badge"]
+        readonly property real toggle: root.tokens["shape.toggle"]
+        readonly property real segmented: root.tokens["shape.segmented"]
+        readonly property real navigation: root.tokens["shape.navigation"]
+        readonly property real track: root.tokens["shape.track"]
+        readonly property real toolbar: root.tokens["shape.toolbar"]
+        readonly property real checkbox: root.tokens["shape.checkbox"]
+        readonly property real swatch: root.tokens["shape.swatch"]
+        readonly property real plate: root.tokens["shape.plate"]
+    }
+
+    readonly property QtObject elevation: QtObject {
+        readonly property real shadow: root.tokens["elevation.shadow"]
+        readonly property real outline: root.tokens["elevation.outline"]
     }
 
     readonly property QtObject font: QtObject {
-        readonly property string main: "Roboto Flex"
-        readonly property string numbers: "Roboto Flex"
-        readonly property string icon: "Material Symbols Rounded"
+        readonly property string main: root.tokens["typography.family"]
+        readonly property string icon: root.tokens["icons.family"]
         readonly property string mono: Qt.platform.os === "windows" ? "Consolas"
             : Qt.platform.os === "osx" ? "Menlo" : "monospace"
 
-        readonly property var axes: ({ "wght": 450, "wdth": 100 })
-        readonly property var axesTitle: ({ "wght": 550, "wdth": 100 })
+        readonly property int weight: root.tokens["typography.weight"]
+        readonly property int titleWeight: root.tokens["typography.titleWeight"]
+        readonly property var axes: ({
+            "wght": root.tokens["typography.weight"],
+            "wdth": root.tokens["typography.width"]
+        })
+        readonly property var axesTitle: ({
+            "wght": root.tokens["typography.titleWeight"],
+            "wdth": root.tokens["typography.width"]
+        })
 
-        readonly property int smallest: 10
-        readonly property int smaller: 12
-        readonly property int smallie: 13
-        readonly property int small: 15
-        readonly property int normal: 16
-        readonly property int large: 17
-        readonly property int larger: 19
-        readonly property int huge: 22
-        readonly property int display: 30
+        readonly property int smallest: root.tokens["typography.size.smallest"]
+        readonly property int smaller: root.tokens["typography.size.smaller"]
+        readonly property int smallie: root.tokens["typography.size.smallie"]
+        readonly property int small: root.tokens["typography.size.small"]
+        readonly property int normal: root.tokens["typography.size.normal"]
+        readonly property int large: root.tokens["typography.size.large"]
+        readonly property int larger: root.tokens["typography.size.larger"]
+        readonly property int huge: root.tokens["typography.size.huge"]
+        readonly property int display: root.tokens["typography.size.display"]
     }
 
     readonly property QtObject curve: QtObject {
-        readonly property list<real> expressiveFastSpatial: [0.42, 1.67, 0.21, 0.90, 1, 1]
-        readonly property list<real> expressiveDefaultSpatial: [0.38, 1.21, 0.22, 1.00, 1, 1]
-        readonly property list<real> expressiveSlowSpatial: [0.39, 1.29, 0.35, 0.98, 1, 1]
-        readonly property list<real> expressiveEffects: [0.34, 0.80, 0.34, 1.00, 1, 1]
-        readonly property list<real> emphasized: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
-        readonly property list<real> emphasizedAccel: [0.3, 0, 0.8, 0.15, 1, 1]
-        readonly property list<real> emphasizedDecel: [0.05, 0.7, 0.1, 1, 1, 1]
-        readonly property list<real> standard: [0.2, 0, 0, 1, 1, 1]
-        readonly property list<real> standardDecel: [0, 0, 0, 1, 1, 1]
+        readonly property list<real> expressiveFastSpatial: root.tokens["motion.curve.expressiveFastSpatial"]
+        readonly property list<real> expressiveDefaultSpatial: root.tokens["motion.curve.expressiveDefaultSpatial"]
+        readonly property list<real> expressiveSlowSpatial: root.tokens["motion.curve.expressiveSlowSpatial"]
+        readonly property list<real> expressiveEffects: root.tokens["motion.curve.expressiveEffects"]
+        readonly property list<real> emphasized: root.tokens["motion.curve.emphasized"]
+        readonly property list<real> emphasizedAccel: root.tokens["motion.curve.emphasizedAccel"]
+        readonly property list<real> emphasizedDecel: root.tokens["motion.curve.emphasizedDecel"]
+        readonly property list<real> standard: root.tokens["motion.curve.standard"]
+        readonly property list<real> standardDecel: root.tokens["motion.curve.standardDecel"]
+        readonly property list<real> decelerate: root.tokens["motion.curve.decelerate"]
     }
 
     readonly property QtObject duration: QtObject {
-        readonly property int fast: 200
-        readonly property int spatialFast: 350
-        readonly property int spatial: 500
-        readonly property int spatialSlow: 650
-        readonly property int enter: 400
-        readonly property int exit: 200
-        readonly property int resize: 300
-        readonly property int sheetEnter: 500
-        readonly property int sheetExit: 400
-        readonly property int ripple: 1000
-        readonly property int rippleFade: 600
+        readonly property int fast: root.tokens["motion.duration.fast"]
+        readonly property int spatialFast: root.tokens["motion.duration.spatialFast"]
+        readonly property int spatial: root.tokens["motion.duration.spatial"]
+        readonly property int spatialSlow: root.tokens["motion.duration.spatialSlow"]
+        readonly property int enter: root.tokens["motion.duration.enter"]
+        readonly property int exit: root.tokens["motion.duration.exit"]
+        readonly property int resize: root.tokens["motion.duration.resize"]
+        readonly property int sheetEnter: root.tokens["motion.duration.sheetEnter"]
+        readonly property int sheetExit: root.tokens["motion.duration.sheetExit"]
+        readonly property int ripple: root.tokens["motion.duration.ripple"]
+        readonly property int rippleFade: root.tokens["motion.duration.rippleFade"]
     }
 
     readonly property QtObject size: QtObject {
-        readonly property int contentMaxWidth: 1620
-        readonly property int railCollapsed: 88
-        readonly property int railExpanded: 232
-        readonly property int playerBar: 88
-        readonly property int gutter: 24
-        readonly property int cardInset: 10
-        readonly property int bleed: 20
+        readonly property int row: root.tokens["size.row"]
+        readonly property int card: root.tokens["size.card"]
+        readonly property int playerBar: root.tokens["size.playerBar"]
+        readonly property int railCollapsed: root.tokens["size.railCollapsed"]
+        readonly property int railExpanded: root.tokens["size.railExpanded"]
+        readonly property int contentMaxWidth: root.tokens["size.contentMaxWidth"]
+    }
+
+    readonly property QtObject spacing: QtObject {
+        readonly property int gutter: root.tokens["spacing.gutter"]
+        readonly property int bleed: root.tokens["spacing.bleed"]
+        readonly property int cardInset: root.tokens["spacing.cardInset"]
+    }
+
+    readonly property real spacingDensity: root.tokens["density.spacing"]
+    readonly property real sizeDensity: root.tokens["density.size"]
+
+    function spaced(value: real): real {
+        return Math.round(value * root.spacingDensity);
+    }
+
+    function sized(value: real): real {
+        return Math.round(value * root.sizeDensity);
     }
 }

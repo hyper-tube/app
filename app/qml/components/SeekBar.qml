@@ -6,8 +6,8 @@ Item {
 
     property real position: 0
     property real duration: 0
-    property real trackHeight: 5
-    property real activeTrackHeight: 9
+    property real trackHeight: Theme.sized(5)
+    property real activeTrackHeight: Theme.sized(9)
     property bool continuous: false
     property bool live: false
 
@@ -22,7 +22,7 @@ Item {
 
     signal seeked(int value)
 
-    implicitHeight: 22
+    implicitHeight: Theme.sized(22)
 
     function fractionAt(x) {
         return Math.max(0, Math.min(1, x / Math.max(1, root.width)));
@@ -45,14 +45,14 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            radius: Theme.rounding.full
+            radius: Theme.shape.track
             color: ColorUtils.withAlpha(Theme.colOnSurface, 0.18)
         }
 
         Rectangle {
             width: Math.max(parent.height, parent.width * root.progress)
             height: parent.height
-            radius: Theme.rounding.full
+            radius: Theme.shape.track
             color: root.live ? Theme.colError : Theme.colPrimary
 
             Behavior on color {
@@ -70,9 +70,9 @@ Item {
 
         x: root.width * root.progress - width / 2
         anchors.verticalCenter: parent.verticalCenter
-        width: root.engaged ? 6 : 0
-        height: root.engaged ? 20 : 0
-        radius: Theme.rounding.full
+        width: root.engaged ? Theme.sized(6) : 0
+        height: root.engaged ? Theme.sized(20) : 0
+        radius: Theme.shape.track
         color: Theme.colPrimary
 
         Behavior on width {
