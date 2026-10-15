@@ -15,9 +15,9 @@ Item {
         id: heading
 
         anchors.left: parent.left
-        anchors.leftMargin: Theme.size.gutter * 2
+        anchors.leftMargin: Theme.spacing.gutter * 2
         anchors.top: parent.top
-        anchors.topMargin: Theme.size.gutter
+        anchors.topMargin: Theme.spacing.gutter
         text: qsTr("License agreement")
         title: true
         font.pixelSize: Theme.font.huge
@@ -28,8 +28,8 @@ Item {
 
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: Theme.size.gutter * 2
-        anchors.rightMargin: Theme.size.gutter * 2
+        anchors.leftMargin: Theme.spacing.gutter * 2
+        anchors.rightMargin: Theme.spacing.gutter * 2
         anchors.top: heading.bottom
         anchors.topMargin: 16
         anchors.bottom: footer.top
@@ -75,7 +75,7 @@ Item {
             id: consent
 
             anchors.left: parent.left
-            anchors.leftMargin: Theme.size.gutter * 2 - 8
+            anchors.leftMargin: Theme.spacing.gutter * 2 - 8
             anchors.verticalCenter: parent.verticalCenter
             width: agreement.implicitWidth + tick.width + 28
             height: 40
@@ -103,7 +103,7 @@ Item {
 
         Row {
             anchors.right: parent.right
-            anchors.rightMargin: Theme.size.gutter * 2
+            anchors.rightMargin: Theme.spacing.gutter * 2
             anchors.verticalCenter: parent.verticalCenter
             spacing: 12
 

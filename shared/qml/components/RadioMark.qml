@@ -7,10 +7,10 @@ Item {
     property bool checked: false
     property real progress: checked ? 1 : 0
 
-    readonly property real ring: 20
+    readonly property real ring: Theme.sized(20)
 
-    implicitWidth: 22
-    implicitHeight: 22
+    implicitWidth: Theme.sized(22)
+    implicitHeight: Theme.sized(22)
 
     Rectangle {
         anchors.centerIn: parent

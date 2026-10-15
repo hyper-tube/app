@@ -5,7 +5,7 @@ import HtMusic
 Rectangle {
     id: root
 
-    readonly property real contentWidth: Math.min(root.width, Theme.size.contentMaxWidth - Theme.size.bleed * 2)
+    readonly property real contentWidth: Math.min(root.width, Theme.size.contentMaxWidth - Theme.spacing.bleed * 2)
     readonly property bool showShuffleRepeat: root.contentWidth >= 700
     readonly property bool showRating: root.contentWidth >= 900
     readonly property bool wideVolume: root.contentWidth >= 1010
@@ -49,11 +49,11 @@ Rectangle {
         id: seek
 
         anchors.top: parent.top
-        anchors.topMargin: 6
+        anchors.topMargin: Theme.spaced(6)
         anchors.horizontalCenter: parent.horizontalCenter
-        width: root.contentWidth - 36
-        trackHeight: 4
-        activeTrackHeight: 8
+        width: root.contentWidth - Theme.spaced(36)
+        trackHeight: Theme.sized(4)
+        activeTrackHeight: Theme.sized(8)
         position: PlaybackController.position
         duration: PlaybackController.duration
         live: PlaybackController.live
@@ -68,13 +68,13 @@ Rectangle {
         anchors.top: seek.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        width: root.contentWidth - 28
+        width: root.contentWidth - Theme.spaced(28)
 
         Row {
             id: transport
 
             anchors.verticalCenter: parent.verticalCenter
-            x: Math.max(0, Math.min((body.width - width) / 2, trailing.x - width - 12))
+            x: Math.max(0, Math.min((body.width - width) / 2, trailing.x - width - Theme.spaced(12)))
             spacing: 0
 
             TapHandler {
@@ -84,8 +84,8 @@ Rectangle {
 
             Item {
                 anchors.verticalCenter: parent.verticalCenter
-                width: root.showShuffleRepeat ? 44 * root.musicPresence : 0
-                height: 40
+                width: root.showShuffleRepeat ? Theme.sized(44) * root.musicPresence : 0
+                height: Theme.sized(40)
                 visible: width > 0.5
 
                 IconButton {
@@ -115,22 +115,22 @@ Rectangle {
             }
 
             Item {
-                width: 4
+                width: Theme.spaced(4)
                 height: 1
             }
 
             PlayPauseButton {
                 anchors.verticalCenter: parent.verticalCenter
                 playing: PlaybackController.playing
-                iconSize: 28
-                diameter: 50
+                iconSize: Theme.sized(28)
+                diameter: Theme.sized(50)
                 interactive: root.loaded
                 opacity: interactive ? 1 : 0.35
                 onClicked: PlaybackController.toggle()
             }
 
             Item {
-                width: 4
+                width: Theme.spaced(4)
                 height: 1
             }
 
@@ -151,8 +151,8 @@ Rectangle {
 
             Item {
                 anchors.verticalCenter: parent.verticalCenter
-                width: root.showShuffleRepeat ? 44 * root.musicPresence : 0
-                height: 40
+                width: root.showShuffleRepeat ? Theme.sized(44) * root.musicPresence : 0
+                height: Theme.sized(40)
                 visible: width > 0.5
 
                 IconButton {
@@ -174,7 +174,7 @@ Rectangle {
 
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 6
+            spacing: Theme.spaced(6)
 
             TapHandler {
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
@@ -219,8 +219,8 @@ Rectangle {
 
             Item {
                 anchors.verticalCenter: parent.verticalCenter
-                width: tune.width * root.musicPresence + (speed.width + 4) * root.podcastPresence
-                height: 40
+                width: tune.width * root.musicPresence + (speed.width + Theme.spaced(4)) * root.podcastPresence
+                height: Theme.sized(40)
                 clip: true
 
                 IconButton {
@@ -240,7 +240,7 @@ Rectangle {
                 SpeedButton {
                     id: speed
 
-                    x: 2
+                    x: Theme.spaced(2)
                     anchors.verticalCenter: parent.verticalCenter
                     opacity: root.podcastPresence
                     scale: 0.6 + 0.4 * root.podcastPresence
@@ -266,17 +266,17 @@ Rectangle {
 
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            width: Math.max(0, Math.min(300, transport.x - 20))
+            width: Math.max(0, Math.min(Theme.sized(300), transport.x - Theme.spaced(20)))
             height: body.height
             visible: width >= 64
-            spacing: 12
+            spacing: Theme.spaced(12)
 
             Item {
                 id: cover
 
                 anchors.verticalCenter: parent.verticalCenter
-                width: 52
-                height: 52
+                width: Theme.sized(52)
+                height: Theme.sized(52)
                 opacity: switcher.fade
                 scale: switcher.depth
 
@@ -297,7 +297,7 @@ Rectangle {
                 Column {
                     anchors.verticalCenter: parent.verticalCenter
                     width: parent.width
-                    spacing: 2
+                    spacing: Theme.spaced(2)
                     opacity: switcher.fade
                     transform: Translate { y: switcher.offsetY }
 
@@ -336,9 +336,9 @@ Rectangle {
         id: tuning
 
         parent: tune
-        x: tune.width / 2 - width + 40
-        y: -height - 10
-        anchorX: (tuning.width - 40) / tuning.width
+        x: tune.width / 2 - width + Theme.spaced(40)
+        y: -height - Theme.spaced(10)
+        anchorX: (tuning.width - Theme.spaced(40)) / tuning.width
         anchorY: 1
     }
 

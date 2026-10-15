@@ -110,6 +110,8 @@ QString ThemeFile::expectation(const Token &token)
             .arg(tokens::steps().join(QStringLiteral(", ")));
     case Token::Duration:
         return tr("a number of milliseconds from %1 to %2").arg(token.minimum).arg(token.maximum);
+    case Token::Length:
+        return tr("a number of pixels from %1 to %2").arg(token.minimum).arg(token.maximum);
     case Token::Curve:
         return tr("a list of Bezier control points in groups of six, ending in 1, 1");
     case Token::Family: return tr("the name of a font family");

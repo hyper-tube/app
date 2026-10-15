@@ -10,6 +10,7 @@ struct Token
     enum Kind {
         Step,
         Radius,
+        Length,
         Real,
         Duration,
         Curve,
@@ -22,6 +23,7 @@ struct Token
     qreal minimum = 0;
     qreal maximum = 0;
     QString description;
+    QString follows;
 };
 
 }

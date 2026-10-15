@@ -6,8 +6,8 @@ RippleSurface {
 
     property bool forward: false
     property real morph: 0
-    property real iconSize: 26
-    property real diameter: 40
+    property real iconSize: Theme.sized(26)
+    property real diameter: Theme.sized(40)
 
     readonly property real trackGlyph: Math.max(0, Math.min(1, 1 - root.morph))
     readonly property real stepGlyph: Math.max(0, Math.min(1, root.morph))

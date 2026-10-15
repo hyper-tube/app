@@ -15,8 +15,8 @@ ModalSheet {
     readonly property bool failed: Updater.stage === Updater.Failed
     readonly property bool busy: root.downloading || root.installing
     readonly property bool structured: Updater.sections.length > 0
-    readonly property real notesCeiling: 440
-    readonly property real notesHeight: Math.min(root.notesCeiling, notes.implicitHeight + 36)
+    readonly property real notesCeiling: Theme.sized(440)
+    readonly property real notesHeight: Math.min(root.notesCeiling, notes.implicitHeight + Theme.spaced(36))
 
     readonly property string updateLabel: qsTr("Update now")
     readonly property string cancelLabel: qsTr("Cancel")
@@ -29,9 +29,9 @@ ModalSheet {
     }
 
     title: qsTr("Update available")
-    sheetWidth: Math.min(680, root.width - 96)
-    sheetHeight: Math.min(root.height - 64,
-        root.headerHeight + hero.height + 16 + root.notesHeight + footer.height)
+    sheetWidth: Math.min(Theme.sized(680), root.width - Theme.spaced(96))
+    sheetHeight: Math.min(root.height - Theme.spaced(64),
+        root.headerHeight + hero.height + Theme.spaced(16) + root.notesHeight + footer.height)
 
     Connections {
         target: Updater
@@ -47,17 +47,17 @@ ModalSheet {
 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: 24
+        anchors.leftMargin: Theme.spaced(24)
         anchors.right: parent.right
-        anchors.rightMargin: 24
-        height: 96
+        anchors.rightMargin: Theme.spaced(24)
+        height: Theme.sized(96)
 
         CookieShape {
             id: cookie
 
             anchors.verticalCenter: parent.verticalCenter
-            width: 80
-            height: 80
+            width: Theme.sized(80)
+            height: Theme.sized(80)
             colFill: Theme.colPrimaryContainer
             opacity: root.stage(0)
             scale: 0.55 + 0.45 * root.bloom
@@ -66,8 +66,8 @@ ModalSheet {
 
         Image {
             anchors.centerIn: cookie
-            width: 42
-            height: 42
+            width: Theme.sized(42)
+            height: Theme.sized(42)
             sourceSize.width: 42
             sourceSize.height: 42
             source: "qrc:/icons/ht-music.svg"
@@ -77,10 +77,10 @@ ModalSheet {
 
         Column {
             anchors.left: cookie.right
-            anchors.leftMargin: 20
+            anchors.leftMargin: Theme.spaced(20)
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 2
+            spacing: Theme.spaced(2)
 
             StyledText {
                 width: parent.width
@@ -94,7 +94,7 @@ ModalSheet {
             }
 
             Row {
-                spacing: 12
+                spacing: Theme.spaced(12)
                 opacity: root.stage(1)
                 transform: Translate { x: 16 * (1 - root.stage(1)) }
 
@@ -108,8 +108,8 @@ ModalSheet {
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     visible: Updater.prerelease
-                    width: prereleaseLabel.implicitWidth + 20
-                    height: 26
+                    width: prereleaseLabel.implicitWidth + Theme.spaced(20)
+                    height: Theme.sized(26)
                     radius: Theme.shape.badge
                     color: Theme.colTertiaryContainer
 
@@ -143,11 +143,11 @@ ModalSheet {
         id: plate
 
         anchors.top: hero.bottom
-        anchors.topMargin: 16
+        anchors.topMargin: Theme.spaced(16)
         anchors.left: parent.left
-        anchors.leftMargin: 24
+        anchors.leftMargin: Theme.spaced(24)
         anchors.right: parent.right
-        anchors.rightMargin: 24
+        anchors.rightMargin: Theme.spaced(24)
         anchors.bottom: footer.top
         radius: Theme.rounding.medium
         color: Theme.colLayer2
@@ -159,7 +159,7 @@ ModalSheet {
 
             anchors.fill: parent
             contentWidth: width
-            contentHeight: notes.implicitHeight + 36
+            contentHeight: notes.implicitHeight + Theme.spaced(36)
             clip: true
             interactive: contentHeight > height
             boundsBehavior: Flickable.StopAtBounds
@@ -169,10 +169,10 @@ ModalSheet {
             Column {
                 id: notes
 
-                x: 20
-                y: 18
-                width: scroller.width - 40
-                spacing: 20
+                x: Theme.spaced(20)
+                y: Theme.spaced(18)
+                width: scroller.width - Theme.spaced(40)
+                spacing: Theme.spaced(20)
 
                 Repeater {
                     model: Updater.sections
@@ -186,7 +186,7 @@ ModalSheet {
                         readonly property real arrival: root.stage(3 + Math.min(section.index, 5))
 
                         width: notes.width
-                        spacing: 4
+                        spacing: Theme.spaced(4)
                         opacity: section.arrival
                         transform: Translate { y: 14 * (1 - section.arrival) }
 
@@ -211,20 +211,20 @@ ModalSheet {
 
                         Row {
                             visible: section.modelData.title.length > 0
-                            height: 32
-                            spacing: 10
+                            height: Theme.sized(32)
+                            spacing: Theme.spaced(10)
 
                             Rectangle {
                                 anchors.verticalCenter: parent.verticalCenter
-                                width: 28
-                                height: 28
+                                width: Theme.sized(28)
+                                height: Theme.sized(28)
                                 radius: Theme.rounding.extraSmall
                                 color: Theme.colSecondaryContainer
 
                                 Sym {
                                     anchors.centerIn: parent
                                     text: section.modelData.icon
-                                    iconSize: 17
+                                    iconSize: Theme.sized(17)
                                     fill: 1
                                     color: Theme.colOnSecondaryContainer
                                 }
@@ -277,7 +277,7 @@ ModalSheet {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            height: 28
+            height: Theme.sized(28)
             radius: plate.radius
             opacity: scroller.atYBeginning ? 0 : 1
             gradient: Gradient {
@@ -298,7 +298,7 @@ ModalSheet {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            height: 36
+            height: Theme.sized(36)
             radius: plate.radius
             opacity: scroller.atYEnd ? 0 : 1
             gradient: Gradient {
@@ -322,7 +322,7 @@ ModalSheet {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: 80
+        height: Theme.sized(80)
         opacity: root.stage(3)
 
         Item {
@@ -366,9 +366,9 @@ ModalSheet {
             id: actions
 
             anchors.right: parent.right
-            anchors.rightMargin: 24
+            anchors.rightMargin: Theme.spaced(24)
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 8
+            spacing: Theme.spaced(8)
 
             PillButton {
                 text: qsTr("Later")
@@ -420,14 +420,14 @@ ModalSheet {
             id: status
 
             anchors.left: parent.left
-            anchors.leftMargin: 24
+            anchors.leftMargin: Theme.spaced(24)
             anchors.right: actions.left
-            anchors.rightMargin: 24
+            anchors.rightMargin: Theme.spaced(24)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
             PillButton {
-                x: -8
+                x: -Theme.spaced(8)
                 anchors.verticalCenter: parent.verticalCenter
                 visible: opacity > 0 && Updater.changelogUrl.toString().length > 0
                 opacity: 1 - root.activity
@@ -449,7 +449,7 @@ ModalSheet {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
+                    spacing: Theme.spaced(8)
                     visible: opacity > 0
                     opacity: 1 - root.failure
 
@@ -462,7 +462,7 @@ ModalSheet {
 
                             anchors.left: parent.left
                             anchors.right: amount.left
-                            anchors.rightMargin: 12
+                            anchors.rightMargin: Theme.spaced(12)
                             text: root.installing ? qsTr("Checksum verified. Restarting to install...")
                                 : qsTr("Downloading update")
                             title: true
@@ -507,7 +507,7 @@ ModalSheet {
 
                         y: (failureMetrics.height - failureGlyph.height) / 2
                         text: "error"
-                        iconSize: 20
+                        iconSize: Theme.sized(20)
                         fill: 1
                         color: Theme.colError
                     }
@@ -516,7 +516,7 @@ ModalSheet {
                         id: failureText
 
                         anchors.left: failureGlyph.right
-                        anchors.leftMargin: 10
+                        anchors.leftMargin: Theme.spaced(10)
                         anchors.right: parent.right
                         text: Updater.error
                         wrapMode: Text.WordWrap

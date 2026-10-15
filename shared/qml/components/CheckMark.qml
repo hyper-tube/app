@@ -13,8 +13,8 @@ Rectangle {
     readonly property real firstStroke: Math.min(1, strokeProgress * 3)
     readonly property real secondStroke: Math.max(0, (strokeProgress - 1 / 3) * 1.5)
 
-    implicitWidth: 22
-    implicitHeight: 22
+    implicitWidth: Theme.sized(22)
+    implicitHeight: Theme.sized(22)
     radius: Theme.shape.checkbox
     color: "transparent"
     border.width: 2

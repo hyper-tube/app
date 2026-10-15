@@ -21,7 +21,7 @@ Column {
     readonly property bool historyFiltered: root.history && root.page.filterable
     readonly property bool filterable: root.podcast && root.page.chips.length > 0
     readonly property bool filtersShown: root.sortable || root.filterable
-    readonly property real finderWidth: 260
+    readonly property real finderWidth: Theme.sized(260)
     readonly property real filtersWidth: (root.sortable ? sorter.implicitWidth : 0)
         + (root.filterable ? chipFilters.naturalWidth : 0)
         + (root.sortable && root.filterable ? filters.spacing : 0)
@@ -32,7 +32,7 @@ Column {
     signal menuRequested(var request)
     signal filterDismissed
 
-    spacing: 18
+    spacing: Theme.spaced(18)
 
     PodcastHeader {
         width: parent.width
@@ -44,15 +44,15 @@ Column {
 
     Item {
         width: parent.width
-        height: !visible ? 0 : root.page && root.page.artId.length > 0 ? 192
-            : Math.max(titles.implicitHeight, downloadFinder.visible ? downloadFinder.height : 0) + 16
+        height: !visible ? 0 : root.page && root.page.artId.length > 0 ? Theme.sized(192)
+            : Math.max(titles.implicitHeight, downloadFinder.visible ? downloadFinder.height : 0) + Theme.spaced(16)
         visible: !root.podcast
 
         Artwork {
             id: cover
 
             anchors.left: parent.left
-            width: visible ? 176 : 0
+            width: visible ? Theme.sized(176) : 0
             height: width
             visible: root.page && root.page.artId.length > 0
             artId: root.page ? root.page.artId : ""
@@ -83,7 +83,7 @@ Column {
 
             anchors.right: parent.right
             anchors.verticalCenter: titles.verticalCenter
-            width: Math.min(300, parent.width * 0.45)
+            width: Math.min(Theme.sized(300), parent.width * 0.45)
             visible: root.downloads
             enabled: Downloads.ids.length > 0 || text.length > 0
             opacity: enabled ? 1 : 0.5
@@ -97,12 +97,12 @@ Column {
             id: titles
 
             anchors.left: cover.right
-            anchors.leftMargin: cover.visible ? 24 : 0
+            anchors.leftMargin: cover.visible ? Theme.spaced(24) : 0
             anchors.right: downloadFinder.visible ? downloadFinder.left
                 : trailingSelect.visible ? trailingSelect.left : parent.right
-            anchors.rightMargin: 16
+            anchors.rightMargin: Theme.spaced(16)
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 14
+            spacing: Theme.spaced(14)
 
             SectionHeader {
                 width: parent.width
@@ -131,7 +131,7 @@ Column {
             }
 
             Row {
-                spacing: 8
+                spacing: Theme.spaced(8)
 
                 PillButton {
                     visible: root.page && root.page.playable && root.detail && root.listing
@@ -220,7 +220,7 @@ Column {
 
     Row {
         visible: !!root.page && root.page.kind === "search" && root.page.local
-        spacing: 10
+        spacing: Theme.spaced(10)
 
         Sym {
             anchors.verticalCenter: parent.verticalCenter
@@ -249,8 +249,8 @@ Column {
 
     Item {
         width: parent.width
-        height: !visible ? 0 : root.finderBeside ? Math.max(46, filters.height)
-            : (filters.visible ? filters.height + 12 : 0) + finder.height
+        height: !visible ? 0 : root.finderBeside ? Math.max(Theme.sized(46), filters.height)
+            : (filters.visible ? filters.height + Theme.spaced(12) : 0) + finder.height
         visible: root.sortable || root.searchable || root.filterable
 
         Row {
@@ -258,10 +258,10 @@ Column {
 
             anchors.left: parent.left
             anchors.right: finder.visible && root.finderBeside ? finder.left : parent.right
-            anchors.rightMargin: finder.visible && root.finderBeside ? 16 : 0
+            anchors.rightMargin: finder.visible && root.finderBeside ? Theme.spaced(16) : 0
             y: root.finderBeside ? (parent.height - height) / 2 : 0
             visible: root.filtersShown
-            spacing: 10
+            spacing: Theme.spaced(10)
 
             BrowseFilter {
                 id: sorter
@@ -288,8 +288,8 @@ Column {
             id: finder
 
             x: root.finderBeside && root.filtersShown ? parent.width - width : 0
-            y: root.finderBeside ? (parent.height - height) / 2 : filters.visible ? filters.height + 12 : 0
-            width: root.finderBeside ? root.finderWidth : Math.min(parent.width, 420)
+            y: root.finderBeside ? (parent.height - height) / 2 : filters.visible ? filters.height + Theme.spaced(12) : 0
+            width: root.finderBeside ? root.finderWidth : Math.min(parent.width, Theme.sized(420))
             visible: root.searchable
             icon: "search"
             placeholder: root.podcast ? qsTr("Find in show") : qsTr("Find in playlist")
@@ -300,7 +300,7 @@ Column {
 
     Item {
         width: parent.width
-        height: 8
+        height: Theme.spaced(8)
     }
 
     onPageChanged: {

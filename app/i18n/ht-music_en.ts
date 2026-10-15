@@ -31,7 +31,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location line="+93"/>
+        <location line="+97"/>
         <source>%n downloads continue when you&apos;re back online.</source>
         <translation>
             <numerusform>%n download continues when you&apos;re back online.</numerusform>

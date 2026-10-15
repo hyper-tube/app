@@ -7,9 +7,9 @@ Item {
 
     property real value: 0
     property bool indeterminate: false
-    property real thickness: 4
+    property real thickness: Theme.sized(4)
     property real amplitude: 2.5
-    property real wavelength: 26
+    property real wavelength: Theme.sized(26)
     property color colTrack: Theme.colSecondaryContainer
     property color colActive: Theme.colPrimary
 
@@ -20,7 +20,7 @@ Item {
     property real sweep: 0
     property real phase: 0
 
-    readonly property real gap: 6
+    readonly property real gap: Theme.spaced(6)
     readonly property real stop: root.thickness
 
     implicitHeight: root.thickness + root.amplitude * 2

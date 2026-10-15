@@ -7,7 +7,7 @@ Column {
     readonly property real used: Downloads.smartBytes + Downloads.forcedBytes + Downloads.partialBytes
     readonly property real ceiling: Downloads.sizeLimitGb * 1024 * 1024 * 1024
 
-    spacing: 8
+    spacing: Theme.spaced(8)
 
     function megabytes(bytes) {
         return (bytes / 1048576).toFixed(1);
@@ -17,7 +17,7 @@ Column {
         width: parent.width
         title: qsTr("Smart downloads")
         caption: qsTr("Keep your most played music available offline. Skips lower a track's priority.")
-        controlWidth: 52
+        controlWidth: Theme.sized(52)
 
         ToggleSwitch {
             checked: Downloads.smartEnabled
@@ -29,10 +29,10 @@ Column {
         width: parent.width
         title: qsTr("Tracks to keep")
         caption: qsTr("Up to %n smart downloads", "", Downloads.trackLimit)
-        controlWidth: 200
+        controlWidth: Theme.sized(200)
 
         SeekBar {
-            width: 200
+            width: Theme.sized(200)
             continuous: true
             position: Downloads.trackLimit
             duration: 2000
@@ -45,10 +45,10 @@ Column {
         title: qsTr("Storage ceiling")
         caption: qsTr("%1 GB. Manual downloads are always kept until you remove them.")
             .arg(Downloads.sizeLimitGb.toFixed(1))
-        controlWidth: 200
+        controlWidth: Theme.sized(200)
 
         SeekBar {
-            width: 200
+            width: Theme.sized(200)
             continuous: true
             position: Downloads.sizeLimitGb
             duration: 20
@@ -58,14 +58,14 @@ Column {
 
     Rectangle {
         width: parent.width
-        height: 104
+        height: Theme.sized(104)
         radius: Theme.rounding.medium
         color: Theme.colLayer2
 
         Column {
             anchors.fill: parent
-            anchors.margins: 16
-            spacing: 12
+            anchors.margins: Theme.spaced(16)
+            spacing: Theme.spaced(12)
 
             StyledText {
                 text: qsTr("%1 MB used").arg(root.megabytes(root.used))
@@ -74,7 +74,7 @@ Column {
 
             Rectangle {
                 width: parent.width
-                height: 8
+                height: Theme.sized(8)
                 radius: Theme.shape.track
                 color: Theme.colLayer4
                 clip: true
@@ -88,7 +88,11 @@ Column {
                     color: Theme.colTertiary
 
                     Behavior on width {
-                        NumberAnimation { duration: Theme.duration.spatial; easing.type: Easing.OutCubic }
+                        NumberAnimation {
+                            duration: Theme.duration.spatial
+                            easing.type: Easing.BezierSpline
+                            easing.bezierCurve: Theme.curve.decelerate
+                        }
                     }
                 }
 
@@ -137,7 +141,7 @@ Column {
         height: cleanup.implicitHeight
 
         Row {
-            spacing: 8
+            spacing: Theme.spaced(8)
 
             PillButton {
                 id: cleanup

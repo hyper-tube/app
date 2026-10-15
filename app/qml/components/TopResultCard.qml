@@ -17,15 +17,15 @@ Item {
     readonly property bool person: root.lead.circular
     readonly property bool shuffles: root.lead.actions.shufflePlaylistId.length > 0
     readonly property bool writable: Account.signedIn && Connectivity.online
-    readonly property real plateHeight: 196
-    readonly property real rowHeight: 58
+    readonly property real plateHeight: Theme.sized(196)
+    readonly property real rowHeight: Theme.sized(58)
     readonly property real listHeight: root.cells.length * root.rowHeight
     readonly property bool active: root.lead.playable
         && PlaybackController.track.videoId === root.lead.track.videoId
 
     signal menuRequested(var request)
 
-    implicitHeight: root.wide || !root.listed ? root.plateHeight : root.plateHeight + 12 + root.listHeight
+    implicitHeight: root.wide || !root.listed ? root.plateHeight : root.plateHeight + Theme.spaced(12) + root.listHeight
 
     function requestMenu(source, x, y) {
         root.menuRequested({ "entry": root.lead, "index": -1, "model": null, "source": source,
@@ -68,10 +68,10 @@ Item {
         Item {
             id: cover
 
-            x: 20
+            x: Theme.spaced(20)
             anchors.verticalCenter: parent.verticalCenter
-            width: 156
-            height: 156
+            width: Theme.sized(156)
+            height: Theme.sized(156)
             scale: 0.88 + 0.12 * root.bloom
 
             Artwork {
@@ -83,7 +83,7 @@ Item {
             LiveBadge {
                 anchors.left: parent.left
                 anchors.bottom: parent.bottom
-                anchors.margins: 8
+                anchors.margins: Theme.spaced(8)
                 width: implicitWidth
                 height: implicitHeight
                 visible: root.lead.track.live
@@ -92,17 +92,17 @@ Item {
 
             Rectangle {
                 anchors.centerIn: parent
-                width: 54
-                height: 54
+                width: Theme.sized(54)
+                height: Theme.sized(54)
                 radius: Theme.shape.playButton
                 color: ColorUtils.withAlpha(Theme.colLayer1, 0.85)
                 visible: root.active
 
                 PlayingIndicator {
                     anchors.centerIn: parent
-                    barWidth: 4
-                    barHeight: 24
-                    barSpacing: 4
+                    barWidth: Theme.sized(4)
+                    barHeight: Theme.sized(24)
+                    barSpacing: Theme.sized(4)
                     playing: root.active && PlaybackController.playing
                 }
             }
@@ -110,11 +110,11 @@ Item {
 
         Column {
             anchors.left: cover.right
-            anchors.leftMargin: 22
+            anchors.leftMargin: Theme.spaced(22)
             anchors.right: parent.right
-            anchors.rightMargin: 18
+            anchors.rightMargin: Theme.spaced(18)
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 4
+            spacing: Theme.spaced(4)
             opacity: Math.min(1, root.bloom * 1.4)
             transform: Translate { x: 16 * (1 - root.bloom) }
 
@@ -151,11 +151,11 @@ Item {
 
             Item {
                 width: 1
-                height: 8
+                height: Theme.spaced(8)
             }
 
             Row {
-                spacing: 8
+                spacing: Theme.spaced(8)
 
                 PillButton {
                     visible: root.lead.playable || root.collection || root.shuffles
@@ -211,8 +211,8 @@ Item {
     }
 
     Column {
-        x: root.wide ? plate.width + 16 : 0
-        y: root.wide ? Math.max(0, (root.plateHeight - root.listHeight) / 2) : root.plateHeight + 12
+        x: root.wide ? plate.width + Theme.spaced(16) : 0
+        y: root.wide ? Math.max(0, (root.plateHeight - root.listHeight) / 2) : root.plateHeight + Theme.spaced(12)
         width: root.wide ? root.width - x : root.width
         visible: root.listed
 

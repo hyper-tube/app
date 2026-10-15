@@ -680,7 +680,7 @@
 <context>
     <name>ControlCenterButton</name>
     <message>
-        <location filename="../qml/components/ControlCenterButton.qml" line="+47"/>
+        <location filename="../qml/components/ControlCenterButton.qml" line="+48"/>
         <location line="+1"/>
         <source>Control center</source>
         <translation>Центр управления</translation>
@@ -770,7 +770,7 @@
         <translation>Занято %1 МБ</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+39"/>
         <source>Smart %1 MB  /  Manual %2 MB  /  Incomplete %3 MB</source>
         <translation>Умные %1 МБ  /  Вручную %2 МБ  /  Незавершённые %3 МБ</translation>
     </message>
@@ -1179,7 +1179,7 @@
         <translation>Скачанное</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+26"/>
         <source>Collapse navigation</source>
         <translation>Свернуть меню</translation>
     </message>
@@ -3304,6 +3304,11 @@ Discord должен быть запущен на этом компьютере.
         <location line="+5"/>
         <source>a number of milliseconds from %1 to %2</source>
         <translation>числом миллисекунд от %1 до %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>a number of pixels from %1 to %2</source>
+        <translation>числом пикселей от %1 до %2</translation>
     </message>
     <message>
         <location line="+2"/>

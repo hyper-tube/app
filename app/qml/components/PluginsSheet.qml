@@ -14,8 +14,8 @@ ModalSheet {
         root.open = true;
     }
 
-    sheetWidth: Math.min(760, root.width - 96)
-    sheetHeight: Math.min(root.height - 64, 620)
+    sheetWidth: Math.min(Theme.sized(760), root.width - Theme.spaced(96))
+    sheetHeight: Math.min(root.height - Theme.spaced(64), Theme.sized(620))
 
     onCurrentIdChanged: {
         const found = root.currentId.length > 0 ? PluginRegistry.find(root.currentId) : null;
@@ -40,7 +40,7 @@ ModalSheet {
 
     headerContent: [
         IconButton {
-            x: 14
+            x: Theme.spaced(14)
             anchors.verticalCenter: parent.verticalCenter
             icon: "arrow_back"
             visible: root.depth > 0.01
@@ -50,8 +50,8 @@ ModalSheet {
             onClicked: root.currentId = ""
         },
         StyledText {
-            x: 24 - 30 * root.depth
-            width: parent.width - x - 12
+            x: Theme.spaced(24) - 30 * root.depth
+            width: parent.width - x - Theme.spaced(12)
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Plugins")
             title: true
@@ -60,8 +60,8 @@ ModalSheet {
             elide: Text.ElideRight
         },
         StyledText {
-            x: 64 + 30 * (1 - root.depth)
-            width: parent.width - x - 12
+            x: Theme.spaced(64) + 30 * (1 - root.depth)
+            width: parent.width - x - Theme.spaced(12)
             anchors.verticalCenter: parent.verticalCenter
             text: root.displayed ? root.displayed.info.name : ""
             title: true
@@ -92,9 +92,9 @@ ModalSheet {
 
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: 24
+                anchors.leftMargin: Theme.spaced(24)
                 anchors.right: parent.right
-                anchors.rightMargin: 24
+                anchors.rightMargin: Theme.spaced(24)
                 placeholder: qsTr("Search plugins")
                 onTextChanged: PluginRegistry.query = finder.text
                 onEditingFinished: list.forceActiveFocus()
@@ -104,15 +104,15 @@ ModalSheet {
                 id: list
 
                 anchors.top: finder.bottom
-                anchors.topMargin: 14
+                anchors.topMargin: Theme.spaced(14)
                 anchors.left: parent.left
-                anchors.leftMargin: 16
+                anchors.leftMargin: Theme.spaced(16)
                 anchors.right: parent.right
-                anchors.rightMargin: 16
+                anchors.rightMargin: Theme.spaced(16)
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 16
+                anchors.bottomMargin: Theme.spaced(16)
                 clip: true
-                spacing: 2
+                spacing: Theme.spaced(2)
                 boundsBehavior: Flickable.StopAtBounds
                 model: PluginRegistry
 

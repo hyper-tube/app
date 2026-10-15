@@ -105,23 +105,23 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.topMargin: 110
-        anchors.bottomMargin: 40
-        width: Math.min(parent.width, Theme.size.contentMaxWidth) - 80
+        anchors.topMargin: Theme.spaced(110)
+        anchors.bottomMargin: Theme.spaced(40)
+        width: Math.min(parent.width, Theme.size.contentMaxWidth) - Theme.spaced(80)
 
         Column {
             id: stage
 
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            width: Math.min(400, parent.width * 0.4)
-            spacing: 16
+            width: Math.min(Theme.sized(400), parent.width * 0.4)
+            spacing: Theme.spaced(16)
 
             Column {
                 id: face
 
                 width: parent.width
-                spacing: 16
+                spacing: Theme.spaced(16)
                 opacity: switcher.fade
                 scale: switcher.depth
                 transform: Translate { x: switcher.offsetX }
@@ -131,13 +131,13 @@ Rectangle {
                     artId: switcher.track.artId
                     video: switcher.track.video
                     live: switcher.track.live
-                    reach: Math.max(100, stage.parent.height - 310 - volume.height - stage.spacing)
+                    reach: Math.max(Theme.sized(100), stage.parent.height - Theme.sized(310) - volume.height - stage.spacing)
                     span: stage.width
                 }
 
                 Column {
                     width: parent.width
-                    spacing: 4
+                    spacing: Theme.spaced(4)
 
                     Marquee {
                         width: parent.width
@@ -164,7 +164,7 @@ Rectangle {
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: PlaybackController.track.valid
-                spacing: 12
+                spacing: Theme.spaced(12)
 
                 LikeButton {
                     visible: Account.signedIn
@@ -216,7 +216,7 @@ Rectangle {
 
             Column {
                 width: parent.width
-                spacing: 2
+                spacing: Theme.spaced(2)
 
                 SeekBar {
                     width: parent.width
@@ -228,7 +228,7 @@ Rectangle {
 
                 Item {
                     width: parent.width
-                    height: 18
+                    height: Theme.sized(18)
 
                     StyledText {
                         anchors.left: parent.left
@@ -259,12 +259,12 @@ Rectangle {
 
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 8
+                spacing: Theme.spaced(8)
 
                 Item {
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 40 * root.musicPresence + fullSpeed.width * root.podcastPresence
-                    height: 40
+                    width: Theme.sized(40) * root.musicPresence + fullSpeed.width * root.podcastPresence
+                    height: Theme.sized(40)
 
                     IconButton {
                         anchors.centerIn: parent
@@ -292,8 +292,8 @@ Rectangle {
                 SkipButton {
                     anchors.verticalCenter: parent.verticalCenter
                     morph: root.podcastReveal
-                    iconSize: 30
-                    diameter: 48
+                    iconSize: Theme.sized(30)
+                    diameter: Theme.sized(48)
                     Accessible.name: root.episode ? qsTr("Back 10 seconds") : qsTr("Previous track")
                     onClicked: {
                         if (root.episode)
@@ -306,8 +306,8 @@ Rectangle {
                 PlayPauseButton {
                     anchors.verticalCenter: parent.verticalCenter
                     playing: PlaybackController.playing
-                    iconSize: 34
-                    diameter: 66
+                    iconSize: Theme.sized(34)
+                    diameter: Theme.sized(66)
                     onClicked: PlaybackController.toggle()
                 }
 
@@ -315,8 +315,8 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     forward: true
                     morph: root.podcastReveal
-                    iconSize: 30
-                    diameter: 48
+                    iconSize: Theme.sized(30)
+                    diameter: Theme.sized(48)
                     Accessible.name: root.episode ? qsTr("Forward 30 seconds") : qsTr("Next track")
                     onClicked: {
                         if (root.episode)
@@ -328,8 +328,8 @@ Rectangle {
 
                 Item {
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 40 * root.musicPresence + fullSpeed.width * root.podcastPresence
-                    height: 40
+                    width: Theme.sized(40) * root.musicPresence + fullSpeed.width * root.podcastPresence
+                    height: Theme.sized(40)
 
                     IconButton {
                         anchors.centerIn: parent
@@ -361,14 +361,14 @@ Rectangle {
                 id: volume
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(260, parent.width)
+                width: Math.min(Theme.sized(260), parent.width)
                 showLevel: true
             }
         }
 
         Item {
             anchors.left: stage.right
-            anchors.leftMargin: 44 + Math.min(68, Math.max(0, (parent.width - 1100) * 0.2))
+            anchors.leftMargin: Theme.spaced(44) + Math.min(Theme.spaced(68), Math.max(0, (parent.width - 1100) * 0.2))
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -384,7 +384,7 @@ Rectangle {
                 id: tabs
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(260, parent.width)
+                width: Math.min(Theme.sized(260), parent.width)
                 labels: root.episode ? [qsTr("Up next"), qsTr("Details")] : [qsTr("Lyrics"), qsTr("Up next")]
                 glass: true
                 current: root.pane
@@ -393,7 +393,7 @@ Rectangle {
 
             Item {
                 anchors.top: tabs.bottom
-                anchors.topMargin: 18
+                anchors.topMargin: Theme.spaced(18)
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
@@ -464,12 +464,12 @@ Rectangle {
     IconButton {
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.margins: 18
-        anchors.topMargin: 76
+        anchors.margins: Theme.spaced(18)
+        anchors.topMargin: Theme.spaced(76)
         colBackground: ColorUtils.withAlpha(Theme.colLayer3, 0.65)
         icon: "expand_more"
         Accessible.name: qsTr("Collapse player")
-        iconSize: 26
+        iconSize: Theme.sized(26)
         onClicked: root.collapseRequested()
     }
 

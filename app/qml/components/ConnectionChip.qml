@@ -13,10 +13,10 @@ Item {
     readonly property bool shown: !Connectivity.online || root.welcoming
     readonly property real labelWidth: offlineLabel.implicitWidth
         + (onlineLabel.implicitWidth - offlineLabel.implicitWidth) * root.welcome
-    readonly property real fullWidth: 14 + Theme.font.larger + 8 + root.labelWidth + 16
+    readonly property real fullWidth: Theme.spaced(14) + Theme.font.larger + Theme.spaced(8) + root.labelWidth + Theme.spaced(16)
 
     implicitWidth: root.fullWidth * Math.max(0, root.reveal)
-    implicitHeight: 40
+    implicitHeight: Theme.sized(40)
     visible: root.reveal > 0
     opacity: Math.min(1, root.reveal)
     clip: true
@@ -53,7 +53,7 @@ Item {
         Item {
             id: glyphs
 
-            x: 14
+            x: Theme.spaced(14)
             anchors.verticalCenter: parent.verticalCenter
             width: Theme.font.larger
             height: Theme.font.larger
@@ -79,8 +79,8 @@ Item {
 
             BusySpinner {
                 anchors.centerIn: parent
-                width: 16
-                height: 16
+                width: Theme.sized(16)
+                height: Theme.sized(16)
                 visible: root.probing > 0
                 opacity: root.probing * (1 - root.welcome)
                 colArc: Theme.colOnSurfaceVariant
@@ -88,7 +88,7 @@ Item {
         }
 
         Item {
-            x: glyphs.x + glyphs.width + 8
+            x: glyphs.x + glyphs.width + Theme.spaced(8)
             anchors.verticalCenter: parent.verticalCenter
             width: root.labelWidth
             height: offlineLabel.implicitHeight

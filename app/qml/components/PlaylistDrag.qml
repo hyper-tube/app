@@ -140,10 +140,10 @@ Item {
     Item {
         id: card
 
-        x: (root.width - root.contentWidth) / 2 + Theme.size.bleed
+        x: (root.width - root.contentWidth) / 2 + Theme.spacing.bleed
         y: root.cardY
-        width: root.contentWidth - Theme.size.bleed * 2
-        height: 60
+        width: root.contentWidth - Theme.spacing.bleed * 2
+        height: Theme.sized(60)
         visible: root.active
         scale: 1 + 0.012 * root.lift
         enabled: false

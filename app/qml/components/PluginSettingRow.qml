@@ -11,7 +11,7 @@ SettingRow {
 
     title: root.descriptor.label
     caption: root.descriptor.caption
-    controlWidth: root.picker ? 246 : 52
+    controlWidth: root.picker ? Theme.sized(246) : Theme.sized(52)
 
     ToggleSwitch {
         visible: !root.picker
@@ -23,8 +23,8 @@ SettingRow {
 
     SelectField {
         visible: root.picker
-        width: 246
-        height: visible ? 42 : 0
+        width: Theme.sized(246)
+        height: visible ? Theme.sized(42) : 0
         options: root.descriptor.options
         value: root.picker ? String(root.plugin.values[root.descriptor.key]) : ""
         onPicked: chosen => root.plugin.setValue(root.descriptor.key, chosen)

@@ -7,7 +7,7 @@ Item {
     property var labels: []
     property int current: 0
     property bool glass: false
-    property real inset: 4
+    property real inset: Theme.spaced(4)
 
     readonly property int count: root.labels.length
     readonly property real segmentWidth: root.count > 0
@@ -15,8 +15,8 @@ Item {
         : 0
     readonly property real segmentHeight: root.height - root.inset * 2
 
-    implicitWidth: Math.max(160, root.count * 116)
-    implicitHeight: 42
+    implicitWidth: Math.max(Theme.sized(160), root.count * Theme.sized(116))
+    implicitHeight: Theme.sized(42)
 
     Rectangle {
         anchors.fill: parent

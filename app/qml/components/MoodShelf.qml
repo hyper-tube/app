@@ -9,15 +9,15 @@ Column {
     property bool moreAvailable: false
 
     readonly property int rows: 4
-    readonly property real gap: 8
-    readonly property real cellHeight: 52 + root.gap
-    readonly property real cellWidth: Math.max(180, Math.min(260, root.width / 5)) + root.gap
+    readonly property real gap: Theme.spaced(8)
+    readonly property real cellHeight: Theme.sized(52) + root.gap
+    readonly property real cellWidth: Math.max(Theme.sized(180), Math.min(Theme.sized(260), root.width / 5)) + root.gap
     readonly property bool scrollable: grid.contentWidth > grid.width
 
     signal cellActivated(int index)
     signal moreRequested
 
-    spacing: 16
+    spacing: Theme.spaced(16)
 
     Item {
         width: parent.width
@@ -29,7 +29,7 @@ Column {
 
             anchors.left: parent.left
             anchors.right: arrows.left
-            anchors.rightMargin: 16
+            anchors.rightMargin: Theme.spaced(16)
             anchors.verticalCenter: parent.verticalCenter
             title: root.title
         }
@@ -39,7 +39,7 @@ Column {
 
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 2
+            spacing: Theme.spaced(2)
 
             PillButton {
                 anchors.verticalCenter: parent.verticalCenter
@@ -53,7 +53,7 @@ Column {
                 visible: root.scrollable
                 icon: "chevron_left"
                 Accessible.name: qsTr("Scroll left")
-                iconSize: 24
+                iconSize: Theme.sized(24)
                 interactive: !grid.atXBeginning
                 opacity: grid.atXBeginning ? 0.3 : 1
                 onClicked: glide.scrollBy(-1)
@@ -72,7 +72,7 @@ Column {
                 visible: root.scrollable
                 icon: "chevron_right"
                 Accessible.name: qsTr("Scroll right")
-                iconSize: 24
+                iconSize: Theme.sized(24)
                 interactive: !grid.atXEnd
                 opacity: grid.atXEnd ? 0.3 : 1
                 onClicked: glide.scrollBy(1)

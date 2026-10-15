@@ -30,9 +30,9 @@ Item {
         id: scroller
 
         anchors.fill: parent
-        anchors.rightMargin: 12
+        anchors.rightMargin: Theme.spaced(12)
         contentWidth: width
-        contentHeight: column.implicitHeight + 24
+        contentHeight: column.implicitHeight + Theme.spaced(24)
         clip: true
         boundsBehavior: Flickable.StopAtBounds
         opacity: root.populated ? 1 : 0
@@ -50,7 +50,7 @@ Item {
             id: column
 
             width: scroller.width
-            spacing: 12
+            spacing: Theme.spaced(12)
 
             StyledText {
                 width: parent.width
@@ -71,8 +71,8 @@ Item {
             }
 
             RippleSurface {
-                implicitWidth: podcastRow.implicitWidth + 20
-                implicitHeight: 40
+                implicitWidth: podcastRow.implicitWidth + Theme.spaced(20)
+                implicitHeight: Theme.sized(40)
                 visible: EpisodeDetails.podcast.length > 0
                 rounding: Theme.shape.chip
                 colBackground: ColorUtils.withAlpha(Theme.colLayer3, 0.55)
@@ -84,12 +84,12 @@ Item {
                     id: podcastRow
 
                     anchors.centerIn: parent
-                    spacing: 8
+                    spacing: Theme.spaced(8)
 
                     Sym {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "podcasts"
-                        iconSize: 18
+                        iconSize: Theme.sized(18)
                         color: Theme.colPrimary
                     }
 
@@ -104,7 +104,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         visible: EpisodeDetails.podcastId.length > 0
                         text: "chevron_right"
-                        iconSize: 18
+                        iconSize: Theme.sized(18)
                         color: Theme.colOnSurfaceVariant
                     }
                 }
@@ -114,7 +114,7 @@ Item {
 
             Item {
                 width: parent.width
-                height: 4
+                height: Theme.spaced(4)
             }
 
             StyledText {

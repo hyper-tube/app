@@ -22,12 +22,12 @@ Item {
         id: column
 
         anchors.centerIn: parent
-        spacing: 10
+        spacing: Theme.spaced(10)
 
         Sym {
             anchors.horizontalCenter: parent.horizontalCenter
             text: root.icon
-            iconSize: 44
+            iconSize: Theme.sized(44)
             color: Theme.colInactive
             opacity: root.stage(0)
             scale: 0.6 + 0.4 * root.reveal

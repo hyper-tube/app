@@ -13,7 +13,7 @@ RippleSurface {
     property real retryReveal: root.retryable ? 1 : 0
     property real trackReveal: root.showing ? 1 : 0
 
-    implicitHeight: 58 + 30 * root.trackReveal + 48 * root.retryReveal
+    implicitHeight: Theme.sized(58) + Theme.sized(30) * root.trackReveal + Theme.sized(48) * root.retryReveal
     rounding: Theme.rounding.small
     colBackground: Theme.colLayer2
     Accessible.role: Accessible.Button
@@ -38,20 +38,20 @@ RippleSurface {
     PluginGlyph {
         id: glyph
 
-        x: 14
-        y: 18
+        x: Theme.spaced(14)
+        y: Theme.sized(18)
         info: DiscordPresence.info
-        glyphSize: 21
+        glyphSize: Theme.sized(21)
         colGlyph: DiscordPresence.connected ? Theme.colPrimary : Theme.colOnSurfaceVariant
     }
 
     Column {
         anchors.left: glyph.right
-        anchors.leftMargin: 12
+        anchors.leftMargin: Theme.spaced(12)
         anchors.right: quick.left
-        anchors.rightMargin: 12
-        y: 11
-        spacing: 2
+        anchors.rightMargin: Theme.spaced(12)
+        y: Theme.sized(11)
+        spacing: Theme.spaced(2)
 
         StyledText {
             width: parent.width
@@ -73,25 +73,25 @@ RippleSurface {
         id: quick
 
         anchors.right: parent.right
-        anchors.rightMargin: 12
-        y: 16
+        anchors.rightMargin: Theme.spaced(12)
+        y: Theme.sized(16)
         checked: DiscordPresence.sharing
         Accessible.name: qsTr("Share what you are listening to")
         onToggled: value => DiscordPresence.sharing = value
     }
 
     Item {
-        y: 58
+        y: Theme.sized(58)
         width: parent.width
-        height: 30 * root.trackReveal
+        height: Theme.sized(30) * root.trackReveal
         clip: true
         opacity: root.trackReveal
 
         Row {
-            x: 14
-            width: parent.width - 28
+            x: Theme.spaced(14)
+            width: parent.width - Theme.spaced(28)
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 8
+            spacing: Theme.spaced(8)
 
             Sym {
                 anchors.verticalCenter: parent.verticalCenter
@@ -101,7 +101,7 @@ RippleSurface {
             }
 
             StyledText {
-                width: parent.width - 26
+                width: parent.width - Theme.sized(26)
                 text: DiscordPresence.shown.title
                 font.pixelSize: Theme.font.smallie
                 elide: Text.ElideRight
@@ -110,19 +110,19 @@ RippleSurface {
     }
 
     Item {
-        y: 58 + 30 * root.trackReveal
+        y: Theme.sized(58) + Theme.sized(30) * root.trackReveal
         width: parent.width
-        height: 48 * root.retryReveal
+        height: Theme.sized(48) * root.retryReveal
         clip: true
         opacity: root.retryReveal
 
         PillButton {
-            x: 14
+            x: Theme.spaced(14)
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("Reconnect")
             icon: "refresh"
             toggled: true
-            horizontalPadding: 14
+            horizontalPadding: Theme.spaced(14)
             onClicked: DiscordPresence.reconnect()
         }
     }

@@ -10,7 +10,7 @@ Item {
     Column {
         anchors.centerIn: parent
         anchors.verticalCenterOffset: -24
-        width: Math.min(parent.width - Theme.size.gutter * 6, 520)
+        width: Math.min(parent.width - Theme.spacing.gutter * 6, 520)
         spacing: 22
 
         Wordmark {

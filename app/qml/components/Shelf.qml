@@ -8,11 +8,11 @@ Column {
     property string subtitle: ""
     property var cards: []
     property bool videoCovers: false
-    property real cardSize: 168
+    property real cardSize: Theme.size.card
     property bool moreAvailable: false
     property bool moreGhost: false
 
-    readonly property real inset: Theme.size.cardInset
+    readonly property real inset: Theme.spacing.cardInset
     readonly property real stride: root.cardSize + root.inset * 2 + strip.spacing
     readonly property bool scrollable: strip.contentWidth > strip.width
 
@@ -22,7 +22,7 @@ Column {
     signal moreRequested
     signal endReached
 
-    spacing: 16
+    spacing: Theme.spaced(16)
 
     Item {
         width: parent.width
@@ -35,7 +35,7 @@ Column {
 
             anchors.left: parent.left
             anchors.right: arrows.left
-            anchors.rightMargin: 16
+            anchors.rightMargin: Theme.spaced(16)
             anchors.verticalCenter: parent.verticalCenter
             title: root.title
             subtitle: root.subtitle
@@ -46,7 +46,7 @@ Column {
 
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 2
+            spacing: Theme.spaced(2)
             visible: root.scrollable || root.moreAvailable
 
             PillButton {
@@ -62,7 +62,7 @@ Column {
                 icon: "chevron_left"
                 Accessible.name: qsTr("Scroll left")
                 visible: root.scrollable
-                iconSize: 24
+                iconSize: Theme.sized(24)
                 interactive: !strip.atXBeginning
                 opacity: strip.atXBeginning ? 0.3 : 1
                 onClicked: glide.scrollBy(-1)
@@ -81,7 +81,7 @@ Column {
                 icon: "chevron_right"
                 Accessible.name: qsTr("Scroll right")
                 visible: root.scrollable
-                iconSize: 24
+                iconSize: Theme.sized(24)
                 interactive: !strip.atXEnd
                 opacity: strip.atXEnd ? 0.3 : 1
                 onClicked: glide.scrollBy(1)
@@ -100,14 +100,14 @@ Column {
     Item {
         x: -root.inset
         width: root.width + root.inset * 2
-        height: root.cardSize + root.inset * 2 + 52
+        height: root.cardSize + root.inset * 2 + Theme.sized(52)
 
         ListView {
             id: strip
 
             anchors.fill: parent
             orientation: ListView.Horizontal
-            spacing: 2
+            spacing: Theme.spaced(2)
             clip: true
             boundsBehavior: Flickable.StopAtBounds
             acceptedButtons: Qt.NoButton

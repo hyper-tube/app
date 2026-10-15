@@ -20,7 +20,7 @@ Item {
         Sym {
             anchors.centerIn: parent
             text: "music_note"
-            iconSize: Math.max(16, Math.min(parent.width, parent.height) * 0.34)
+            iconSize: Math.max(Theme.sized(16), Math.min(parent.width, parent.height) * 0.34)
             color: Theme.colInactive
         }
     }

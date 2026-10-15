@@ -11,11 +11,11 @@ PopupMenu {
     property real spotX: 0
     property real spotY: 0
 
-    readonly property real rowHeight: 46
+    readonly property real rowHeight: Theme.sized(46)
 
     signal extraTriggered(string action)
 
-    minimumWidth: 268
+    minimumWidth: Theme.sized(268)
     modal: true
     dim: false
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -36,7 +36,7 @@ PopupMenu {
         root.spotY = spot.y;
         root.x = Math.max(0, Math.min(request.above ? spot.x - root.width / 2 : spot.x,
             root.parent.width - root.width));
-        root.y = request.above ? Math.max(0, spot.y - reach - 8)
+        root.y = request.above ? Math.max(0, spot.y - reach - Theme.spaced(8))
             : Math.max(0, Math.min(spot.y, Math.max(0, root.parent.height - reach)));
         root.open();
     }

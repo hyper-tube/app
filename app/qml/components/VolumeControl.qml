@@ -12,13 +12,13 @@ Item {
     readonly property int level: PlaybackController.muted || PlaybackController.volume === 0
         ? 0 : PlaybackController.volume < 50 ? 1 : 2
     readonly property string icon: ["volume_off", "volume_down", "volume_up"][root.level]
-    readonly property real glyphSize: [21, 26, 23][root.level]
-    readonly property real approach: 10
+    readonly property real glyphSize: [Theme.sized(21), Theme.sized(26), Theme.sized(23)][root.level]
+    readonly property real approach: Theme.spaced(10)
     readonly property bool engaged: root.compact && (button.hovered || trayHover.hovered || vertical.dragging)
 
     implicitWidth: root.compact ? button.width
-        : (button.width + 6) * (root.showLevel ? 2 : 1) + inline.implicitWidth
-    implicitHeight: 40
+        : (button.width + Theme.spaced(6)) * (root.showLevel ? 2 : 1) + inline.implicitWidth
+    implicitHeight: Theme.sized(40)
 
     IconButton {
         id: button
@@ -36,13 +36,13 @@ Item {
         id: inline
 
         anchors.left: button.right
-        anchors.leftMargin: 6
+        anchors.leftMargin: Theme.spaced(6)
         anchors.verticalCenter: parent.verticalCenter
         visible: !root.compact
         width: Math.max(0, root.width - (button.width + anchors.leftMargin) * (root.showLevel ? 2 : 1))
-        implicitWidth: 84
-        trackHeight: 4
-        activeTrackHeight: 6
+        implicitWidth: Theme.sized(84)
+        trackHeight: Theme.sized(4)
+        activeTrackHeight: Theme.sized(6)
         continuous: true
         position: PlaybackController.muted ? 0 : PlaybackController.volume
         duration: 100
@@ -71,8 +71,8 @@ Item {
         parent: button
         x: (button.width - width) / 2
         y: -height
-        width: 48
-        height: 168
+        width: Theme.sized(48)
+        height: Theme.sized(168)
         padding: 0
         focus: false
         visible: root.engaged
@@ -113,10 +113,10 @@ Item {
                     id: vertical
 
                     anchors.centerIn: parent
-                    width: plate.height - 34
+                    width: plate.height - Theme.sized(34)
                     rotation: -90
-                    trackHeight: 5
-                    activeTrackHeight: 7
+                    trackHeight: Theme.sized(5)
+                    activeTrackHeight: Theme.sized(7)
                     continuous: true
                     position: PlaybackController.muted ? 0 : PlaybackController.volume
                     duration: 100

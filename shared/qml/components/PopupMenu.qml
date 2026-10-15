@@ -6,10 +6,10 @@ Popover {
 
     property var actions: []
     property Component header: null
-    property real minimumWidth: 236
-    property real itemHeight: 44
+    property real minimumWidth: Theme.sized(236)
+    property real itemHeight: Theme.sized(44)
 
-    readonly property real itemPadding: 14
+    readonly property real itemPadding: Theme.spaced(14)
     readonly property real itemGlyphSize: Theme.font.larger
     readonly property real itemRounding: Math.max(0, root.rounding - root.inset)
     readonly property bool divided: root.header !== null && root.actions.length > 0
@@ -45,7 +45,7 @@ Popover {
     Item {
         x: -root.inset
         width: root.width
-        height: 13
+        height: Theme.sized(13)
         visible: root.divided
 
         Rectangle {

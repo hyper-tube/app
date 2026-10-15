@@ -39,7 +39,8 @@ QJsonObject propertyOf(const Token &token)
     switch (token.kind) {
     case Token::Step:
     case Token::Real: return number(token, QStringLiteral("number"));
-    case Token::Duration: return number(token, QStringLiteral("integer"));
+    case Token::Duration:
+    case Token::Length: return number(token, QStringLiteral("integer"));
     case Token::Radius:
         return {{QStringLiteral("anyOf"),
                  QJsonArray {QJsonObject {{kType, QStringLiteral("number")},

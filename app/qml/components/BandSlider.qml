@@ -14,8 +14,8 @@ Item {
 
     signal moved(real value)
 
-    implicitWidth: 34
-    implicitHeight: 170
+    implicitWidth: Theme.sized(34)
+    implicitHeight: Theme.sized(170)
 
     function valueAt(y) {
         const span = track.height - handle.height;
@@ -29,11 +29,11 @@ Item {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width
-        height: parent.height - 38
+        height: parent.height - Theme.sized(38)
 
         Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 5
+            width: Theme.sized(5)
             height: parent.height
             radius: Theme.shape.track
             color: ColorUtils.withAlpha(Theme.colOnSurface, 0.18)
@@ -42,7 +42,7 @@ Item {
         Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             y: Math.min(parent.height / 2, root.handleY + handle.height / 2)
-            width: 5
+            width: Theme.sized(5)
             height: Math.abs(parent.height / 2 - root.handleY - handle.height / 2)
             radius: Theme.shape.track
             color: Theme.colPrimary
@@ -53,8 +53,8 @@ Item {
 
             y: root.handleY
             anchors.horizontalCenter: parent.horizontalCenter
-            width: root.engaged ? 22 : 18
-            height: 8
+            width: root.engaged ? Theme.sized(22) : Theme.sized(18)
+            height: Theme.sized(8)
             radius: Theme.shape.track
             color: Theme.colPrimary
 
@@ -94,7 +94,7 @@ Item {
 
     StyledText {
         anchors.bottom: caption.top
-        anchors.bottomMargin: 2
+        anchors.bottomMargin: Theme.spaced(2)
         anchors.horizontalCenter: parent.horizontalCenter
         text: (root.value > 0 ? "+" : "") + root.value
         font.pixelSize: Theme.font.smallest

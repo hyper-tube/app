@@ -34,19 +34,20 @@ Rectangle {
     IconButton {
         id: menuButton
 
-        x: 44 + (40 - 44) * root.expansion - width / 2
-        y: 16
+        x: Theme.size.railCollapsed / 2
+            + (Theme.spaced(12) + Theme.sized(28) - Theme.size.railCollapsed / 2) * root.expansion - width / 2
+        y: Theme.spaced(16)
         icon: root.expanded ? "menu_open" : "menu"
         Accessible.name: root.expanded ? qsTr("Collapse navigation") : qsTr("Expand navigation")
-        iconSize: 24
+        iconSize: Theme.sized(24)
         onClicked: root.expanded = !root.expanded
     }
 
     Column {
         anchors.top: menuButton.bottom
-        anchors.topMargin: 32
+        anchors.topMargin: Theme.spaced(32)
         width: parent.width
-        spacing: 4
+        spacing: Theme.spaced(4)
 
         Repeater {
             model: root.entries
@@ -68,9 +69,9 @@ Rectangle {
 
     Column {
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 16
+        anchors.bottomMargin: Theme.spaced(16)
         width: root.width
-        spacing: 4
+        spacing: Theme.spaced(4)
 
         NavItem {
             objectName: "plugins"

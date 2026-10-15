@@ -6,8 +6,8 @@ RippleSurface {
     id: root
 
     property bool playing: false
-    property real iconSize: 28
-    property real diameter: 50
+    property real iconSize: Theme.sized(28)
+    property real diameter: Theme.sized(50)
     property real morph: root.playing ? 1 : 0
 
     tooltip: Accessible.name

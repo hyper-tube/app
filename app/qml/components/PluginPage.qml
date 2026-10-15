@@ -48,17 +48,17 @@ Item {
 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: 24
+        anchors.leftMargin: Theme.spaced(24)
         anchors.right: parent.right
-        anchors.rightMargin: 24
-        height: 84
+        anchors.rightMargin: Theme.spaced(24)
+        height: Theme.sized(84)
 
         Rectangle {
             id: tile
 
             anchors.verticalCenter: parent.verticalCenter
-            width: 68
-            height: 68
+            width: Theme.sized(68)
+            height: Theme.sized(68)
             radius: Theme.rounding.medium
             color: root.live ? Theme.colPrimaryContainer : Theme.colLayer3
 
@@ -73,7 +73,7 @@ Item {
             PluginGlyph {
                 anchors.centerIn: parent
                 info: root.present ? root.plugin.info : null
-                glyphSize: 32
+                glyphSize: Theme.sized(32)
                 fill: root.live ? 1 : 0
                 colGlyph: root.live ? Theme.colOnPrimaryContainer : Theme.colOnSurfaceVariant
             }
@@ -81,11 +81,11 @@ Item {
 
         Column {
             anchors.left: tile.right
-            anchors.leftMargin: 18
+            anchors.leftMargin: Theme.spaced(18)
             anchors.right: power.left
-            anchors.rightMargin: 18
+            anchors.rightMargin: Theme.spaced(18)
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 4
+            spacing: Theme.spaced(4)
 
             StyledText {
                 width: parent.width
@@ -119,11 +119,11 @@ Item {
         id: tabs
 
         anchors.top: hero.bottom
-        anchors.topMargin: 8
+        anchors.topMargin: Theme.spaced(8)
         anchors.left: parent.left
-        anchors.leftMargin: 24
+        anchors.leftMargin: Theme.spaced(24)
         anchors.right: parent.right
-        anchors.rightMargin: 24
+        anchors.rightMargin: Theme.spaced(24)
         visible: root.configurable
         labels: [qsTr("Home"), qsTr("Settings")]
     }
@@ -143,7 +143,7 @@ Item {
             x: -width * tabs.position
             width: parent.width
             height: parent.height
-            contentHeight: overview.implicitHeight + 34
+            contentHeight: overview.implicitHeight + Theme.spaced(34)
             contentWidth: width
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -153,10 +153,10 @@ Item {
             Column {
                 id: overview
 
-                x: 24
-                y: 18
-                width: home.width - 60
-                spacing: 18
+                x: Theme.spaced(24)
+                y: Theme.spaced(18)
+                width: home.width - Theme.spaced(60)
+                spacing: Theme.spaced(18)
 
                 Item {
                     width: parent.width
@@ -200,7 +200,7 @@ Item {
             x: width * (1 - tabs.position)
             width: parent.width
             height: parent.height
-            contentHeight: settings.implicitHeight + 34
+            contentHeight: settings.implicitHeight + Theme.spaced(34)
             contentWidth: width
             clip: true
             boundsBehavior: Flickable.StopAtBounds
@@ -210,10 +210,10 @@ Item {
             Column {
                 id: settings
 
-                x: 24
-                y: 12
-                width: preferences.width - 60
-                spacing: 2
+                x: Theme.spaced(24)
+                y: Theme.spaced(12)
+                width: preferences.width - Theme.spaced(60)
+                spacing: Theme.spaced(2)
                 opacity: root.live ? 1 : 0.4
                 enabled: root.live
 

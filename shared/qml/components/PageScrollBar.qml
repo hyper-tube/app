@@ -8,12 +8,12 @@ ScrollBar {
     property real reveal: root.hovered || root.pressed ? 1 : root.scrolling ? 0.55 : 0
     property bool scrolling: false
 
-    readonly property real gutter: 14
-    readonly property real barWidth: 4 + 4 * root.reveal
+    readonly property real gutter: Theme.spaced(14)
+    readonly property real barWidth: Theme.sized(4) + Theme.sized(4) * root.reveal
 
     implicitWidth: root.gutter
-    topPadding: 6
-    bottomPadding: 6
+    topPadding: Theme.spaced(6)
+    bottomPadding: Theme.spaced(6)
     leftPadding: (root.gutter - root.barWidth) / 2
     rightPadding: (root.gutter - root.barWidth) / 2
     minimumSize: 0.06

@@ -7,8 +7,8 @@ Popup {
     id: root
 
     property real rounding: Theme.shape.popover
-    property real inset: 6
-    property real gap: 2
+    property real inset: Theme.spaced(6)
+    property real gap: Theme.spaced(2)
     property real anchorX: 0.5
     property real anchorY: 0
 

@@ -6,7 +6,7 @@ RippleSurface {
 
     required property colorSourceInfo modelData
 
-    implicitHeight: labels.implicitHeight + 16
+    implicitHeight: labels.implicitHeight + Theme.spaced(16)
     rounding: Theme.rounding.extraSmall
     interactive: SystemTheme.sources.length > 1
 
@@ -14,7 +14,7 @@ RippleSurface {
         id: glyph
 
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: Theme.spaced(10)
         anchors.verticalCenter: parent.verticalCenter
         text: root.modelData.active ? "check_circle" : "radio_button_unchecked"
         iconSize: Theme.font.small
@@ -26,9 +26,9 @@ RippleSurface {
         id: labels
 
         anchors.left: glyph.right
-        anchors.leftMargin: 10
+        anchors.leftMargin: Theme.spaced(10)
         anchors.right: parent.right
-        anchors.rightMargin: 10
+        anchors.rightMargin: Theme.spaced(10)
         anchors.verticalCenter: parent.verticalCenter
         spacing: 1
 

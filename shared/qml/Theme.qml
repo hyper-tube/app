@@ -113,15 +113,15 @@ QtObject {
             "wdth": root.tokens["typography.width"]
         })
 
-        readonly property int smallest: 10
-        readonly property int smaller: 12
-        readonly property int smallie: 13
-        readonly property int small: 15
-        readonly property int normal: 16
-        readonly property int large: 17
-        readonly property int larger: 19
-        readonly property int huge: 22
-        readonly property int display: 30
+        readonly property int smallest: root.tokens["typography.size.smallest"]
+        readonly property int smaller: root.tokens["typography.size.smaller"]
+        readonly property int smallie: root.tokens["typography.size.smallie"]
+        readonly property int small: root.tokens["typography.size.small"]
+        readonly property int normal: root.tokens["typography.size.normal"]
+        readonly property int large: root.tokens["typography.size.large"]
+        readonly property int larger: root.tokens["typography.size.larger"]
+        readonly property int huge: root.tokens["typography.size.huge"]
+        readonly property int display: root.tokens["typography.size.display"]
     }
 
     readonly property QtObject curve: QtObject {
@@ -134,6 +134,7 @@ QtObject {
         readonly property list<real> emphasizedDecel: root.tokens["motion.curve.emphasizedDecel"]
         readonly property list<real> standard: root.tokens["motion.curve.standard"]
         readonly property list<real> standardDecel: root.tokens["motion.curve.standardDecel"]
+        readonly property list<real> decelerate: root.tokens["motion.curve.decelerate"]
     }
 
     readonly property QtObject duration: QtObject {
@@ -151,12 +152,28 @@ QtObject {
     }
 
     readonly property QtObject size: QtObject {
-        readonly property int contentMaxWidth: 1620
-        readonly property int railCollapsed: 88
-        readonly property int railExpanded: 232
-        readonly property int playerBar: 88
-        readonly property int gutter: 24
-        readonly property int cardInset: 10
-        readonly property int bleed: 20
+        readonly property int row: root.tokens["size.row"]
+        readonly property int card: root.tokens["size.card"]
+        readonly property int playerBar: root.tokens["size.playerBar"]
+        readonly property int railCollapsed: root.tokens["size.railCollapsed"]
+        readonly property int railExpanded: root.tokens["size.railExpanded"]
+        readonly property int contentMaxWidth: root.tokens["size.contentMaxWidth"]
+    }
+
+    readonly property QtObject spacing: QtObject {
+        readonly property int gutter: root.tokens["spacing.gutter"]
+        readonly property int bleed: root.tokens["spacing.bleed"]
+        readonly property int cardInset: root.tokens["spacing.cardInset"]
+    }
+
+    readonly property real spacingDensity: root.tokens["density.spacing"]
+    readonly property real sizeDensity: root.tokens["density.size"]
+
+    function spaced(value: real): real {
+        return Math.round(value * root.spacingDensity);
+    }
+
+    function sized(value: real): real {
+        return Math.round(value * root.sizeDensity);
     }
 }

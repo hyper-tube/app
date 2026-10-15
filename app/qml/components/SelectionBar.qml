@@ -44,8 +44,8 @@ Item {
     Rectangle {
         id: card
 
-        width: controls.implicitWidth + 24
-        height: 64
+        width: controls.implicitWidth + Theme.spaced(24)
+        height: Theme.sized(64)
         radius: Theme.shape.toolbar
         color: Theme.colLayer4
         border.width: Theme.elevation.outline
@@ -58,7 +58,7 @@ Item {
             id: controls
 
             anchors.centerIn: parent
-            spacing: 4
+            spacing: Theme.spaced(4)
 
             IconButton {
                 anchors.verticalCenter: parent.verticalCenter
@@ -69,7 +69,7 @@ Item {
 
             StyledText {
                 anchors.verticalCenter: parent.verticalCenter
-                width: 96
+                width: Theme.sized(96)
                 text: qsTr("%n selected", "", root.count)
                 title: true
                 font.pixelSize: Theme.font.smallie
@@ -79,7 +79,7 @@ Item {
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 width: 1
-                height: 26
+                height: Theme.sized(26)
                 color: Theme.colOutlineVariant
             }
 

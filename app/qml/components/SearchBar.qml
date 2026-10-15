@@ -17,7 +17,7 @@ Rectangle {
     readonly property bool recalling: input.text.trim().length === 0
     readonly property var entries: !root.suggestionsEnabled ? []
         : root.recalling ? SearchHistory.queries : suggestions.suggestions
-    readonly property real expandedHeight: height + (panel.visible ? panel.height + 8 : 0)
+    readonly property real expandedHeight: height + (panel.visible ? panel.height + Theme.spaced(8) : 0)
     readonly property real textPresence: 1 - Math.abs(root.textPhase)
 
     signal accepted(string query)
@@ -51,7 +51,7 @@ Rectangle {
         retarget.restart();
     }
 
-    implicitHeight: 46
+    implicitHeight: Theme.sized(46)
     radius: Theme.shape.searchField
     color: root.glass ? ColorUtils.withAlpha(Theme.colLayer2, 0.55)
         : focusRing.visible ? Theme.colLayer2 : Theme.colLayer1
@@ -84,7 +84,7 @@ Rectangle {
         id: glyph
 
         anchors.left: parent.left
-        anchors.leftMargin: 16
+        anchors.leftMargin: Theme.spaced(16)
         anchors.verticalCenter: parent.verticalCenter
         visible: root.icon.length > 0
         width: visible ? glyph.iconSize : 0
@@ -97,9 +97,9 @@ Rectangle {
         id: input
 
         anchors.left: glyph.right
-        anchors.leftMargin: 12
+        anchors.leftMargin: Theme.spaced(12)
         anchors.right: clear.left
-        anchors.rightMargin: 8
+        anchors.rightMargin: Theme.spaced(8)
         anchors.verticalCenter: parent.verticalCenter
         verticalAlignment: TextInput.AlignVCenter
         opacity: root.textPresence
@@ -157,7 +157,7 @@ Rectangle {
         icon: "close"
         Accessible.name: qsTr("Clear search")
         iconSize: Theme.font.normal
-        diameter: 36
+        diameter: Theme.sized(36)
         onClicked: input.clear()
     }
 
@@ -165,13 +165,13 @@ Rectangle {
         id: paste
 
         anchors.right: parent.right
-        anchors.rightMargin: 4
+        anchors.rightMargin: Theme.spaced(4)
         anchors.verticalCenter: parent.verticalCenter
         visible: root.pasteEnabled
         icon: "content_paste"
         Accessible.name: qsTr("Open a link from the clipboard")
         iconSize: Theme.font.normal
-        diameter: visible ? 36 : 0
+        diameter: visible ? Theme.sized(36) : 0
         onClicked: {
             root.clearFocus();
             root.pasteRequested();
@@ -188,7 +188,7 @@ Rectangle {
         id: panel
 
         parent: root
-        y: root.height + 8
+        y: root.height + Theme.spaced(8)
         width: root.width
         focus: false
         closePolicy: Popup.NoAutoClose
@@ -204,7 +204,7 @@ Rectangle {
                 required property int index
 
                 width: panel.columnWidth
-                implicitHeight: 44
+                implicitHeight: Theme.sized(44)
                 rounding: panel.rounding - panel.inset
                 colBackground: root.selectedEntry === entry.index
                     ? Theme.colSecondaryContainer : "transparent"
@@ -213,7 +213,7 @@ Rectangle {
                     id: cue
 
                     anchors.left: parent.left
-                    anchors.leftMargin: 14
+                    anchors.leftMargin: Theme.spaced(14)
                     anchors.verticalCenter: parent.verticalCenter
                     text: root.recalling ? "history" : "search"
                     iconSize: Theme.font.normal
@@ -222,9 +222,9 @@ Rectangle {
 
                 StyledText {
                     anchors.left: cue.right
-                    anchors.leftMargin: 12
+                    anchors.leftMargin: Theme.spaced(12)
                     anchors.right: forget.left
-                    anchors.rightMargin: 8
+                    anchors.rightMargin: Theme.spaced(8)
                     anchors.verticalCenter: parent.verticalCenter
                     text: entry.modelData
                     font.pixelSize: Theme.font.small
@@ -235,13 +235,13 @@ Rectangle {
                     id: forget
 
                     anchors.right: parent.right
-                    anchors.rightMargin: 6
+                    anchors.rightMargin: Theme.spaced(6)
                     anchors.verticalCenter: parent.verticalCenter
                     visible: root.recalling
                     icon: "close"
                     Accessible.name: qsTr("Remove from search history")
                     iconSize: Theme.font.normal
-                    diameter: visible ? 32 : 0
+                    diameter: visible ? Theme.sized(32) : 0
                     onClicked: SearchHistory.forget(entry.modelData)
                 }
 

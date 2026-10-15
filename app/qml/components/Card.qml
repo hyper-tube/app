@@ -13,9 +13,9 @@ RippleSurface {
     property bool pinned: false
     property bool live: false
     property bool active: false
-    property real artSize: 168
+    property real artSize: Theme.size.card
 
-    readonly property real inset: Theme.size.cardInset
+    readonly property real inset: Theme.spacing.cardInset
     readonly property bool playingNow: root.active && PlaybackController.playing
     readonly property bool cueVisible: root.hovered && !root.playingNow
 
@@ -23,7 +23,7 @@ RippleSurface {
     signal menuRequested(real x, real y)
 
     implicitWidth: root.artSize * (root.video ? 16 / 9 : 1) + root.inset * 2
-    implicitHeight: root.artSize + root.inset * 2 + labels.implicitHeight + 12
+    implicitHeight: root.artSize + root.inset * 2 + labels.implicitHeight + Theme.spaced(12)
     rounding: Theme.shape.card
 
     Item {
@@ -70,9 +70,9 @@ RippleSurface {
         Rectangle {
             anchors.left: parent.left
             anchors.top: parent.top
-            anchors.margins: 8
-            width: 30
-            height: 30
+            anchors.margins: Theme.spaced(8)
+            width: Theme.sized(30)
+            height: Theme.sized(30)
             radius: Theme.shape.plate
             color: ColorUtils.withAlpha(Theme.colLayer1, 0.85)
             visible: root.pinned
@@ -89,7 +89,7 @@ RippleSurface {
         LiveBadge {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
-            anchors.margins: 8
+            anchors.margins: Theme.spaced(8)
             width: implicitWidth
             height: implicitHeight
             visible: root.live
@@ -98,17 +98,17 @@ RippleSurface {
 
         Rectangle {
             anchors.centerIn: parent
-            width: 54
-            height: 54
+            width: Theme.sized(54)
+            height: Theme.sized(54)
             radius: Theme.shape.playButton
             color: ColorUtils.withAlpha(Theme.colLayer1, 0.85)
             visible: root.active && !root.cueVisible
 
             PlayingIndicator {
                 anchors.centerIn: parent
-                barWidth: 4
-                barHeight: 24
-                barSpacing: 4
+                barWidth: Theme.sized(4)
+                barHeight: Theme.sized(24)
+                barSpacing: Theme.sized(4)
                 playing: root.playingNow
             }
         }
@@ -118,10 +118,10 @@ RippleSurface {
 
             anchors.right: parent.right
             anchors.top: parent.top
-            anchors.margins: 6
+            anchors.margins: Theme.spaced(6)
             icon: "more_vert"
-            iconSize: 20
-            diameter: 34
+            iconSize: Theme.sized(20)
+            diameter: Theme.sized(34)
             colBackground: ColorUtils.withAlpha(Theme.colLayer1, 0.85)
             colIcon: Theme.colOnSurfaceVariant
             opacity: root.hovered ? 1 : 0
@@ -142,12 +142,12 @@ RippleSurface {
         }
 
         IconButton {
-            x: root.playable || root.circular ? (parent.width - width) / 2 : parent.width - width - 10
-            y: root.playable || root.circular ? (parent.height - height) / 2 : parent.height - height - 10
+            x: root.playable || root.circular ? (parent.width - width) / 2 : parent.width - width - Theme.spaced(10)
+            y: root.playable || root.circular ? (parent.height - height) / 2 : parent.height - height - Theme.spaced(10)
             icon: "play_arrow"
             Accessible.name: qsTr("Play")
-            iconSize: 24
-            diameter: 44
+            iconSize: Theme.sized(24)
+            diameter: Theme.sized(44)
             filled: true
             opacity: root.cueVisible ? 1 : 0
             scale: root.cueVisible ? 1 : 0.7
@@ -176,9 +176,9 @@ RippleSurface {
         id: labels
 
         x: root.inset
-        y: cover.y + cover.height + 12
+        y: cover.y + cover.height + Theme.spaced(12)
         width: root.artSize * (root.video ? 16 / 9 : 1)
-        spacing: 2
+        spacing: Theme.spaced(2)
 
         StyledText {
             width: parent.width

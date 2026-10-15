@@ -21,9 +21,9 @@ Item {
     readonly property real pageWidth: Math.min(root.width, Theme.size.contentMaxWidth)
     readonly property real pageInset: (root.width - root.pageWidth) / 2
     readonly property real contentWidth: Math.min(list.width, Theme.size.contentMaxWidth)
-    readonly property real cellSize: Math.min(200,
-        (root.contentWidth - Theme.size.bleed * 2) / contentModel.columns - 24)
-    readonly property real podcastColumn: Math.max(280, Math.min(380, root.pageWidth * 0.3))
+    readonly property real cellSize: Math.min(Theme.sized(200),
+        (root.contentWidth - Theme.spacing.bleed * 2) / contentModel.columns - Theme.spaced(24))
+    readonly property real podcastColumn: Math.max(Theme.sized(280), Math.min(Theme.sized(380), root.pageWidth * 0.3))
     readonly property bool podcastSplit: root.podcastPage && root.pageWidth >= 1000
     readonly property bool initialLoading: !!root.page && root.page.refreshing
     readonly property bool modalActive: newPlaylist.modalVisible || deletePlaylist.modalVisible
@@ -44,10 +44,10 @@ Item {
         id: libraryHeader
 
         anchors.horizontalCenter: parent.horizontalCenter
-        width: root.contentWidth - Theme.size.bleed * 2
+        width: root.contentWidth - Theme.spacing.bleed * 2
         enabled: !root.modalActive
         visible: root.libraryPage
-        spacing: 18
+        spacing: Theme.spaced(18)
 
         Item {
             width: parent.width
@@ -58,7 +58,7 @@ Item {
 
                 anchors.left: parent.left
                 anchors.right: librarySort.left
-                anchors.rightMargin: 16
+                anchors.rightMargin: Theme.spaced(16)
                 anchors.verticalCenter: parent.verticalCenter
                 title: qsTr("Library")
             }
@@ -82,8 +82,8 @@ Item {
 
                 anchors.left: parent.left
                 anchors.right: actions.left
-                anchors.rightMargin: actions.width > 0 ? 20 : 0
-                spacing: 6
+                anchors.rightMargin: actions.width > 0 ? Theme.spaced(20) : 0
+                spacing: Theme.spaced(6)
 
                 Repeater {
                     model: Browser.libraryTabs
@@ -93,7 +93,7 @@ Item {
                         required property int index
 
                         text: modelData.title
-                        horizontalPadding: 14
+                        horizontalPadding: Theme.spaced(14)
                         toggled: Browser.libraryTab === index
                         onClicked: Browser.showLibraryTab(index)
                     }
@@ -109,7 +109,7 @@ Item {
                 RevealingSelect {
                     anchors.verticalCenter: parent.verticalCenter
                     width: implicitWidth
-                    gap: 8
+                    gap: Theme.spaced(8)
                     shown: root.filteredLibrary
                     choices: root.filteredLibrary ? root.page.chips : []
                     current: root.filteredLibrary ? root.page.filterIndex : -1
@@ -121,8 +121,8 @@ Item {
                     shown: Account.signedIn && Browser.uploadsTab
                     text: qsTr("Upload")
                     icon: "upload"
-                    iconSize: 20
-                    leadingPadding: 12
+                    iconSize: Theme.sized(20)
+                    leadingPadding: Theme.spaced(12)
                     onClicked: chooser.open()
                 }
 
@@ -130,8 +130,8 @@ Item {
                     shown: Account.signedIn && Browser.playlistsTab
                     text: qsTr("New playlist")
                     icon: "add"
-                    iconSize: 20
-                    leadingPadding: 12
+                    iconSize: Theme.sized(20)
+                    leadingPadding: Theme.spaced(12)
                     onClicked: newPlaylist.open = true
                 }
             }
@@ -151,19 +151,19 @@ Item {
         id: contentModel
 
         page: root.page
-        columns: Math.max(1, Math.floor((root.contentWidth - Theme.size.bleed * 2) / 188))
+        columns: Math.max(1, Math.floor((root.contentWidth - Theme.spacing.bleed * 2) / (Theme.size.card + Theme.spaced(20))))
     }
 
     Flickable {
         id: podcastColumn
 
-        x: root.pageInset + Theme.size.bleed
+        x: root.pageInset + Theme.spacing.bleed
         width: root.podcastColumn
         height: parent.height
         visible: root.podcastSplit
         enabled: !root.modalActive
         contentWidth: width
-        contentHeight: podcastHeader.implicitHeight + 24
+        contentHeight: podcastHeader.implicitHeight + Theme.spaced(24)
         clip: true
         boundsBehavior: Flickable.StopAtBounds
         interactive: contentHeight > height
@@ -188,14 +188,14 @@ Item {
         id: list
 
         anchors.top: root.libraryPage ? libraryHeader.bottom : parent.top
-        anchors.topMargin: root.libraryPage ? 24 : 0
+        anchors.topMargin: root.libraryPage ? Theme.spaced(24) : 0
         anchors.left: root.podcastSplit ? podcastColumn.right : parent.left
-        anchors.leftMargin: root.podcastSplit ? 28 - Theme.size.bleed : 0
+        anchors.leftMargin: root.podcastSplit ? Theme.spaced(28) - Theme.spacing.bleed : 0
         anchors.right: parent.right
         anchors.rightMargin: root.podcastSplit ? root.pageInset : 0
         anchors.bottom: parent.bottom
         clip: true
-        spacing: 2
+        spacing: Theme.spaced(2)
         enabled: !root.modalActive
         visible: !root.libraryLocked
         opacity: root.contentReveal
@@ -261,8 +261,8 @@ Item {
             BrowseHeader {
                 id: pageHeader
 
-                x: (list.width - root.contentWidth) / 2 + Theme.size.bleed
-                width: root.contentWidth - Theme.size.bleed * 2
+                x: (list.width - root.contentWidth) / 2 + Theme.spacing.bleed
+                width: root.contentWidth - Theme.spacing.bleed * 2
                 page: root.page
                 podcastInline: !root.podcastSplit
                 onMenuRequested: request => itemMenu.show(request)
@@ -301,9 +301,9 @@ Item {
                     - (list.headerItem ? list.headerItem.height : 0)
                     - footerContent.spacing - trailing.height
 
-                x: (list.width - root.contentWidth) / 2 + Theme.size.bleed
-                width: root.contentWidth - Theme.size.bleed * 2
-                spacing: 16
+                x: (list.width - root.contentWidth) / 2 + Theme.spacing.bleed
+                width: root.contentWidth - Theme.spacing.bleed * 2
+                spacing: Theme.spaced(16)
                 opacity: root.loadingReveal
 
                 BusySpinner {
@@ -316,7 +316,7 @@ Item {
                     readonly property bool keepable: root.offline && Downloads.ids.length > 0
 
                     width: parent.width
-                    height: blank ? Math.max(320, footerContent.freeHeight) : implicitHeight
+                    height: blank ? Math.max(Theme.sized(320), footerContent.freeHeight) : implicitHeight
                     size: blank ? ErrorState.Page : ErrorState.Inline
                     shown: !!root.page && root.page.error.length > 0 && !root.page.loading
                     busy: Connectivity.checking
@@ -335,7 +335,7 @@ Item {
 
                 EmptyState {
                     width: parent.width
-                    height: Math.max(220, footerContent.freeHeight)
+                    height: Math.max(Theme.sized(220), footerContent.freeHeight)
                     shown: !!root.page && !root.page.loading && root.page.error.length === 0
                         && !root.page.messaged
                         && ((root.playlistPage ? !root.page.playable : root.page.count === 0)
@@ -365,7 +365,7 @@ Item {
                     id: trailing
 
                     width: parent.width
-                    height: root.selectMode ? 96 : 20
+                    height: root.selectMode ? Theme.sized(96) : Theme.spaced(20)
                 }
             }
         }
@@ -400,9 +400,9 @@ Item {
         opacity: root.contentReveal
 
         LoadingSkeleton {
-            x: (list.width - root.contentWidth) / 2 + Theme.size.bleed
+            x: (list.width - root.contentWidth) / 2 + Theme.spacing.bleed
             y: list.headerItem ? list.headerItem.y + list.headerItem.height - list.contentY : 0
-            width: root.contentWidth - Theme.size.bleed * 2
+            width: root.contentWidth - Theme.spacing.bleed * 2
             shape: root.podcastPage ? "episodes" : !!root.page ? root.page.skeleton : "list"
             columns: contentModel.columns
             cellSize: root.cellSize
@@ -428,7 +428,7 @@ Item {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20
+        anchors.bottomMargin: Theme.spaced(20)
         active: root.selectMode
         count: root.selectionCount
         removable: !!root.page && root.page.owned
@@ -534,10 +534,10 @@ Item {
 
         Column {
             anchors.centerIn: parent
-            spacing: 14
+            spacing: Theme.spaced(14)
 
             EmptyState {
-                width: 360
+                width: Theme.sized(360)
                 shown: root.libraryLocked
                 icon: "account_circle"
                 title: qsTr("Your library")
@@ -548,7 +548,7 @@ Item {
 
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 8
+                spacing: Theme.spaced(8)
 
                 PillButton {
                     text: qsTr("Sign in")
@@ -616,7 +616,8 @@ Item {
         from: 0
         to: 1
         duration: Theme.duration.fast
-        easing.type: Easing.OutCubic
+        easing.type: Easing.BezierSpline
+        easing.bezierCurve: Theme.curve.decelerate
     }
 
     states: State {

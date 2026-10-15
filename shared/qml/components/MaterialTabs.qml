@@ -6,7 +6,7 @@ Item {
 
     property var labels: []
     property int current: 0
-    property real padding: 20
+    property real padding: Theme.spaced(20)
     property real position: root.current
 
     readonly property int count: root.labels.length
@@ -15,7 +15,7 @@ Item {
     readonly property real blend: root.position - Math.floor(root.position)
     readonly property bool measured: root.lower !== null && root.upper !== null
 
-    implicitHeight: 48
+    implicitHeight: Theme.sized(48)
 
     Behavior on position {
         NumberAnimation {
@@ -83,7 +83,7 @@ Item {
                 + (root.upper.width - root.lower.width) * root.blend
             : 0
         anchors.bottom: parent.bottom
-        height: 3
+        height: Theme.sized(3)
         radius: Theme.shape.track
         color: Theme.colPrimary
         visible: root.count > 1

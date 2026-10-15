@@ -7,7 +7,7 @@ RippleSurface {
     property string icon: ""
     property real iconSize: Theme.font.larger
     property real iconFill: root.toggled || root.filled ? 1 : 0
-    property real diameter: 40
+    property real diameter: Theme.sized(40)
     property bool toggled: false
     property bool filled: false
     property color colIcon: root.filled ? Theme.colOnPrimary

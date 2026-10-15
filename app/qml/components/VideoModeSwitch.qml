@@ -5,15 +5,15 @@ Item {
     id: root
 
     property bool video: false
-    property real inset: 4
+    property real inset: Theme.spaced(4)
 
     readonly property real segment: (root.width - root.inset * 2) / 2
     readonly property real lane: root.height - root.inset * 2
 
     signal picked(bool wantsVideo)
 
-    implicitWidth: 80
-    implicitHeight: 38
+    implicitWidth: Theme.sized(80)
+    implicitHeight: Theme.sized(38)
 
     property real reveal: root.video ? 1 : 0
 

@@ -10,13 +10,13 @@ Window {
 
     readonly property real shadowMargin: 34
     readonly property real rounding: Theme.shape.popover
-    readonly property real inset: 6
-    readonly property real gap: 2
-    readonly property real itemPadding: 14
+    readonly property real inset: Theme.spaced(6)
+    readonly property real gap: Theme.spaced(2)
+    readonly property real itemPadding: Theme.spaced(14)
     readonly property real itemGlyphSize: Theme.font.larger
-    readonly property real itemHeight: 44
-    readonly property real dividerHeight: 13
-    readonly property real minimumWidth: 236
+    readonly property real itemHeight: Theme.sized(44)
+    readonly property real dividerHeight: Theme.sized(13)
+    readonly property real minimumWidth: Theme.sized(236)
 
     readonly property var entries: [
         { "icon": PlaybackController.playing ? "pause" : "play_arrow",

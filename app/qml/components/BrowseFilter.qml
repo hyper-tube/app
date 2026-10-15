@@ -12,7 +12,7 @@ PillButton {
     text: root.page && root.page.sortIndex >= 0
         ? root.page.sortOptions[root.page.sortIndex].title : root.country ? qsTr("Country") : qsTr("Sort")
     icon: root.country ? "public" : "sort"
-    leadingPadding: 12
+    leadingPadding: Theme.spaced(12)
     rounding: Theme.shape.chip
     interactive: !!root.page && !root.page.loading && !root.page.reordering
     Accessible.name: root.country ? qsTr("Country: %1").arg(text) : qsTr("Sort by: %1").arg(text)
@@ -23,15 +23,15 @@ PillButton {
 
         parent: root
         x: root.page && root.page.kind === "library" ? Math.min(0, root.width - width) : 0
-        y: root.height + 6
-        width: 252
+        y: root.height + Theme.spaced(6)
+        width: Theme.sized(252)
         anchorX: (root.width / 2 - menu.x) / menu.width
 
         ListView {
             id: options
 
             width: menu.columnWidth
-            implicitHeight: Math.min(352, contentHeight)
+            implicitHeight: Math.min(Theme.sized(352), contentHeight)
             clip: true
             boundsBehavior: Flickable.StopAtBounds
             model: root.page ? root.page.sortOptions : []
@@ -46,15 +46,15 @@ PillButton {
                 required property int index
 
                 width: options.width
-                implicitHeight: 44
+                implicitHeight: Theme.sized(44)
                 rounding: Math.max(0, menu.rounding - menu.inset)
                 colBackground: option.modelData.selected ? Theme.colSecondaryContainer : "transparent"
 
                 StyledText {
                     anchors.left: parent.left
-                    anchors.leftMargin: 14
+                    anchors.leftMargin: Theme.spaced(14)
                     anchors.right: tick.left
-                    anchors.rightMargin: 10
+                    anchors.rightMargin: Theme.spaced(10)
                     anchors.verticalCenter: parent.verticalCenter
                     text: option.modelData.title
                     title: option.modelData.selected
@@ -66,10 +66,10 @@ PillButton {
                     id: tick
 
                     anchors.right: parent.right
-                    anchors.rightMargin: 14
+                    anchors.rightMargin: Theme.spaced(14)
                     anchors.verticalCenter: parent.verticalCenter
                     text: "check"
-                    iconSize: 20
+                    iconSize: Theme.sized(20)
                     opacity: option.modelData.selected ? 1 : 0
                     color: Theme.colOnSecondaryContainer
                 }

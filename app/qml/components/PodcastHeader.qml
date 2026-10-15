@@ -14,8 +14,8 @@ Item {
     readonly property var entry: root.page ? root.page.entry : null
     readonly property bool writable: Account.signedIn && Connectivity.online
     readonly property bool sideways: root.inline && root.width >= 560
-    readonly property real coverSize: root.sideways ? Math.round(Math.min(232, root.width * 0.3))
-        : Math.min(root.width - 24, root.inline ? 240 : 288)
+    readonly property real coverSize: root.sideways ? Math.round(Math.min(Theme.sized(232), root.width * 0.3))
+        : Math.min(root.width - Theme.spaced(24), root.inline ? Theme.sized(240) : Theme.sized(288))
     readonly property int alignment: root.sideways ? Text.AlignLeft : Text.AlignHCenter
     readonly property bool clipped: fullDescription.implicitHeight > shortDescription.implicitHeight + 1
     readonly property bool bylined: !!root.page && root.page.byline.length > 0
@@ -38,9 +38,9 @@ Item {
 
         property real reveal: root.bylined ? 1 : 0
 
-        x: root.sideways ? details.x - 10 : (root.width - width) / 2
-        implicitWidth: bylineRow.implicitWidth + 20
-        implicitHeight: 34
+        x: root.sideways ? details.x - Theme.spaced(10) : (root.width - width) / 2
+        implicitWidth: bylineRow.implicitWidth + Theme.spaced(20)
+        implicitHeight: Theme.sized(34)
         opacity: byline.reveal
         scale: 0.9 + 0.1 * byline.reveal
         transformOrigin: root.sideways ? Item.Left : Item.Center
@@ -53,12 +53,12 @@ Item {
             id: bylineRow
 
             anchors.centerIn: parent
-            spacing: 8
+            spacing: Theme.spaced(8)
 
             Artwork {
                 anchors.verticalCenter: parent.verticalCenter
-                width: 22
-                height: 22
+                width: Theme.sized(22)
+                height: Theme.sized(22)
                 visible: !!root.page && root.page.bylineArtId.length > 0
                 artId: root.page ? root.page.bylineArtId : ""
                 rounding: Theme.shape.avatar
@@ -87,7 +87,7 @@ Item {
         id: cover
 
         x: root.sideways ? 0 : (root.width - width) / 2
-        y: root.sideways ? 0 : byline.height + 16
+        y: root.sideways ? 0 : byline.height + Theme.spaced(16)
         width: root.coverSize
         height: root.coverSize
 
@@ -113,10 +113,10 @@ Item {
     Column {
         id: details
 
-        x: root.sideways ? cover.width + 28 : 0
-        y: root.sideways ? byline.height + 10 : cover.y + cover.height + 16
+        x: root.sideways ? cover.width + Theme.spaced(28) : 0
+        y: root.sideways ? byline.height + Theme.spaced(10) : cover.y + cover.height + Theme.spaced(16)
         width: root.width - details.x
-        spacing: root.sideways ? 12 : 16
+        spacing: root.sideways ? Theme.spaced(12) : Theme.spaced(16)
 
         StyledText {
             width: parent.width
@@ -167,10 +167,10 @@ Item {
         }
 
         PillButton {
-            x: root.sideways ? -12 : (details.width - width) / 2
+            x: root.sideways ? -Theme.spaced(12) : (details.width - width) / 2
             visible: root.clipped
             ghost: true
-            horizontalPadding: 12
+            horizontalPadding: Theme.spaced(12)
             text: root.expanded ? qsTr("Less") : qsTr("More")
             icon: root.expanded ? "expand_less" : "expand_more"
             onClicked: root.expanded = !root.expanded
@@ -178,7 +178,7 @@ Item {
 
         Row {
             x: root.sideways ? 0 : (details.width - width) / 2
-            spacing: 8
+            spacing: Theme.spaced(8)
 
             PillButton {
                 anchors.verticalCenter: parent.verticalCenter

@@ -22,7 +22,7 @@ Item {
     Column {
         anchors.centerIn: parent
         anchors.verticalCenterOffset: -30
-        width: Math.min(parent.width - Theme.size.gutter * 6, 540)
+        width: Math.min(parent.width - Theme.spacing.gutter * 6, 540)
         spacing: 20
 
         Item {
@@ -34,7 +34,7 @@ Item {
                 anchors.centerIn: parent
                 width: 88
                 height: 88
-                radius: 44
+                radius: width / 2
                 color: root.settled ? Theme.colLayer2 : Theme.colPrimaryContainer
                 scale: 0.7 + 0.3 * root.reveal
                 opacity: root.reveal
@@ -86,7 +86,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: footer.top
         anchors.bottomMargin: 12
-        width: parent.width - Theme.size.gutter * 4
+        width: parent.width - Theme.spacing.gutter * 4
         spacing: 10
         visible: root.failed
 

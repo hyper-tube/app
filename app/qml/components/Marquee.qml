@@ -9,7 +9,7 @@ Item {
     property real pixelSize: Theme.font.small
     property color color: Theme.colOnSurface
     property bool active: false
-    property real gap: 48
+    property real gap: Theme.spaced(48)
 
     readonly property bool overflowing: label.implicitWidth > root.width + 0.5
 

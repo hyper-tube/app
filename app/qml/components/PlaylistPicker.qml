@@ -7,15 +7,15 @@ ModalSheet {
 
     property bool creating: false
 
-    readonly property real listHeight: Math.min(360, Math.max(120, PlaylistTargets.count * 64))
+    readonly property real listHeight: Math.min(Theme.sized(360), Math.max(Theme.sized(120), PlaylistTargets.count * Theme.sized(64)))
 
     open: PlaylistTargets.open
     title: PlaylistTargets.trackCount > 1
         ? qsTr("Save %n songs to playlist", "", PlaylistTargets.trackCount)
         : qsTr("Save to playlist")
-    sheetWidth: Math.min(480, root.width - 96)
-    sheetHeight: Math.min(root.height - 64,
-        root.headerHeight + root.listHeight + (root.creating ? 150 : 84))
+    sheetWidth: Math.min(Theme.sized(480), root.width - Theme.spaced(96))
+    sheetHeight: Math.min(root.height - Theme.spaced(64),
+        root.headerHeight + root.listHeight + (root.creating ? Theme.sized(150) : Theme.sized(84)))
 
     onOpenChanged: {
         if (!root.open)
@@ -25,14 +25,14 @@ ModalSheet {
 
     Column {
         anchors.fill: parent
-        anchors.leftMargin: 14
-        anchors.rightMargin: 14
-        anchors.bottomMargin: 16
-        spacing: 12
+        anchors.leftMargin: Theme.spaced(14)
+        anchors.rightMargin: Theme.spaced(14)
+        anchors.bottomMargin: Theme.spaced(16)
+        spacing: Theme.spaced(12)
 
         Item {
             width: parent.width
-            height: root.creating ? newName.height + 46 : 46
+            height: root.creating ? newName.height + Theme.sized(46) : Theme.sized(46)
 
             Behavior on height {
                 NumberAnimation {
@@ -46,13 +46,13 @@ ModalSheet {
                 id: startCreate
 
                 anchors.left: parent.left
-                anchors.leftMargin: 10
+                anchors.leftMargin: Theme.spaced(10)
                 anchors.top: parent.top
                 visible: !root.creating
                 text: qsTr("New playlist")
                 icon: "add"
-                iconSize: 20
-                leadingPadding: 12
+                iconSize: Theme.sized(20)
+                leadingPadding: Theme.spaced(12)
                 onClicked: {
                     root.creating = true;
                     newName.focusInput();
@@ -64,8 +64,8 @@ ModalSheet {
 
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.leftMargin: 10
-                anchors.rightMargin: 10
+                anchors.leftMargin: Theme.spaced(10)
+                anchors.rightMargin: Theme.spaced(10)
                 anchors.top: parent.top
                 visible: root.creating
                 label: qsTr("New playlist")
@@ -76,10 +76,10 @@ ModalSheet {
 
             Row {
                 anchors.right: parent.right
-                anchors.rightMargin: 10
+                anchors.rightMargin: Theme.spaced(10)
                 anchors.bottom: parent.bottom
                 visible: root.creating
-                spacing: 8
+                spacing: Theme.spaced(8)
 
                 PillButton {
                     text: qsTr("Cancel")
@@ -124,8 +124,8 @@ ModalSheet {
 
             ErrorState {
                 anchors.centerIn: parent
-                width: parent.width - 20
-                height: 52
+                width: parent.width - Theme.spaced(20)
+                height: Theme.sized(52)
                 size: ErrorState.Inline
                 shown: !PlaylistTargets.loading && PlaylistTargets.error.length > 0
                 busy: Connectivity.checking
@@ -142,7 +142,7 @@ ModalSheet {
                 anchors.fill: parent
                 clip: true
                 visible: !PlaylistTargets.loading && PlaylistTargets.count > 0
-                spacing: 2
+                spacing: Theme.spaced(2)
                 boundsBehavior: Flickable.StopAtBounds
                 acceptedButtons: Qt.NoButton
                 model: PlaylistTargets
@@ -158,28 +158,28 @@ ModalSheet {
                     required property int index
 
                     width: list.width
-                    implicitHeight: 62
+                    implicitHeight: Theme.sized(62)
                     rounding: Theme.shape.row
 
                     Artwork {
                         id: cover
 
                         anchors.left: parent.left
-                        anchors.leftMargin: 10
+                        anchors.leftMargin: Theme.spaced(10)
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 44
-                        height: 44
+                        width: Theme.sized(44)
+                        height: Theme.sized(44)
                         artId: option.targetArtId
                         rounding: Theme.shape.thumbnail
                     }
 
                     Column {
                         anchors.left: cover.right
-                        anchors.leftMargin: 14
+                        anchors.leftMargin: Theme.spaced(14)
                         anchors.right: parent.right
-                        anchors.rightMargin: 14
+                        anchors.rightMargin: Theme.spaced(14)
                         anchors.verticalCenter: parent.verticalCenter
-                        spacing: 2
+                        spacing: Theme.spaced(2)
 
                         StyledText {
                             width: parent.width

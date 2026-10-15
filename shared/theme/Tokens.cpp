@@ -10,6 +10,7 @@ using theme::Token;
 const QString kScalePrefix = QStringLiteral("shape.scale.");
 const QString kSpeed = QStringLiteral("motion.speed");
 constexpr qreal kRadiusLimit = 9999;
+constexpr qreal kLengthLimit = 4000;
 constexpr qreal kDurationLimit = 5000;
 constexpr int kCurveSegment = 6;
 
@@ -23,6 +24,32 @@ Token radius(const char *name, const QVariant &value, const char *description)
 {
     return {QString::fromLatin1(name),       Token::Radius, value, 0, kRadiusLimit,
             QString::fromLatin1(description)};
+}
+
+Token length(const char *name, int value, const char *follows, const char *description)
+{
+    return {QString::fromLatin1(name),
+            Token::Length,
+            value,
+            0,
+            kLengthLimit,
+            QString::fromLatin1(description),
+            QString::fromLatin1(follows)};
+}
+
+Token size(const char *name, int value, const char *description)
+{
+    return length(name, value, "density.size", description);
+}
+
+Token spacing(const char *name, int value, const char *description)
+{
+    return length(name, value, "density.spacing", description);
+}
+
+Token text(const char *name, int value, const char *description)
+{
+    return length(name, value, "density.text", description);
 }
 
 Token real(const char *name, qreal value, qreal minimum, qreal maximum, const char *description)
@@ -129,6 +156,36 @@ const QList<Token> &all()
         radius("shape.plate", onStep("full"),
                "Icon plates: Explore destinations, error states, the pinned badge"),
 
+        real("density.spacing", 1, 0.5, 2,
+             "Scales every gap, margin and padding. 0.75 is tighter, 1.25 roomier"),
+        real("density.size", 1, 0.5, 2,
+             "Scales the height and width of controls, rows, artwork and panels"),
+        real("density.text", 1, 0.5, 2, "Scales every text size, and icons sized to match text"),
+
+        size("size.row", 60, "Song rows in lists, albums and playlists"),
+        size("size.card", 168, "The cover art of cards on shelves and in grids"),
+        size("size.playerBar", 88, "The height of the mini player"),
+        size("size.railCollapsed", 88, "The width of the navigation rail"),
+        size("size.railExpanded", 232, "The width of the navigation rail when it shows labels"),
+        size("size.contentMaxWidth", 1620,
+             "The widest a page's content grows on a large window, its bleed included"),
+        spacing("spacing.gutter", 24, "The space between the window's edge and its content"),
+        spacing("spacing.bleed", 20,
+                "Room at a page's edges for hovered cards to grow into. Keep it at least "
+                "spacing.cardInset"),
+        spacing("spacing.cardInset", 10,
+                "How far a card's hover background reaches beyond its cover art"),
+
+        text("typography.size.smallest", 10, "Tiny labels: badges, slider values, counters"),
+        text("typography.size.smaller", 12, "Secondary text: artists, durations, captions"),
+        text("typography.size.smallie", 13, "Labels on buttons, chips, tabs and the navigation"),
+        text("typography.size.small", 15, "Titles in rows and cards, and text in fields"),
+        text("typography.size.normal", 16, "Small icons in rows and buttons"),
+        text("typography.size.large", 17, "Headings in empty states, destinations and sheets"),
+        text("typography.size.larger", 19, "Most icons"),
+        text("typography.size.huge", 22, "Sheet and section titles"),
+        text("typography.size.display", 30, "The largest titles: page headers and the full player"),
+
         family("typography.family", "Roboto Flex",
                "Text font family. List a font file under fonts to use one that is not installed"),
         real("typography.weight", 450, 100, 1000,
@@ -176,6 +233,8 @@ const QList<Token> &all()
         curve("motion.curve.emphasizedDecel", {0.05, 0.7, 0.1, 1, 1, 1}, "Small elements entering"),
         curve("motion.curve.standard", {0.2, 0, 0, 1, 1, 1}, "Ordinary transitions"),
         curve("motion.curve.standardDecel", {0, 0, 0, 1, 1, 1}, "The press ripple"),
+        curve("motion.curve.decelerate", {0.33, 1, 0.68, 1, 1, 1},
+              "Progress filling up, a page fading in, a badge popping"),
     };
     return kTokens;
 }
@@ -215,6 +274,7 @@ std::optional<QVariant> accept(const Token &token, const QJsonValue &value)
             return value.toDouble();
         break;
     case Token::Duration:
+    case Token::Length:
         if (within(token, value))
             return qRound(value.toDouble());
         break;
@@ -256,6 +316,12 @@ QVariantMap resolve(const QVariantHash &chosen)
                                                                : value.toDouble());
             break;
         case Token::Duration: values.insert(token.name, qRound(value.toDouble() / speed)); break;
+        case Token::Length:
+            values.insert(token.name,
+                          chosen.contains(token.name)
+                              ? value.toInt()
+                              : qRound(value.toDouble() * pick(*find(token.follows)).toDouble()));
+            break;
         case Token::Step:
         case Token::Real:
         case Token::Curve:
