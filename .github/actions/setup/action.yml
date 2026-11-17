@@ -92,7 +92,7 @@ runs:
       run: python -m pip install fonttools
 
     - name: Set up the compiler cache
-      uses: hendrikmuhs/ccache-action@v1.2.24
+      uses: hendrikmuhs/ccache-action@v1.2.25
       with:
         key: ${{ runner.os }}-${{ inputs.cache-key }}
         variant: ${{ runner.os == 'Windows' && 'sccache' || 'ccache' }}
